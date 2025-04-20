@@ -2,7 +2,7 @@ import { Coordinate } from '../../../coordinate';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
 import { Grid } from '../../grid';
-import { CellCreator } from '../../cell/celltypealiases';
+import { CellCreator } from '../../typealiases';
 import { Vector } from '../../../vector/vector';
 import { RectangularGridFactory } from './rectangulargridfactory.interface';
 import { RectangularGridProperties } from './rectangulargridproperties';

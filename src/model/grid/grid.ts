@@ -12,6 +12,10 @@ export class Grid {
         this._endCell = endCell;
     }
 
+    static fromSingleCell(cell: Cell): Grid {
+        return new Grid([cell], cell, cell);
+    }
+
     get startCell(): Cell {
         return this._startCell;
     }
@@ -74,7 +78,7 @@ export class Grid {
                     break;
                 }
 
-                if ( cell.hasCommonBorderWith(otherCell)) {
+                if (cell.hasCommonBorderWith(otherCell)) {
                     cell.establishNeighbourRelationTo(otherCell);
                 }
             }

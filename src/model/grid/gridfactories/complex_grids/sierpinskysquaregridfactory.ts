@@ -4,6 +4,7 @@ import { Grid } from '../../grid';
 import { GridFactory } from '../gridfactory';
 import { AdvancedCellFactory } from '../../cell/advancedcellfactory';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
+import { GridCreator } from '../../typealiases';
 
 export class SierpinskySquareGridFactory extends GridFactory {
 
@@ -24,7 +25,7 @@ export class SierpinskySquareGridFactory extends GridFactory {
 
         if (iterations === 0) {
             const cell: Cell = AdvancedCellFactory.createCell(insertionPoint, sideLength, 'square', 1, angle);
-            return new Grid([cell], cell, cell);
+            return Grid.fromSingleCell(cell);
         }
 
         type SubCoordinateGetter = (up: number, right: number) => Coordinate;
@@ -35,7 +36,7 @@ export class SierpinskySquareGridFactory extends GridFactory {
                     .newRotatedVector(angle)
             );
 
-        type GridCreator = (newInsertionPoint: Coordinate) => Grid;
+
         const createSubdivision: GridCreator = (newInsertionPoint: Coordinate) => {
             return this.createSierpinskiSquare(
                 newInsertionPoint,
@@ -53,7 +54,7 @@ export class SierpinskySquareGridFactory extends GridFactory {
                 Math.pow(3, iterations - 1),
                 angle
             );
-            return new Grid([middleCell], middleCell, middleCell);
+            return Grid.fromSingleCell(middleCell);
         };
 
 

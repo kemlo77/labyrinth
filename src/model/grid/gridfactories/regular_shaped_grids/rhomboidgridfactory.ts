@@ -3,7 +3,7 @@ import { Vector } from '../../../vector/vector';
 import { stepInDirection, stepRight } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
-import { CellCreator } from '../../cell/celltypealiases';
+import { CellCreator } from '../../typealiases';
 import { Grid } from '../../grid';
 import { GridFactory } from '../gridfactory';
 import { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
@@ -36,12 +36,12 @@ export class RhomboidGridFactory extends GridFactory implements RegularShapedGri
         const cellColumns: Cell[][] = [];
         for (let columnIndex: number = 0; columnIndex < segmentsPerSide; columnIndex++) {
             const columnInsertionPoint: Coordinate =
-            firstCellInsertionPoint.stepToNewCoordinate(columnStep.times(columnIndex));
+                firstCellInsertionPoint.stepToNewCoordinate(columnStep.times(columnIndex));
             const cellSequence: Cell[] =
                 this.createSequenceOfCells(
-                    columnInsertionPoint, 
-                    rowStep, 
-                    segmentsPerSide, 
+                    columnInsertionPoint,
+                    rowStep,
+                    segmentsPerSide,
                     createRhombusCell
                 );
             cellColumns.push(cellSequence);

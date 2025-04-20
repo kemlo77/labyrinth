@@ -2,7 +2,7 @@ import { MatrixOperations } from '../../../service/matrixoperations';
 import { Coordinate } from '../../coordinate';
 import { Vector } from '../../vector/vector';
 import { Cell } from '../cell/cell';
-import { CellCreator } from '../cell/celltypealiases';
+import { CellCreator } from '../typealiases';
 
 export abstract class GridFactory {
 

@@ -3,7 +3,7 @@ import { Vector } from '../../../vector/vector';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
-import { CellCreator } from '../../cell/celltypealiases';
+import { CellCreator } from '../../typealiases';
 import { Grid } from '../../grid';
 import { GridFactory } from '../gridfactory';
 import { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
