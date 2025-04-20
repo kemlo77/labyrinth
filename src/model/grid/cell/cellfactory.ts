@@ -287,8 +287,8 @@ export class CellFactory {
 
     private static createRhombusCell(insertionPoint: Coordinate, width: number): Cell {
         const sideLength: number = width;
-        const center: Coordinate = 
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength).then(stepInDirection(120, sideLength /2)));
+        const center: Coordinate =
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength).then(stepInDirection(120, sideLength / 2)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(sideLength))
