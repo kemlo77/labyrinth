@@ -1,5 +1,5 @@
 import { Coordinate } from '../../coordinate';
-import { stepRight, stepUp, stepInDirection } from '../../vector/vectorcreator';
+import { stepRight, stepUp, stepInDirection, stepLeft, stepDown } from '../../vector/vectorcreator';
 import { Cell } from './cell';
 import { CellBuilder } from './cellbuilder';
 
@@ -35,9 +35,41 @@ export class AdvancedCellFactory {
         switch (type) {
             case 'triangular':
                 return AdvancedCellFactory.createSegmentedTriangleCell(insertionPoint, width, numberOfSideSegments);
+            case 'square':
+                return AdvancedCellFactory.createSegmentedSquareCell(insertionPoint, width, numberOfSideSegments);
             default:
                 throw new Error('Unknown cell type');
         }
+    }
+
+    private static createSegmentedSquareCell(
+        insertionPoint: Coordinate,
+        width: number,
+        numberOfSideSegments: number
+    ): Cell {
+        const segmentLength: number = width / numberOfSideSegments;
+        const center: Coordinate = insertionPoint.stepToNewCoordinate(
+            stepRight(width / 2).then(stepUp(width / 2))
+        );
+
+        const cellBuilder: CellBuilder = new CellBuilder().setStartCorner(insertionPoint);
+
+        for (let i: number = 0; i < numberOfSideSegments; i++) {
+            cellBuilder.addStepToNextCorner(stepRight(segmentLength));
+        }
+        for (let i: number = 0; i < numberOfSideSegments; i++) {
+            cellBuilder.addStepToNextCorner(stepUp(segmentLength));
+        }
+        for (let i: number = 0; i < numberOfSideSegments; i++) {
+            cellBuilder.addStepToNextCorner(stepLeft(segmentLength));
+        }
+        for (let i: number = 1; i < numberOfSideSegments; i++) {
+            cellBuilder.addStepToNextCorner(stepDown(segmentLength));
+        }
+
+        cellBuilder.defineCenter(center);
+
+        return cellBuilder.build();
     }
 
     private static createSegmentedTriangleCell(

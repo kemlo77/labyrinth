@@ -5,7 +5,7 @@ import { AdvancedCellFactory } from '../../cell/advancedcellfactory';
 import { Cell } from '../../cell/cell';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 
-export class SierpinskiGridFactory extends GridFactory {
+export class SierpinskiTriangleGridFactory extends GridFactory {
 
     createGrid(
         insertionPoint: Coordinate,

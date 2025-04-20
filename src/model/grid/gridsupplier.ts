@@ -17,7 +17,8 @@ import { HexagonalGridFactory } from './gridfactories/regular_shaped_grids/hexag
 import { stepRight } from '../vector/vectorcreator';
 import { RhomboidGridFactory as RhomboidGridFactory } from './gridfactories/regular_shaped_grids/rhomboidgridfactory';
 import { StarGridFactory } from './gridfactories/complex_grids/stargridfactory';
-import { SierpinskiGridFactory } from './gridfactories/complex_grids/sierpinskigridfactory';
+import { SierpinskiTriangleGridFactory } from './gridfactories/complex_grids/sierpinskitrianglegridfactory';
+import { SierpinskySquareGridFactory } from './gridfactories/complex_grids/sierpinskysquaregridfactory';
 
 export class GridSupplier {
 
@@ -106,7 +107,11 @@ export class GridSupplier {
         }
 
         if (gridType === 'sierpinskiTriangle') {
-            return new SierpinskiGridFactory().createGrid(insertionPoint, 6, 730);
+            return new SierpinskiTriangleGridFactory().createGrid(insertionPoint, 6, 730);
+        }
+
+        if (gridType === 'sierpinskySquare') {
+            return new SierpinskySquareGridFactory().createGrid(insertionPoint, 4, 600);
         }
 
         throw new Error('Invalid grid type');
