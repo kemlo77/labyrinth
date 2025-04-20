@@ -4,6 +4,7 @@ import { GridFactory } from '../gridfactory';
 import { AdvancedCellFactory } from '../../cell/advancedcellfactory';
 import { Cell } from '../../cell/cell';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
+import { GridCreator } from '../../typealiases';
 
 export class SierpinskiTriangleGridFactory extends GridFactory {
 
@@ -27,41 +28,40 @@ export class SierpinskiTriangleGridFactory extends GridFactory {
             return new Grid([cell], cell, cell);
         }
 
-        const halfLength: number = sideLength / 2;
-        const quarterLength: number = sideLength / 4;
+        const halfWidth: number = sideLength / 2;
+        const quarterWidth: number = sideLength / 4;
         const height: number = sideLength * Math.sqrt(3) / 4;
 
-        const bottomLeft: Grid = this.createSierpinskiTriangle(
-            insertionPoint,
-            halfLength,
-            iterations - 1,
-            angle
-        );
+        const createSubdivision: GridCreator = (newInsertionPoint: Coordinate) => {
+            return this.createSierpinskiTriangle(
+                newInsertionPoint,
+                halfWidth,
+                iterations - 1,
+                angle
+            );
+        };
 
-        const centerTriangle: Cell = AdvancedCellFactory.createCell(
-            insertionPoint.stepToNewCoordinate(stepRight(halfLength).newRotatedVector(angle)),
-            halfLength,
-            'triangular',
-            Math.pow(2, iterations - 1),
-            angle + 60
-        );
-        const center: Grid = new Grid([centerTriangle], centerTriangle, centerTriangle);
+        const createMiddle: GridCreator = (newInsertionPoint: Coordinate) => {
+            const middleCell: Cell = AdvancedCellFactory.createCell(
+                newInsertionPoint,
+                halfWidth,
+                'triangular',
+                Math.pow(2, iterations - 1),
+                angle + 60
+            );
+            return Grid.fromSingleCell(middleCell);
+        };
 
+        const baseMidPoint: Coordinate = insertionPoint
+            .stepToNewCoordinate(stepRight(halfWidth).newRotatedVector(angle));
+        const topInsertionPoint: Coordinate = insertionPoint
+            .stepToNewCoordinate(stepRight(quarterWidth).then(stepUp(height)).newRotatedVector(angle));
 
-        const bottomRight: Grid = this.createSierpinskiTriangle(
-            insertionPoint.stepToNewCoordinate(stepRight(halfLength).newRotatedVector(angle)),
-            halfLength,
-            iterations - 1,
-            angle
-        );
+        const bottomLeft: Grid = createSubdivision(insertionPoint);
+        const middle: Grid = createMiddle(baseMidPoint);
+        const bottomRight: Grid = createSubdivision(baseMidPoint);
+        const top: Grid = createSubdivision(topInsertionPoint);
 
-        const top: Grid = this.createSierpinskiTriangle(
-            insertionPoint.stepToNewCoordinate(stepRight(quarterLength).then(stepUp(height)).newRotatedVector(angle)),
-            halfLength,
-            iterations - 1,
-            angle
-        );
-
-        return bottomLeft.mergeWith(center).mergeWith(bottomRight).mergeWith(top);
+        return bottomLeft.mergeWith(middle).mergeWith(bottomRight).mergeWith(top);
     }
 }
