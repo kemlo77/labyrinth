@@ -1,3 +1,7 @@
+import { MazeGenerationAlgorithm } from '../algorithm/algorithm';
+import { RecursiveBacktrackerAlgorithm } from '../algorithm/recursivebacktracker';
+import { Coordinate } from '../coordinate';
+import { Segment } from '../segment';
 import { Cell } from './cell/cell';
 
 export class Grid {
@@ -5,11 +9,14 @@ export class Grid {
     private _cells: Cell[];
     private _startCell: Cell;
     private _endCell: Cell;
+    private _center: Coordinate;
+    private _algorithm: MazeGenerationAlgorithm = new RecursiveBacktrackerAlgorithm();
 
-    constructor(interconnectedCells: Cell[], startCell: Cell, endCell: Cell) {
+    constructor(interconnectedCells: Cell[], startCell: Cell, endCell: Cell, center?: Coordinate) {
         this._cells = interconnectedCells;
         this._startCell = startCell;
         this._endCell = endCell;
+        this._center = center;
     }
 
     static fromSingleCell(cell: Cell): Grid {
@@ -28,6 +35,19 @@ export class Grid {
         return [...this._cells];
     }
 
+    get topRightCell(): Cell {
+        if (this._cells.length === 0) {
+            throw new Error('No cells in grid');
+        }
+        // Find the cell with the largest x, and in case of tie, largest y
+        return this._cells.reduce((topRight, cell) => {
+            if (cell.center.x > topRight.center.x || cell.center.y > topRight.center.y) {
+                return cell;
+            }
+            return topRight;
+        }, this._cells[0]);
+    }
+
     private get allCellsWithRoomForMoreNeighbours(): Cell[] {
         return this.allCells.filter(cell => cell.hasRoomForMoreNeighbours);
     }
@@ -42,6 +62,18 @@ export class Grid {
 
     get numberOfVisitedCells(): number {
         return this.allCells.filter(cell => cell.visited).length;
+    }
+
+    set center(center: Coordinate) {
+        this._center = center;
+    }
+
+    get center(): Coordinate {
+        if (this._center) {
+            return this._center;
+        } else {
+            throw new Error('Center is not set');
+        }
     }
 
     public resetGrid(): void {
@@ -92,6 +124,12 @@ export class Grid {
                 ...this.allCells,
                 ...grid.allCells
             ], this.startCell, grid.endCell);
+    }
+
+    public generateMaze(): Segment[] {
+        this.resetGrid();
+        this.startCell.visited = true;
+        return this._algorithm.generateMaze(this);
     }
 
 }

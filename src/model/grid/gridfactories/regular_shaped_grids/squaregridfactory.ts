@@ -19,7 +19,11 @@ export class SquareGridFactory extends GridFactory implements RegularShapedGridF
         const startCell: Cell = cellMatrix[0][0];
         const endCell: Cell = cellMatrix[cellMatrix.length - 1][cellMatrix[0].length - 1];
         const cells: Cell[] = cellMatrix.flat();
-        return new Grid(cells, startCell, endCell);
+        const center: Coordinate = gridProperties.insertionPoint.stepToNewCoordinate(
+            stepRight(gridProperties.lengthOfEdgeSegments * gridProperties.numberOfEdgeSegments / 2),
+            stepUp(gridProperties.lengthOfEdgeSegments * gridProperties.numberOfEdgeSegments / 2)
+        );
+        return new Grid(cells, startCell, endCell, center);
     }
 
     private createCellMatrix(gridProperties: RegularShapedGridProperties): Cell[][] {

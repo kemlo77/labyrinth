@@ -1,12 +1,11 @@
 import { Coordinate } from '../../../coordinate';
 import { Grid } from '../../grid';
-import { GridFactory } from '../gridfactory';
 import { AdvancedCellFactory } from '../../cell/advancedcellfactory';
 import { Cell } from '../../cell/cell';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { GridCreator } from '../../typealiases';
 
-export class SierpinskiTriangleGridFactory extends GridFactory {
+export class SierpinskiTriangleGridFactory {
 
     createGrid(
         insertionPoint: Coordinate,

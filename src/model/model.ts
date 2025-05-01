@@ -3,8 +3,6 @@ import { Observer } from '../view/observer';
 import { Subject } from './subject';
 import { GridSupplier } from './grid/gridsupplier';
 import { Segment } from './segment';
-import { RecursiveBacktrackerAlgorithm } from './algorithm/recursivebacktracker';
-import { MazeGenerationAlgorithm } from './algorithm/algorithm';
 
 export class Model implements Subject {
 
@@ -12,7 +10,6 @@ export class Model implements Subject {
 
     private _solutionTrail: Segment[] = [];
     private _observers: Observer[] = [];
-    private _algorithm: MazeGenerationAlgorithm = new RecursiveBacktrackerAlgorithm();
 
     changeGridType(gridType: string): void {
         this._grid = GridSupplier.getGrid(gridType);
@@ -49,9 +46,7 @@ export class Model implements Subject {
         if (!this._grid) {
             return;
         }
-        this._grid.resetGrid();
-        this._grid.startCell.visited = true;
-        this._solutionTrail = this._algorithm.generateMaze(this._grid);
+        this._solutionTrail = this._grid.generateMaze();
         this.notifyObservers();
     }
 

@@ -19,6 +19,7 @@ import { RhomboidGridFactory as RhomboidGridFactory } from './gridfactories/regu
 import { StarGridFactory } from './gridfactories/complex_grids/stargridfactory';
 import { SierpinskiTriangleGridFactory } from './gridfactories/complex_grids/sierpinskitrianglegridfactory';
 import { SierpinskySquareGridFactory } from './gridfactories/complex_grids/sierpinskysquaregridfactory';
+import { MazeGridFactory } from './gridfactories/complex_grids/mazegridfactory';
 
 export class GridSupplier {
 
@@ -111,7 +112,11 @@ export class GridSupplier {
         }
 
         if (gridType === 'sierpinskySquare') {
-            return new SierpinskySquareGridFactory().createGrid(insertionPoint, 4, 600);
+            return new SierpinskySquareGridFactory().createGrid(insertionPoint, 4, 630);
+        }
+
+        if (gridType === 'mazeInMaze') {
+            return new MazeGridFactory().createGrid(insertionPoint, 9, 8, 8, 8);
         }
 
         throw new Error('Invalid grid type');

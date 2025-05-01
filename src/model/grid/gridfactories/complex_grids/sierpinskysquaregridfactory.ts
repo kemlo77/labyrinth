@@ -1,12 +1,11 @@
 import { Coordinate } from '../../../coordinate';
 import { Cell } from '../../cell/cell';
 import { Grid } from '../../grid';
-import { GridFactory } from '../gridfactory';
 import { AdvancedCellFactory } from '../../cell/advancedcellfactory';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { GridCreator } from '../../typealiases';
 
-export class SierpinskySquareGridFactory extends GridFactory {
+export class SierpinskySquareGridFactory {
 
     createGrid(
         insertionPoint: Coordinate,

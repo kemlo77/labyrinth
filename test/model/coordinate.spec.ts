@@ -83,4 +83,11 @@ describe('Coordinate', () => {
         expect(relativeCoordinate.x).to.equal(7);
         expect(relativeCoordinate.y).to.equal(7);
     });
+
+    it('should return the correct vector to another coordinate', () => {
+        const otherCoordinate: Coordinate = new Coordinate(6, 8);
+        const vector: Vector = coordinate.vectorTo(otherCoordinate);
+        expect(vector.x).to.equal(3);
+        expect(vector.y).to.equal(4);
+    });
 });

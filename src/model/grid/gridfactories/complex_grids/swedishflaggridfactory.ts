@@ -2,14 +2,13 @@ import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Grid } from '../../grid';
-import { GridFactory } from '../gridfactory';
 import { DiagonalSquaresGridFactory } from '../rectangular_grids/diagonalsquaresgridfactory';
 import { RectangularGridProperties } from '../rectangular_grids/rectangulargridproperties';
 import { StandardGridFactory } from '../rectangular_grids/standardgridfactory';
 import { ComplexGridFactory } from './complexgridfactory.interface';
 import { ComplexGridProperties } from './complexgridproperties';
 
-export class SwedishFlagGridFactory extends GridFactory implements ComplexGridFactory {
+export class SwedishFlagGridFactory implements ComplexGridFactory {
 
     createGrid(gridProperties: ComplexGridProperties): Grid {
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;

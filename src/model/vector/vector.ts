@@ -6,6 +6,11 @@ export class Vector {
         //
     }
 
+    static unitVectorInDirection(angleInDegrees: number): Vector {
+        const angleInRadians: number = angleInDegrees * Math.PI / 180;
+        return new Vector(Math.cos(angleInRadians), Math.sin(angleInRadians));
+    }
+
     get magnitude(): number {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
@@ -41,6 +46,18 @@ export class Vector {
             angle += 360;
         }
         return angle;
+    }
+
+    hasSameDirectionAs(otherVector: Vector): boolean {
+        if (this.magnitude === 0 || otherVector.magnitude === 0) {
+            return false;
+        }
+        const tolerance: number = 1e-3; // Tolerance for floating point comparison
+        return Math.abs(this.hasAngleTo(otherVector)) % 360 < tolerance;
+    }
+
+    hasDirection(angleInDegrees: number): boolean {
+        return this.hasSameDirectionAs(Vector.unitVectorInDirection(angleInDegrees));
     }
 
     private dotProduct(otherVector: Vector): number {
