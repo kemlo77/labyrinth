@@ -1,5 +1,6 @@
 import { Segment } from '../../segment';
 import { Coordinate } from '../../coordinate';
+import { Border } from './border';
 
 export class Cell {
 
@@ -8,10 +9,25 @@ export class Cell {
     private _neighbours: Cell[] = [];
     private _connectedNeighbours: Cell[] = [];
     private _corners: Coordinate[];
+    private _borders: Border[] = [];
 
     constructor(center: Coordinate, corners: Coordinate[]) {
         this._center = center;
         this._corners = corners;
+        this._borders = this.createBorders();
+    }
+
+    private createBorders(): Border[] {
+        const newBorders: Border[] = [];
+        for (let i: number = 0; i < this._corners.length; i++) {
+            const lastCorner: boolean = i === this._corners.length - 1;
+            if (lastCorner) {
+                break;
+            }
+            newBorders.push(new Border(this._corners[i], this._corners[i + 1]));
+        }
+        newBorders.push(new Border(this._corners[this._corners.length - 1], this._corners[0]));
+        return newBorders;
     }
 
     get center(): Coordinate {
@@ -50,6 +66,18 @@ export class Cell {
     establishNeighbourRelationTo(cell: Cell): void {
         this.addNeighbour(cell);
         cell.addNeighbour(this);
+        this.settleCommonBordersWith(cell);
+    }
+
+    private settleCommonBordersWith(cell: Cell): void {
+        for (const ownBorder of this.borders) {
+            for (const otherCellsBorderCandidate of cell.borders) {
+                if (ownBorder.isAdjacentTo(otherCellsBorderCandidate)) {
+                    ownBorder.settleCommonBorderWith(otherCellsBorderCandidate);
+                    break;
+                }
+            }
+        }
     }
 
     private addNeighbour(cell: Cell): void {
@@ -67,6 +95,31 @@ export class Cell {
     establishConnectionTo(cell: Cell): void {
         this.addConnection(cell);
         cell.addConnection(this);
+        this.openCommonBordersWith(cell);
+    }
+
+    private openCommonBordersWith(cell: Cell): void {
+        for (const ownBorder of this.borders) {
+            for (const otherCellsBorderCandidate of cell.borders) {
+                if (ownBorder.isAdjacentTo(otherCellsBorderCandidate)) {
+                    ownBorder.open();
+                    otherCellsBorderCandidate.open();
+                    break;
+                }
+            }
+        }
+    }
+
+    private closeCommonBordersWith(cell: Cell): void {
+        for (const ownBorder of this.borders) {
+            for (const otherCellsBorderCandidate of cell.borders) {
+                if (ownBorder.isAdjacentTo(otherCellsBorderCandidate)) {
+                    ownBorder.close();
+                    otherCellsBorderCandidate.close();
+                    break;
+                }
+            }
+        }
     }
 
     private addConnection(toCell: Cell): void {
@@ -78,6 +131,11 @@ export class Cell {
 
     removeEstablishedConnections(): void {
         this._connectedNeighbours = [];
+        this.closeBorders();
+    }
+
+    private closeBorders(): void {
+        this._borders.forEach(border => border.close());
     }
 
     removeConnectionsToCell(): void {
@@ -85,6 +143,7 @@ export class Cell {
         connectedCells.forEach(otherCell => {
             this.removeConnection(otherCell);
             otherCell.removeConnection(this);
+            this.closeCommonBordersWith(otherCell);
         });
     }
 
@@ -95,64 +154,22 @@ export class Cell {
     hasCommonBorderWith(cell: Cell): boolean {
         return this.borders.some(border => {
             return cell.borders.some(otherBorder => {
-                return this.bordersAreAdjacent(border, otherBorder);
+                return border.isAdjacentTo(otherBorder);
             });
         });
-    }
-
-    commonCornersWith(cell: Cell): Coordinate[] {
-        const commonCorners: Coordinate[] = [];
-        for (const corner of this._corners) {
-            for (const otherCorner of cell.corners) {
-                if (corner.distanceTo(otherCorner) < 0.1) {
-                    commonCorners.push(corner);
-                }
-            }
-        }
-        return commonCorners;
-    }
-
-    private bordersAreAdjacent(border: Segment, otherBorder: Segment): boolean {
-        return border.midpoint.distanceTo(otherBorder.midpoint) < 0.1;
     }
 
     get corners(): Coordinate[] {
         return [... this._corners];
     }
 
-    get borders(): Segment[] {
-        const newBorders: Segment[] = [];
-        for (let i: number = 0; i < this._corners.length; i++) {
-            const lastCorner: boolean = i === this._corners.length - 1;
-            if (lastCorner) {
-                break;
-            }
-            newBorders.push(new Segment(this._corners[i], this._corners[i + 1]));
-        }
-        newBorders.push(new Segment(this._corners[this._corners.length - 1], this._corners[0]));
-        return newBorders;
+    get borders(): Border[] {
+        return [... this._borders];
     }
 
-    get closedBorders(): Segment[] {
-        const closedBorders: Segment[] = [];
-        const allConnectedNeighbourBorders: Segment[] =
-            this.connectedNeighbours.reduce((acc, neighbour) => acc.concat(neighbour.borders), []);
+    get closedBorders(): Border[] {
+        return this._borders.filter(border => border.isClosed);
 
-        for (const border of this.borders) {
-            let borderIsOpen: boolean = false;
-
-            for (const neighbourBorder of allConnectedNeighbourBorders) {
-                if (this.bordersAreAdjacent(border, neighbourBorder)) {
-                    borderIsOpen = true;
-                    break;
-                }
-            }
-
-            if (!borderIsOpen) {
-                closedBorders.push(border);
-            }
-        }
-        return closedBorders;
     }
 
     rotateAroundCenter(angle: number, center?: Coordinate): Cell {

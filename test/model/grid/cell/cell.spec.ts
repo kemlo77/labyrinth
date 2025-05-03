@@ -145,16 +145,6 @@ describe('Cell', () => {
         expect(leftCell.hasCommonBorderWith(rightCell)).to.equal(false);
     });
 
-    it('should have common corners with neighbour', () => {
-        const commonCorners: Coordinate[] = leftCell.commonCornersWith(middleCell);
-        expect(commonCorners.length).to.equal(2);
-    });
-
-    it('should not have common corners with non-neighbour', () => {
-        const commonCorners: Coordinate[] = leftCell.commonCornersWith(rightCell);
-        expect(commonCorners.length).to.equal(0);
-    });
-
     it('should have room for more neighbours', () => {
         expect(middleCell.hasRoomForMoreNeighbours).to.equal(true);
         middleCell.establishNeighbourRelationTo(leftCell);
