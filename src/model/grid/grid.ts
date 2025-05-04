@@ -52,8 +52,8 @@ export class Grid {
         return this.allCells.filter(cell => cell.hasRoomForMoreNeighbours);
     }
 
-    get allDisconnectedCells(): Cell[] {
-        return this.allCells.filter(cell => cell.connectedNeighbours.length == 0);
+    get allUnconnectedCells(): Cell[] {
+        return this.allCells.filter(cell => cell.hasNoOpenBorders);
     }
 
     get totalNumberOfCells(): number {
@@ -78,15 +78,15 @@ export class Grid {
 
     public resetGrid(): void {
         this.resetVisitedStatusOnCells();
-        this.removeEstablishedConnectionsInCells();
+        this.closeEstablishedConnectionsInCells();
     }
 
     private resetVisitedStatusOnCells(): void {
         this.allCells.forEach(cell => cell.visited = false);
     }
 
-    private removeEstablishedConnectionsInCells(): void {
-        this.allCells.forEach(cell => cell.removeEstablishedConnections());
+    private closeEstablishedConnectionsInCells(): void {
+        this.allCells.forEach(cell => cell.closeEstablishedConnections());
     }
 
     public disconnectCellsWithOnlyOneConnection(): void {
@@ -95,7 +95,7 @@ export class Grid {
             .filter(cell => cell != this.startCell)
             .filter(cell => cell != this.endCell)
             .forEach(cell => {
-                cell.removeConnectionsToCell();
+                cell.closeEstablishedConnections();
             });
     }
 

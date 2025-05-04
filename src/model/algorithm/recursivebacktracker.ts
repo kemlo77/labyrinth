@@ -37,7 +37,7 @@ export class RecursiveBacktrackerAlgorithm implements MazeGenerationAlgorithm {
         function stepToRandomUnvisitedNeighbour(): void {
             const nextCell: Cell = currentCell().randomUnvisitedNeighbour;
             nextCell.visited = true;
-            currentCell().establishConnectionTo(nextCell);
+            currentCell().openConnectionTo(nextCell);
             sequenceOfVisitedCells.push(nextCell);
             if (nextCell === grid.endCell) {
                 solutionCellSequence = [...sequenceOfVisitedCells];

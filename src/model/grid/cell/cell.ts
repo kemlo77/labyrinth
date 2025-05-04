@@ -1,23 +1,22 @@
-import { Segment } from '../../segment';
 import { Coordinate } from '../../coordinate';
 import { Border } from './border';
+import { Neighbour } from './neighbour';
 
 export class Cell {
 
     private _center: Coordinate;
     private _visited: boolean = false;
-    private _neighbours: Cell[] = [];
-    private _connectedNeighbours: Cell[] = [];
+    private _neighbours: Neighbour[] = [];
     private _corners: Coordinate[];
     private _borders: Border[] = [];
 
     constructor(center: Coordinate, corners: Coordinate[]) {
         this._center = center;
         this._corners = corners;
-        this._borders = this.createBorders();
+        this._borders = this.createAllBorders();
     }
 
-    private createBorders(): Border[] {
+    private createAllBorders(): Border[] {
         const newBorders: Border[] = [];
         for (let i: number = 0; i < this._corners.length; i++) {
             const lastCorner: boolean = i === this._corners.length - 1;
@@ -34,6 +33,26 @@ export class Cell {
         return this._center;
     }
 
+    get corners(): Coordinate[] {
+        return [... this._corners];
+    }
+
+    get allBorders(): Border[] {
+        return this._borders;
+    }
+
+    get closedBorders(): Border[] {
+        return this._borders.filter(border => border.isClosed);
+    }
+
+    get bordersWithNoNeighbour(): Border[] {
+        return this.allBorders.filter(border => !border.bordersToNeighbour);
+    }
+
+    get bordersToNeighbour(): Border[] {
+        return this.allBorders.filter(border => border.bordersToNeighbour);
+    }
+
     get visited(): boolean {
         return this._visited;
     }
@@ -42,16 +61,16 @@ export class Cell {
         this._visited = visited;
     }
 
-    get neighbours(): Cell[] {
-        return this._neighbours;
+    get neighbourCells(): Cell[] {
+        return this._neighbours.map(neighbour => neighbour.cell);
     }
 
     get hasRoomForMoreNeighbours(): boolean {
-        return this._neighbours.length < this._corners.length;
+        return this.neighbourCells.length < this._borders.length;
     }
 
     get unvisitedNeighbours(): Cell[] {
-        return this._neighbours.filter(cell => !cell.visited);
+        return this.neighbourCells.filter(cell => !cell.visited);
     }
 
     get hasNoUnvisitedNeighbours(): boolean {
@@ -63,113 +82,67 @@ export class Cell {
         return this.unvisitedNeighbours[randomIndex];
     }
 
-    establishNeighbourRelationTo(cell: Cell): void {
-        this.addNeighbour(cell);
-        cell.addNeighbour(this);
-        this.settleCommonBordersWith(cell);
-    }
-
-    private settleCommonBordersWith(cell: Cell): void {
-        for (const ownBorder of this.borders) {
-            for (const otherCellsBorderCandidate of cell.borders) {
-                if (ownBorder.isAdjacentTo(otherCellsBorderCandidate)) {
-                    ownBorder.settleCommonBorderWith(otherCellsBorderCandidate);
-                    break;
-                }
-            }
-        }
-    }
-
-    private addNeighbour(cell: Cell): void {
-        if (this._neighbours.includes(cell)) {
-            return;
-        }
-        this._neighbours.push(cell);
-    }
-
     get connectedNeighbours(): Cell[] {
-        return this._connectedNeighbours;
+        return this._neighbours
+            .filter(neighbour => neighbour.commonBorder.isOpen)
+            .map(neighbour => neighbour.cell);
     }
 
-
-    establishConnectionTo(cell: Cell): void {
-        this.addConnection(cell);
-        cell.addConnection(this);
-        this.openCommonBordersWith(cell);
+    get hasNoOpenBorders(): boolean {
+        return this._neighbours.every(neighbour => neighbour.commonBorder.isClosed);
     }
 
-    private openCommonBordersWith(cell: Cell): void {
-        for (const ownBorder of this.borders) {
-            for (const otherCellsBorderCandidate of cell.borders) {
-                if (ownBorder.isAdjacentTo(otherCellsBorderCandidate)) {
-                    ownBorder.open();
-                    otherCellsBorderCandidate.open();
-                    break;
-                }
-            }
-        }
-    }
-
-    private closeCommonBordersWith(cell: Cell): void {
-        for (const ownBorder of this.borders) {
-            for (const otherCellsBorderCandidate of cell.borders) {
-                if (ownBorder.isAdjacentTo(otherCellsBorderCandidate)) {
-                    ownBorder.close();
-                    otherCellsBorderCandidate.close();
-                    break;
-                }
-            }
-        }
-    }
-
-    private addConnection(toCell: Cell): void {
-        if (this._connectedNeighbours.includes(toCell)) {
+    establishNeighbourRelationTo(otherCell: Cell): void {
+        if (this.neighbourCells.includes(otherCell)) {
             return;
         }
-        this._connectedNeighbours.push(toCell);
+        const commonBorder: Border = this.findCommonBorderWith(otherCell);
+        commonBorder.bordersToNeighbour = true;
+        this._neighbours.push(new Neighbour(otherCell, commonBorder));
+        otherCell._neighbours.push(new Neighbour(this, commonBorder));
+        otherCell.replaceAdjacentBorderWith(commonBorder);
     }
 
-    removeEstablishedConnections(): void {
-        this._connectedNeighbours = [];
-        this.closeBorders();
+    private findCommonBorderWith(neighbourCell: Cell): Border {
+        for (const ownBorder of this.bordersWithNoNeighbour) {
+            for (const otherCellsBorderCandidate of neighbourCell.bordersWithNoNeighbour) {
+                if (ownBorder.isAdjacentTo(otherCellsBorderCandidate)) {
+                    return ownBorder;
+                }
+            }
+        }
+        throw new Error('No common border found between cells');
     }
 
-    private closeBorders(): void {
-        this._borders.forEach(border => border.close());
+    private replaceAdjacentBorderWith(newBorder: Border): void {
+        const index: number = this._borders.findIndex(border => border.isAdjacentTo(newBorder));
+        if (index === -1) {
+            throw new Error('Border not found in borders with no neighbour');
+        }
+        this._borders.splice(index, 1);
+        this._borders.push(newBorder);
     }
 
-    removeConnectionsToCell(): void {
-        const connectedCells: Cell[] = [...this.connectedNeighbours];
-        connectedCells.forEach(otherCell => {
-            this.removeConnection(otherCell);
-            otherCell.removeConnection(this);
-            this.closeCommonBordersWith(otherCell);
-        });
+    openConnectionTo(toCell: Cell): void {
+        const neighbour: Neighbour | undefined = this._neighbours.find(neighbour => neighbour.cell === toCell);
+        if (neighbour === undefined) {
+            throw new Error('No neighbour found to open connection to');
+        }
+        neighbour.commonBorder.open();
     }
 
-    private removeConnection(toCell: Cell): void {
-        this._connectedNeighbours = this._connectedNeighbours.filter(cell => cell !== toCell);
+    closeEstablishedConnections(): void {
+        for (const neighbour of this._neighbours) {
+            neighbour.commonBorder.close();
+        }
     }
 
     hasCommonBorderWith(cell: Cell): boolean {
-        return this.borders.some(border => {
-            return cell.borders.some(otherBorder => {
+        return this.allBorders.some(border => {
+            return cell.allBorders.some(otherBorder => {
                 return border.isAdjacentTo(otherBorder);
             });
         });
-    }
-
-    get corners(): Coordinate[] {
-        return [... this._corners];
-    }
-
-    get borders(): Border[] {
-        return [... this._borders];
-    }
-
-    get closedBorders(): Border[] {
-        return this._borders.filter(border => border.isClosed);
-
     }
 
     rotateAroundCenter(angle: number, center?: Coordinate): Cell {

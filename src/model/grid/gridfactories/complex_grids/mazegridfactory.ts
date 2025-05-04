@@ -2,7 +2,7 @@ import { MazeGenerationAlgorithm } from '../../../algorithm/algorithm';
 import { RecursiveBacktrackerAlgorithm } from '../../../algorithm/recursivebacktracker';
 import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
-import { stepRight, stepDown, RIGHT, UP, LEFT, DOWN } from '../../../vector/vectorcreator';
+import { stepRight, stepDown } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { Grid } from '../../grid';
 import { GridCreator } from '../../typealiases';

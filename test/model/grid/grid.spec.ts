@@ -32,8 +32,8 @@ describe('Grid', () => {
 
     it('should return all disconnected cells', () => {
         const allCells: Cell[] = grid.allCells;
-        allCells[0].establishConnectionTo(allCells[1]);
-        expect(grid.allDisconnectedCells.length).to.equal(7);
+        allCells[0].openConnectionTo(allCells[1]);
+        expect(grid.allUnconnectedCells.length).to.equal(7);
     });
 
     it('should have the correct number of cells', () => {
@@ -46,18 +46,18 @@ describe('Grid', () => {
 
     it('should reset the grid', () => {
         const allCells: Cell[] = grid.allCells;
-        allCells[0].establishConnectionTo(allCells[1]);
+        allCells[0].openConnectionTo(allCells[1]);
         allCells.forEach(cell => cell.visited = true);
         grid.resetGrid();
         expect(grid.numberOfVisitedCells).to.equal(0);
-        expect(grid.allDisconnectedCells.length).to.equal(9);
+        expect(grid.allUnconnectedCells.length).to.equal(9);
     });
 
     it('should disconnect cells with only one connection', () => {
         const allCells: Cell[] = grid.allCells;
-        allCells[0].establishConnectionTo(allCells[1]);
+        allCells[0].openConnectionTo(allCells[1]);
         grid.disconnectCellsWithOnlyOneConnection();
-        expect(grid.allDisconnectedCells.length).to.equal(9);
+        expect(grid.allUnconnectedCells.length).to.equal(9);
     });
 
     it('should connect to another grid', () => {
@@ -67,20 +67,20 @@ describe('Grid', () => {
         const gridProperties2: RectangularGridProperties = new RectangularGridProperties(insertionPoint2, 3, 3, 10);
         const grid1: Grid = new StandardGridFactory().createGrid(gridProperties1);
         const grid2: Grid = new StandardGridFactory().createGrid(gridProperties2);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 2).length).to.equal(4);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 3).length).to.equal(4);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 4).length).to.equal(1);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 2).length).to.equal(4);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 3).length).to.equal(4);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 4).length).to.equal(1);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 2).length).to.equal(4);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 3).length).to.equal(4);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 4).length).to.equal(1);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 2).length).to.equal(4);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 3).length).to.equal(4);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 4).length).to.equal(1);
 
         grid1.establishNeighbourRelationsWith(grid2);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 2).length).to.equal(2);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 3).length).to.equal(5);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 4).length).to.equal(2);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 2).length).to.equal(2);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 3).length).to.equal(5);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 4).length).to.equal(2);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 2).length).to.equal(2);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 3).length).to.equal(5);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 4).length).to.equal(2);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 2).length).to.equal(2);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 3).length).to.equal(5);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 4).length).to.equal(2);
     });
 
     it('should not connect to another grid', () => {
@@ -90,20 +90,20 @@ describe('Grid', () => {
         const gridProperties2: RectangularGridProperties = new RectangularGridProperties(insertionPoint2, 3, 3, 10);
         const grid1: Grid = new StandardGridFactory().createGrid(gridProperties1);
         const grid2: Grid = new StandardGridFactory().createGrid(gridProperties2);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 2).length).to.equal(4);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 3).length).to.equal(4);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 4).length).to.equal(1);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 2).length).to.equal(4);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 3).length).to.equal(4);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 4).length).to.equal(1);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 2).length).to.equal(4);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 3).length).to.equal(4);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 4).length).to.equal(1);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 2).length).to.equal(4);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 3).length).to.equal(4);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 4).length).to.equal(1);
 
         grid1.establishNeighbourRelationsWith(grid2);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 2).length).to.equal(4);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 3).length).to.equal(4);
-        expect(grid1.allCells.filter(cell => cell.neighbours.length === 4).length).to.equal(1);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 2).length).to.equal(4);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 3).length).to.equal(4);
-        expect(grid2.allCells.filter(cell => cell.neighbours.length === 4).length).to.equal(1);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 2).length).to.equal(4);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 3).length).to.equal(4);
+        expect(grid1.allCells.filter(cell => cell.neighbourCells.length === 4).length).to.equal(1);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 2).length).to.equal(4);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 3).length).to.equal(4);
+        expect(grid2.allCells.filter(cell => cell.neighbourCells.length === 4).length).to.equal(1);
     });
 
 

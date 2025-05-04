@@ -19,9 +19,9 @@ describe('StandardGridFactory', () => {
     });
 
     it('verifying neighbour count', () => {
-        expect(cellMatrix[0].map(cell => cell.neighbours.length)).to.deep.equal([2, 3, 2]);
-        expect(cellMatrix[1].map(cell => cell.neighbours.length)).to.deep.equal([3, 4, 3]);
-        expect(cellMatrix[2].map(cell => cell.neighbours.length)).to.deep.equal([2, 3, 2]);
+        expect(cellMatrix[0].map(cell => cell.neighbourCells.length)).to.deep.equal([2, 3, 2]);
+        expect(cellMatrix[1].map(cell => cell.neighbourCells.length)).to.deep.equal([3, 4, 3]);
+        expect(cellMatrix[2].map(cell => cell.neighbourCells.length)).to.deep.equal([2, 3, 2]);
     });
 
     it('verifying top left cell', () => {

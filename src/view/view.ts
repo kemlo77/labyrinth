@@ -10,6 +10,7 @@ import {
     LIGHT_RED_COLOR,
     LIGHT_GRAY_COLOR
 } from './canvaspainter';
+import { Border } from '../model/grid/cell/border';
 
 export class View implements Observer {
 
@@ -37,7 +38,7 @@ export class View implements Observer {
     }
 
     private shadeDisconnectedCells(): void {
-        this._model.grid.allDisconnectedCells
+        this._model.grid.allUnconnectedCells
             .forEach(cell => this.fillCell(cell, LIGHT_GRAY_COLOR, BLACK_COLOR));
     }
 
@@ -46,9 +47,15 @@ export class View implements Observer {
     }
 
     private drawAllCellBorders(): void {
-        this._model.grid.allCells.forEach(cell => {
-            this._canvasPainter.drawSegments(cell.closedBorders, 1, BLACK_COLOR);
-        });
+        const borders: Border[] = this._model.grid.allCells
+            .flatMap(cell => cell.closedBorders);
+        const uniqueBorders: Border[] = [...new Set(borders)];
+
+        const bordersBetweenCells: Border[] = uniqueBorders.filter(border => border.bordersToNeighbour);
+        this._canvasPainter.drawSegments(bordersBetweenCells, 1, BLACK_COLOR);
+
+        const edgeBorders: Border[] = uniqueBorders.filter(border => !border.bordersToNeighbour);
+        this._canvasPainter.drawSegments(edgeBorders, 2, BLACK_COLOR);
     }
 
     private drawAllCellCenters(): void {
@@ -67,15 +74,15 @@ export class View implements Observer {
 
     private drawAllNeighbourRelations(): void {
         this._model.grid.allCells.forEach(cell => {
-            cell.neighbours.forEach(neighbour => {
+            cell.neighbourCells.forEach(neighbour => {
                 this._canvasPainter.drawLine(cell.center, neighbour.center, 1, BLUE_COLOR);
             });
         });
     }
 
     private drawNumberOfNeighbours(): void {
-        this._model.grid.allDisconnectedCells.forEach(cell => {
-            this._canvasPainter.drawText(cell.neighbours.length.toString(), cell.center, 10, BLACK_COLOR);
+        this._model.grid.allUnconnectedCells.forEach(cell => {
+            this._canvasPainter.drawText(cell.neighbourCells.length.toString(), cell.center, 10, BLACK_COLOR);
         });
     }
 

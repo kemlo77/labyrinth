@@ -31,13 +31,13 @@ describe('Cell', () => {
 
     it('establishing neighbour relation between two cells', () => {
         leftCell.establishNeighbourRelationTo(middleCell);
-        expect(leftCell.neighbours.length).to.equal(1);
+        expect(leftCell.neighbourCells.length).to.equal(1);
     });
 
     it('trying to establish neighbour relation twice', () => {
         leftCell.establishNeighbourRelationTo(middleCell);
         leftCell.establishNeighbourRelationTo(middleCell);
-        expect(leftCell.neighbours.length).to.equal(1);
+        expect(leftCell.neighbourCells.length).to.equal(1);
     });
 
     it('visiting a cell', () => {
@@ -45,58 +45,89 @@ describe('Cell', () => {
         expect(leftCell.visited).to.equal(true);
     });
 
-    it('interconnecting two cells', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 2, 'square');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 20), 2, 'square');
-        cell1.establishConnectionTo(cell2);
-        expect(cell1.unvisitedNeighbours.length).to.equal(0);
-        expect(cell2.unvisitedNeighbours.length).to.equal(0);
-        expect(cell1.hasNoUnvisitedNeighbours).to.equal(true);
-        expect(cell2.hasNoUnvisitedNeighbours).to.equal(true);
-        expect(cell1.connectedNeighbours[0]).to.equal(cell2);
-        expect(cell2.connectedNeighbours[0]).to.equal(cell1);
+    it('establish neighbour relation between two cells', () => {
+        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square');
+        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square');
+        cell1.establishNeighbourRelationTo(cell2);
+        expect(cell1.neighbourCells.length).to.equal(1);
+        expect(cell2.neighbourCells.length).to.equal(1);
+        expect(cell1.connectedNeighbours.length).to.equal(0);
+        expect(cell2.connectedNeighbours.length).to.equal(0);
+        expect(cell1.unvisitedNeighbours.length).to.equal(1);
+        expect(cell2.unvisitedNeighbours.length).to.equal(1);
+        expect(cell1.hasNoUnvisitedNeighbours).to.equal(false);
+        expect(cell2.hasNoUnvisitedNeighbours).to.equal(false);
+        expect(cell1.allBorders.length).to.equal(4);
+        expect(cell2.allBorders.length).to.equal(4);
+        expect(cell1.bordersWithNoNeighbour.length).to.equal(3);
+        expect(cell2.bordersWithNoNeighbour.length).to.equal(3);
+        expect(cell1.bordersToNeighbour[0])
+            .to.equal(cell2.bordersToNeighbour[0]);
+        expect(cell1.bordersToNeighbour[0].isClosed).to.equal(true);
     });
 
-    it('interconnecting two cells twice', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 2, 'square');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 20), 2, 'square');
-        cell1.establishConnectionTo(cell2);
-        cell1.establishConnectionTo(cell2);
+    it('establish neighbour relation between two cells when not close', () => {
+        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square');
+        const cell2: Cell = CellFactory.createCell(new Coordinate(100, 100), 10, 'square');
+        expect(() => cell1.establishNeighbourRelationTo(cell2))
+            .to.throw('No common border found between cells');
+
+    });
+
+    it('open connection to a neighbour cell', () => {
+        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square');
+        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square');
+        cell1.establishNeighbourRelationTo(cell2);
+        expect(cell1.hasNoOpenBorders).to.equal(true);
+        expect(cell2.hasNoOpenBorders).to.equal(true);
+        cell1.openConnectionTo(cell2);
+        expect(cell1.hasNoOpenBorders).to.equal(false);
+        expect(cell2.hasNoOpenBorders).to.equal(false);
         expect(cell1.connectedNeighbours.length).to.equal(1);
         expect(cell2.connectedNeighbours.length).to.equal(1);
+        expect(cell1.connectedNeighbours[0]).to.equal(cell2);
+        expect(cell2.connectedNeighbours[0]).to.equal(cell1);
+        expect(cell1.bordersWithNoNeighbour.length).to.equal(3);
+        expect(cell2.bordersWithNoNeighbour.length).to.equal(3);
+        expect(cell1.bordersToNeighbour.length).to.equal(1);
+        expect(cell2.bordersToNeighbour.length).to.equal(1);
+        expect(cell1.bordersToNeighbour[0].isOpen).to.equal(true);
     });
 
-    it('removing connection between two cells', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 2, 'square');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 20), 2, 'square');
-        cell1.establishConnectionTo(cell2);
+    it('open connection to a neighbour cell twice', () => {
+        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square');
+        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square');
+        expect(() => cell1.openConnectionTo(cell2)).to.throw('No neighbour found to open connection to');
+    });
+
+    it('establish neighbour relation between two cells twice', () => {
+        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square');
+        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square');
+        cell1.establishNeighbourRelationTo(cell2);
+        cell1.establishNeighbourRelationTo(cell2);
+        expect(cell1.neighbourCells.length).to.equal(1);
+        expect(cell2.neighbourCells.length).to.equal(1);
+    });
+
+    it('closing all connection a cell has', () => {
+        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square');
+        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square');
+        cell1.establishNeighbourRelationTo(cell2);
+        cell1.openConnectionTo(cell2);
+        expect(cell1.bordersToNeighbour[0].isOpen).to.equal(true);
         expect(cell1.connectedNeighbours[0]).to.equal(cell2);
         expect(cell2.connectedNeighbours[0]).to.equal(cell1);
 
-        cell1.removeConnectionsToCell();
-        expect(cell1.unvisitedNeighbours.length).to.equal(0);
-        expect(cell2.unvisitedNeighbours.length).to.equal(0);
-        expect(cell1.hasNoUnvisitedNeighbours).to.equal(true);
-        expect(cell2.hasNoUnvisitedNeighbours).to.equal(true);
+        cell1.closeEstablishedConnections();
+
+        expect(cell1.bordersToNeighbour[0].isOpen).to.equal(false);
         expect(cell1.connectedNeighbours.length).to.equal(0);
         expect(cell2.connectedNeighbours.length).to.equal(0);
     });
 
-    it('removing all connections a cell has', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 2, 'square');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 20), 2, 'square');
-        cell1.establishConnectionTo(cell2);
-        expect(cell1.connectedNeighbours[0]).to.equal(cell2);
-        expect(cell2.connectedNeighbours[0]).to.equal(cell1);
-
-        cell1.removeEstablishedConnections();
-        expect(cell1.connectedNeighbours.length).to.equal(0);
-        expect(cell2.connectedNeighbours.length).to.equal(1);
-    });
-
     it('getting random unvisited neighbour', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 2, 'square');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 20), 2, 'square');
+        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square');
+        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square');
         cell1.establishNeighbourRelationTo(cell2);
         expect(cell1.randomUnvisitedNeighbour).to.equal(cell2);
     });
@@ -121,16 +152,16 @@ describe('Cell', () => {
 
     it('should have 3 borders when one neighbour', () => {
         leftCell.establishNeighbourRelationTo(middleCell);
-        leftCell.establishConnectionTo(middleCell);
+        leftCell.openConnectionTo(middleCell);
         expect(leftCell.closedBorders.length).to.equal(3);
         expect(middleCell.closedBorders.length).to.equal(3);
     });
 
     it('should have 2 closed borders when two neighbours', () => {
-        leftCell.establishNeighbourRelationTo(middleCell);
-        leftCell.establishNeighbourRelationTo(rightCell);
-        middleCell.establishConnectionTo(leftCell);
-        middleCell.establishConnectionTo(rightCell);
+        middleCell.establishNeighbourRelationTo(leftCell);
+        middleCell.establishNeighbourRelationTo(rightCell);
+        middleCell.openConnectionTo(leftCell);
+        middleCell.openConnectionTo(rightCell);
 
         expect(leftCell.closedBorders.length).to.equal(3);
         expect(middleCell.closedBorders.length).to.equal(2);
@@ -155,6 +186,17 @@ describe('Cell', () => {
         expect(middleCell.hasRoomForMoreNeighbours).to.equal(true);
         middleCell.establishNeighbourRelationTo(lowerCell);
         expect(middleCell.hasRoomForMoreNeighbours).to.equal(false);
+    });
+
+    it('should rotate cell', () => {
+        const cell: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square');
+        const originalCorners: Coordinate[] = cell.corners;
+        cell.rotateAroundCenter(90);
+        const rotatedCorners: Coordinate[] = cell.corners;
+        expect(originalCorners[0].equals(rotatedCorners[1])).to.equal(false);
+        expect(originalCorners[1].equals(rotatedCorners[2])).to.equal(false);
+        expect(originalCorners[2].equals(rotatedCorners[3])).to.equal(false);
+        expect(originalCorners[3].equals(rotatedCorners[0])).to.equal(false);
     });
 
 });
