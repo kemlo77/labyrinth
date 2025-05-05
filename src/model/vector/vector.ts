@@ -15,6 +15,14 @@ export class Vector {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
+    get direction(): number {
+        if (this.magnitude === 0) {
+            return 0;
+        }
+        const angle: number = Math.atan2(this.y, this.x) * 180 / Math.PI;
+        return angle < 0 ? angle + 360 : angle;
+    }
+
     //scaling vectors
     times(factor: number): Vector {
         return new Vector(this.x * factor, this.y * factor);
@@ -46,18 +54,6 @@ export class Vector {
             angle += 360;
         }
         return angle;
-    }
-
-    hasSameDirectionAs(otherVector: Vector): boolean {
-        if (this.magnitude === 0 || otherVector.magnitude === 0) {
-            return false;
-        }
-        const tolerance: number = 1e-3; // Tolerance for floating point comparison
-        return Math.abs(this.hasAngleTo(otherVector)) % 360 < tolerance;
-    }
-
-    hasDirection(angleInDegrees: number): boolean {
-        return this.hasSameDirectionAs(Vector.unitVectorInDirection(angleInDegrees));
     }
 
     private dotProduct(otherVector: Vector): number {

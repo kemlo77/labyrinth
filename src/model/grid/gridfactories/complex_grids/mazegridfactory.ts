@@ -75,9 +75,10 @@ export class MazeGridFactory {
         cellSideLength: number,
         subDivisions: number
     ): void {
+        const gridOffset: number = 2;
         const gridWidth: number = cellSideLength * subDivisions;
 
-        const directionFromPreviousToCurrentCell: Vector =
+        const fromPreviousToCurrentCell: Vector =
             previousTemplateGridCell.center.vectorTo(currentTemplateGridCell.center);
 
 
@@ -90,37 +91,20 @@ export class MazeGridFactory {
                 );
             const gridProperties: RectangularGridProperties = new RectangularGridProperties(
                 gridInsertionPoint,
-                subDivisions + 1,
+                subDivisions + gridOffset,
                 subDivisions,
                 cellSideLength,
                 angle
             );
             const newGrid: Grid = new StandardGridFactory().createGrid(gridProperties);
             const newGridCenter: Coordinate = neighbourGridCenter
-                .stepToNewCoordinate(stepRight(gridWidth + cellSideLength).newRotatedVector(angle));
+                .stepToNewCoordinate(stepRight(gridWidth + cellSideLength * gridOffset).newRotatedVector(angle));
             newGrid.center = newGridCenter;
             return newGrid;
         };
 
 
-        let currentGrid: Grid;
-
-        if (directionFromPreviousToCurrentCell.hasDirection(0)) {
-            currentGrid = createGrid(previousGrid.center, 0);
-        }
-
-        if (directionFromPreviousToCurrentCell.hasDirection(90)) {
-            currentGrid = createGrid(previousGrid.center, 90);
-        }
-
-        if (directionFromPreviousToCurrentCell.hasDirection(180)) {
-            currentGrid = createGrid(previousGrid.center, 180);
-        }
-
-        if (directionFromPreviousToCurrentCell.hasDirection(270)) {
-            currentGrid = createGrid(previousGrid.center, 270);
-        }
-
+        const currentGrid: Grid = createGrid(previousGrid.center, fromPreviousToCurrentCell.direction);
         currentGrid.establishNeighbourRelationsWith(previousGrid);
 
 
