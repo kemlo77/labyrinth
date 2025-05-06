@@ -1,11 +1,16 @@
-body {background-color: powderblue;}
+body {
+    background-color: powderblue;
+}
+
 canvas {
     margin-top: 10px;
-    background-color: white;    
+    background-color: white;
 }
+
 button {
     margin-right: 10px;
     margin-top: 10px;
-    height: 30px;
+    margin-bottom: 10px;
+    height: 40px;
     width: 110px;
 }

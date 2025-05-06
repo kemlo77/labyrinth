@@ -16,6 +16,7 @@ export class View implements Observer {
 
     private _model: Model;
     private _canvasPainter: CanvasPainter;
+    private _showSolution: boolean = false;
 
 
     constructor(canvasPainter: CanvasPainter, model: Model) {
@@ -35,6 +36,9 @@ export class View implements Observer {
         //this.drawAllCellConnections();
         //this.drawAllNeighbourRelations();
         //this.drawNumberOfNeighbours();
+        if (this._showSolution) {
+            this.drawSolution();
+        }
     }
 
     private shadeDisconnectedCells(): void {
@@ -94,12 +98,18 @@ export class View implements Observer {
         this._canvasPainter.fillPolygon(this._model.grid.endCell.corners, LIGHT_RED_COLOR, LIGHT_RED_COLOR);
     }
 
-    public showSolution(): void {
+    private drawSolution(): void {
         this._canvasPainter.drawSegments(this._model.solutionTrail, 2, BLUE_COLOR);
     }
 
+    public showSolution(): void {
+        this._showSolution = true;
+        this.update();
+    }
+
     public hideSolution(): void {
-        this._canvasPainter.drawSegments(this._model.solutionTrail, 4, WHITE_COLOR);
+        this._showSolution = false;
+        this.update();
     }
 
 }

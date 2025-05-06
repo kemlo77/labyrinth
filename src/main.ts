@@ -7,8 +7,7 @@ import { CanvasPainter } from './view/canvaspainter';
 const canvasElement: HTMLCanvasElement = document.getElementById('myCanvas') as HTMLCanvasElement;
 const generateButton: HTMLButtonElement = document.getElementById('generateButton') as HTMLButtonElement;
 const simplifyButton: HTMLButtonElement = document.getElementById('simplifyButton') as HTMLButtonElement;
-const showTrailButton: HTMLButtonElement = document.getElementById('showTrailButton') as HTMLButtonElement;
-const hideTrailButton: HTMLButtonElement = document.getElementById('hideTrailButton') as HTMLButtonElement;
+const showSolutionCheckbox: HTMLInputElement = document.getElementById('solutionTrailCheckbox') as HTMLInputElement;
 const mazeTypeRadioButtons: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[name="mazeType"]');
 
 const model: Model = new Model();
@@ -20,8 +19,13 @@ controller.changeGridType('standard');
 
 generateButton.addEventListener('click', () => controller.generateLabyrinth());
 simplifyButton.addEventListener('click', () => model.reduceSomeComplexity());
-showTrailButton.addEventListener('click', () => controller.showSolution());
-hideTrailButton.addEventListener('click', () => controller.hideSolution());
+showSolutionCheckbox.addEventListener('change', () => {
+    if (showSolutionCheckbox.checked) {
+        controller.showSolution();
+    } else {
+        controller.hideSolution();
+    }
+});
 
 mazeTypeRadioButtons.forEach(radioButton => {
     radioButton.addEventListener('change', () => {
