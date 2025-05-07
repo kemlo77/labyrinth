@@ -18,7 +18,9 @@ controller.changeGridType('standard');
 
 
 generateButton.addEventListener('click', () => controller.generateLabyrinth());
+
 simplifyButton.addEventListener('click', () => model.reduceSomeComplexity());
+
 showSolutionCheckbox.addEventListener('change', () => {
     if (showSolutionCheckbox.checked) {
         controller.showSolution();
@@ -34,3 +36,16 @@ mazeTypeRadioButtons.forEach(radioButton => {
         }
     });
 });
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'g' || event.key === 'G') {
+        controller.generateLabyrinth();
+    }
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 's' || event.key === 'S') {
+        model.reduceSomeComplexity();
+    }
+}
+);
