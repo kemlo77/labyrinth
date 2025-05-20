@@ -20,6 +20,7 @@ import { StarGridFactory } from './gridfactories/complex_grids/stargridfactory';
 import { SierpinskiTriangleGridFactory } from './gridfactories/complex_grids/sierpinskitrianglegridfactory';
 import { SierpinskySquareGridFactory } from './gridfactories/complex_grids/sierpinskysquaregridfactory';
 import { MazeGridFactory } from './gridfactories/complex_grids/mazegridfactory';
+import { SpiralGridFactory } from './gridfactories/complex_grids/spiralgridfactory';
 
 export class GridSupplier {
 
@@ -117,6 +118,10 @@ export class GridSupplier {
 
         if (gridType === 'mazeInMaze') {
             return new MazeGridFactory().createGrid(insertionPoint, 9, 8, 8, 8);
+        }
+
+        if (gridType === 'spiralMaze') {
+            return new SpiralGridFactory().createGrid(insertionPoint, 11, 7, 8, 1, 10);
         }
 
         throw new Error('Invalid grid type');
