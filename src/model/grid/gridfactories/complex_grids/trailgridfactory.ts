@@ -5,9 +5,9 @@ import { RectangularGridProperties } from '../rectangular_grids/rectangulargridp
 import { stepDown, stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 
-export class SpiralGridFactory {
+export class TrailGridFactory {
 
-    createGrid(
+    createSpiralGrid(
         insertionPoint: Coordinate,
         width: number,
         height: number,
@@ -15,12 +15,62 @@ export class SpiralGridFactory {
         cellOffset: number,
         cellWidth: number
     ): Grid {
-
-        
         const stepAngleSequence: number[] = this.createSpiralStepAngleSequence(width, height);
         return this.createTrailingGrid(insertionPoint, stepAngleSequence, cellsPerSide, cellWidth, cellOffset);
+    }
 
- 
+    createWaveGrid(
+        insertionPoint: Coordinate,
+        width: number,
+        height: number,
+        cellsPerSide: number,
+        cellOffset: number,
+        cellWidth: number
+    ): Grid {
+        const stepAngleSequence: number[] = this.createWaveStepAngleSequence(width, height);
+        return this.createTrailingGrid(insertionPoint, stepAngleSequence, cellsPerSide, cellWidth, cellOffset);
+    }
+
+    createWaveStepAngleSequence(width: number, height: number): number[] {
+        const angleSequence: number[] = [];
+
+        for (let i:number = 0; i < width; i++) {
+            if (i % 2 === 0) {
+                
+                angleSequence.push(...Array(height -1).fill(90));
+            } else {
+                angleSequence.push(...Array(height -1).fill(270));
+            }
+            if (i < width - 1) {
+                angleSequence.push(0);
+            }
+            
+        }
+        return angleSequence;
+    }
+
+    createSpiralStepAngleSequence(width: number, height: number): number[] {
+        const angleSequence: number[] = [];
+        let stepsLeft: number = width * height;
+        let xSteps: number = width;
+        let ySteps: number = height -1;
+        let angle: number = 0;
+        while (stepsLeft > 0) {
+            if (xSteps > 0) {
+                angleSequence.push(...Array(xSteps).fill(angle));
+                stepsLeft -= xSteps;
+                xSteps -= 1;
+            }
+            if (ySteps > 0) {
+                angleSequence.push(...Array(ySteps).fill(angle + 90));
+                stepsLeft -= ySteps;
+                ySteps -= 1;
+            }
+
+            angle = (angle + 180) % 360;
+        }
+        angleSequence.shift();
+        return angleSequence;
     }
 
     createTrailingGrid(
@@ -91,27 +141,4 @@ export class SpiralGridFactory {
         return newGrid;
     }
 
-    createSpiralStepAngleSequence(width: number, height: number): number[] {
-        const angleSequence: number[] = [];
-        let stepsLeft: number = width * height;
-        let xSteps: number = width;
-        let ySteps: number = height -1;
-        let angle: number = 0;
-        while (stepsLeft > 0) {
-            if (xSteps > 0) {
-                angleSequence.push(...Array(xSteps).fill(angle));
-                stepsLeft -= xSteps;
-                xSteps -= 1;
-            }
-            if (ySteps > 0) {
-                angleSequence.push(...Array(ySteps).fill(angle + 90));
-                stepsLeft -= ySteps;
-                ySteps -= 1;
-            }
-
-            angle = (angle + 180) % 360;
-        }
-        angleSequence.shift();
-        return angleSequence;
-    }
 }
