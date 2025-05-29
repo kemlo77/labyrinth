@@ -199,4 +199,123 @@ describe('Cell', () => {
         expect(originalCorners[3].equals(rotatedCorners[0])).to.equal(false);
     });
 
+    it('kill cell', () => {
+        middleCell.establishNeighbourRelationTo(leftCell);
+        middleCell.openConnectionTo(leftCell);
+        middleCell.establishNeighbourRelationTo(rightCell);
+        expect(middleCell.isDead).to.equal(false);
+        expect(middleCell.connectedNeighbours.length).to.equal(1);
+        expect(middleCell.hasRoomForMoreNeighbours).to.equal(true);
+        expect(middleCell.neighbourCells.length).to.equal(2);
+        expect(middleCell.allBorders.length).to.equal(4);
+
+        middleCell.kill();
+        expect(middleCell.isDead).to.equal(true);
+        expect(middleCell.allBorders.length).to.equal(0);
+        expect(middleCell.closedBorders.length).to.equal(0);
+        expect(middleCell.bordersWithNoNeighbour.length).to.equal(0);
+        expect(middleCell.bordersToNeighbour.length).to.equal(0);
+        expect(middleCell.corners.length).to.equal(0);
+        expect(middleCell.connectedNeighbours.length).to.equal(0);
+        expect(middleCell.hasRoomForMoreNeighbours).to.equal(false);
+        expect(middleCell.neighbourCells.length).to.equal(0);
+        expect(middleCell.unvisitedNeighbours.length).to.equal(0);
+        expect(middleCell.hasNoUnvisitedNeighbours).to.equal(true);
+        expect(middleCell.randomUnvisitedNeighbour).to.equal(undefined);
+        expect(() => middleCell.openConnectionTo(leftCell)).to.throw('No neighbour found to open connection to');
+        expect(() => middleCell.establishNeighbourRelationTo(leftCell))
+            .to.throw('No common border found between cells');
+        expect(() => middleCell.rotateAroundCenter(90)).not.to.throw();
+    });
+
+    it('gauss shoelace - clockwise', () => {
+        const cell: Cell = new Cell(
+            new Coordinate(5, 5),
+            [
+                new Coordinate(0, 10),
+                new Coordinate(10, 10),
+                new Coordinate(10, 0),
+                new Coordinate(0, 0)
+            ]
+        );
+        const area: number = cell['gaussShoelace']();
+        expect(area).to.equal(-100);
+        const isClockwise: boolean = cell['cornersAreInClockwiseOrder']();
+        expect(isClockwise).to.equal(true);
+    });
+
+    it('gauss shoelace - counter clockwise', () => {
+        const cell: Cell = new Cell(
+            new Coordinate(5, 5),
+            [
+                new Coordinate(0, 0),
+                new Coordinate(20, 0),
+                new Coordinate(20, 20),
+                new Coordinate(0, 20)
+            ]
+        );
+        const area: number = cell['gaussShoelace']();
+        expect(area).to.equal(400);
+        const isClockwise: boolean = cell['cornersAreInClockwiseOrder']();
+        expect(isClockwise).to.equal(false);
+    });
+
+    [
+        {angle1: 0, angle2: 0},
+        {angle1: 0, angle2: 90},
+        {angle1: 0, angle2: 180},
+        {angle1: 0, angle2: 270},
+        {angle1: 90, angle2: 0},
+        {angle1: 90, angle2: 90},
+        {angle1: 90, angle2: 180},
+        {angle1: 90, angle2: 270},
+        {angle1: 180, angle2: 0},
+        {angle1: 180, angle2: 90},
+        {angle1: 180, angle2: 180},
+        {angle1: 180, angle2: 270},
+        {angle1: 270, angle2: 0},
+        {angle1: 270, angle2: 90},
+        {angle1: 270, angle2: 180},
+
+    ].forEach(testData => {
+        it('should merge with another cell', () => {
+            const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square');
+            const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square');
+            const rotatedCell1: Cell = cell1.rotateAroundCenter(testData.angle1);
+            const rotatedCell2: Cell = cell2.rotateAroundCenter(testData.angle2);
+            const newCell: Cell = rotatedCell1.mergeWith(rotatedCell2);
+            expect(newCell.center.x).to.equal(20);
+            expect(newCell.center.y).to.equal(15);
+            expect(newCell.corners.length).to.equal(6);
+        });
+    });
+
+    it('should not merge with another cell when no common border', () => {
+        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square');
+        const cell2: Cell = CellFactory.createCell(new Coordinate(30, 10), 10, 'square');
+        expect(() => cell1.mergeWith(cell2)).to.throw('No common border found between cells');
+    });
+
+    it('should carry over neighbour relations when merging cells', () => {
+        leftCell.establishNeighbourRelationTo(middleCell);
+        rightCell.establishNeighbourRelationTo(middleCell);
+        upperCell.establishNeighbourRelationTo(middleCell);
+
+        const newCell: Cell = middleCell.mergeWith(upperCell);
+
+        expect(middleCell.isDead).to.equal(true);
+        expect(upperCell.isDead).to.equal(true);
+        expect(newCell.neighbourCells.length).to.equal(2);
+        expect(newCell.neighbourCells.includes(leftCell)).to.equal(true);
+        expect(newCell.neighbourCells.includes(rightCell)).to.equal(true);
+        
+
+        expect(leftCell.neighbourCells.length).to.equal(1);
+        expect(leftCell.neighbourCells[0]).to.equal(newCell);
+        expect(rightCell.neighbourCells.length).to.equal(1);
+        expect(rightCell.neighbourCells[0]).to.equal(newCell);
+    });
+
+
+
 });
