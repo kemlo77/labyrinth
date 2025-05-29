@@ -117,6 +117,27 @@ export class Grid {
         }
     }
 
+    public mergeNeighbouringCells(grid: Grid): Cell[] {
+        const mergedCells: Cell[] = [];
+        for (const cell of this.allCellsWithRoomForMoreNeighbours) {
+            for (const otherCell of grid.allCellsWithRoomForMoreNeighbours) {
+                if (!otherCell.hasRoomForMoreNeighbours) {
+                    continue;
+                }
+
+                if (!cell.hasRoomForMoreNeighbours) {
+                    break;
+                }
+
+                if (cell.hasCommonBorderWith(otherCell)) {
+                    const newCell: Cell = cell.mergeWith(otherCell);
+                    mergedCells.push(newCell);
+                }
+            }
+        }
+        return mergedCells;
+    }
+
     public mergeWith(grid: Grid): Grid {
         this.establishNeighbourRelationsWith(grid);
         return new Grid(
