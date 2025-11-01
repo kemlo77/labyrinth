@@ -55,12 +55,19 @@ export class CellFactory {
                 return CellFactory.createBottomRightQuarterHexagonalCell(insertionPoint, width);
             case 'bottom-left-quarter-hexagonal':
                 return CellFactory.createBottomLeftQuarterHexagonalCell(insertionPoint, width);
+
             case 'rhombus': return CellFactory.createRhombusCell(insertionPoint, width);
+
+            case 'kite': return CellFactory.createKiteCell(insertionPoint, width);
+            case 'triakis-triangle':
+                return CellFactory.createTriakisTriangle(insertionPoint, width);
+
             default: throw new Error('Unknown cell type');
         }
 
     }
 
+    //Triangle that has all sides equal length
     private static createEquilateralTriangleCell(insertionPoint: Coordinate, width: number): Cell {
         const height: number = width * Math.sqrt(3) / 2;
         const thirdHeight: number = height / 3;
@@ -294,6 +301,32 @@ export class CellFactory {
             .addStepToNextCorner(stepRight(sideLength))
             .addStepToNextCorner(stepInDirection(60, sideLength))
             .addStepToNextCorner(stepLeft(sideLength))
+            .defineCenter(center)
+            .build();
+    }
+
+    private static createKiteCell(insertionPoint: Coordinate, width: number): Cell {
+        const sideLength1: number = width;
+        const sideLength2: number = width / (Math.sqrt(3))
+        const center: Coordinate =
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength1 / 2).then(stepUp(sideLength2 / 2)));
+        return new CellBuilder()
+            .setStartCorner(insertionPoint)
+            .addStepToNextCorner(stepRight(sideLength1))
+            .addStepToNextCorner(stepUp(sideLength2))
+            .addStepToNextCorner(stepInDirection(150, sideLength2))
+            .defineCenter(center)
+            .build();
+    }
+
+    private static createTriakisTriangle(insertionPoint: Coordinate, width: number): Cell {
+        const height: number = width / (2 * Math.sqrt(3));
+        const center: Coordinate =
+            insertionPoint.stepToNewCoordinate(stepRight(width / 2).then(stepUp(height / 3)));
+        return new CellBuilder()
+            .setStartCorner(insertionPoint)
+            .addStepToNextCorner(stepRight(width))
+            .addStepToNextCorner(stepUp(height).then(stepLeft(width / 2)))
             .defineCenter(center)
             .build();
     }
