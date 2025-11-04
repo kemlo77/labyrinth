@@ -95,7 +95,7 @@ export class View implements Observer {
         try {
             this._canvasPainter.drawFilledCircle(this._model.grid.center, 10, LIGHT_RED_COLOR);
         } catch {
-            console.log('Grid center is not defined');
+            //console.log('Grid center is not defined');
         }
 
     }
