@@ -125,13 +125,13 @@ export class RunningBondGridFactory extends GridFactory implements RectangularGr
                     continue;
                 }
                 const lowerRowLeftNeighbour: Cell = grid[rowIndex - 1][columnIndex - 1];
-                cell.establishNeighbourRelationTo(lowerRowLeftNeighbour);
+                cell.establishNeighbourRelationsWith(lowerRowLeftNeighbour);
 
                 if (onLastRow) {
                     continue;
                 }
                 const upperRowLeftNeighbour: Cell = grid[rowIndex + 1][columnIndex - 1];
-                cell.establishNeighbourRelationTo(upperRowLeftNeighbour);
+                cell.establishNeighbourRelationsWith(upperRowLeftNeighbour);
             }
         }
     }

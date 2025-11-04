@@ -186,12 +186,12 @@ export class HexagonsGridFactory extends GridFactory implements RectangularGridF
 
                 if (onEvenColumn) {
                     const neighbourUpRight: Cell = grid[columnIndex + 1][rowIndex + 1];
-                    currentCell.establishNeighbourRelationTo(neighbourUpRight);
+                    currentCell.establishNeighbourRelationsWith(neighbourUpRight);
                 }
 
                 if (onOddColumn && notOnFirstRow) {
                     const neighbourDownRight: Cell = grid[columnIndex + 1][rowIndex - 1];
-                    currentCell.establishNeighbourRelationTo(neighbourDownRight);
+                    currentCell.establishNeighbourRelationsWith(neighbourDownRight);
                 }
             }
         }

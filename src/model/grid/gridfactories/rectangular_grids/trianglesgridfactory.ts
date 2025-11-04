@@ -145,7 +145,7 @@ export class TrianglesGridFactory extends GridFactory implements RectangularGrid
                 const currentCell: Cell = grid[rowIndex][columnIndex];
                 const neighbourCellAbove: Cell = grid[rowIndex + 1][columnIndex];
                 if (currentCell.hasCommonBorderWith(neighbourCellAbove)) {
-                    currentCell.establishNeighbourRelationTo(neighbourCellAbove);
+                    currentCell.establishNeighbourRelationsWith(neighbourCellAbove);
                 }
             }
         }

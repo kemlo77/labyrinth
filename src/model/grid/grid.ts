@@ -3,8 +3,9 @@ import { RecursiveBacktrackerAlgorithm } from '../algorithm/recursivebacktracker
 import { Coordinate } from '../coordinate';
 import { Segment } from '../segment';
 import { Cell } from './cell/cell';
+import { Region } from './region';
 
-export class Grid {
+export class Grid implements Region<Grid> {
 
     private _cells: Cell[];
     private _startCell: Cell;
@@ -33,6 +34,10 @@ export class Grid {
 
     get allCells(): Cell[] {
         return [...this._cells];
+    }
+
+    getCells(): Cell[] {
+        return this.allCells;
     }
 
     get topRightCell(): Cell {
@@ -111,7 +116,7 @@ export class Grid {
                 }
 
                 if (cell.hasCommonBorderWith(otherCell)) {
-                    cell.establishNeighbourRelationTo(otherCell);
+                    cell.establishNeighbourRelationsWith(otherCell);
                 }
             }
         }

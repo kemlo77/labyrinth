@@ -82,7 +82,7 @@ export abstract class GridFactory {
             if (notOnTheLastCell) {
                 const cell: Cell = sequence[cellIndex];
                 const nextCell: Cell = sequence[cellIndex + 1];
-                cell.establishNeighbourRelationTo(nextCell);
+                cell.establishNeighbourRelationsWith(nextCell);
             }
         }
     }

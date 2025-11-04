@@ -68,7 +68,7 @@ export class TriangularGridFactory extends GridFactory implements RegularShapedG
             for (let columnIndex: number = 0; columnIndex < nextRow.length; columnIndex += 2) {
                 const currentRowCell: Cell = currentRow[columnIndex + 1];
                 const nextRowCell: Cell = nextRow[columnIndex];
-                currentRowCell.establishNeighbourRelationTo(nextRowCell);
+                currentRowCell.establishNeighbourRelationsWith(nextRowCell);
 
             }
         }

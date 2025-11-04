@@ -271,10 +271,10 @@ export class OctagonsGridFactory extends GridFactory implements RectangularGridF
                 const neighbourUpLeft: Cell = grid[columnIndex - 1][rowIndex + 1];
                 const neighbourUpRight: Cell = grid[columnIndex + 1][rowIndex + 1];
 
-                currentCell.establishNeighbourRelationTo(neighbourDownLeft);
-                currentCell.establishNeighbourRelationTo(neighbourDownRight);
-                currentCell.establishNeighbourRelationTo(neighbourUpLeft);
-                currentCell.establishNeighbourRelationTo(neighbourUpRight);
+                currentCell.establishNeighbourRelationsWith(neighbourDownLeft);
+                currentCell.establishNeighbourRelationsWith(neighbourDownRight);
+                currentCell.establishNeighbourRelationsWith(neighbourUpLeft);
+                currentCell.establishNeighbourRelationsWith(neighbourUpRight);
 
             }
         }

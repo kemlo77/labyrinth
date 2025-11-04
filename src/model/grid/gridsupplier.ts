@@ -22,6 +22,7 @@ import { SierpinskySquareGridFactory } from './gridfactories/complex_grids/sierp
 import { MazeGridFactory } from './gridfactories/complex_grids/mazegridfactory';
 import { TrailGridFactory } from './gridfactories/complex_grids/trailgridfactory';
 import { TiltedTrailGridFactory } from './gridfactories/complex_grids/tiltedtrailgridfactory';
+import { TriakisGridFactory } from './gridfactories/complex_grids/triakisgridfactory';
 
 export class GridSupplier {
 
@@ -131,6 +132,25 @@ export class GridSupplier {
 
         if (gridType === 'tiltedSpiralMaze') {
             return new TiltedTrailGridFactory().createSpiralGrid(insertionPoint, 11, 7, 6, 1, 13);
+        }
+        if (gridType === 'triakisHexagonal') {
+            const numberOfEdgeSegments: number = 12;
+            const lengthOfEdgeSegments: number = 30;
+            const adjustedInsertionPoint: Coordinate =
+                insertionPoint.stepToNewCoordinate(stepRight(numberOfEdgeSegments * lengthOfEdgeSegments / 2));
+            const gridProperties: RegularShapedGridProperties =
+                new RegularShapedGridProperties(adjustedInsertionPoint, numberOfEdgeSegments, lengthOfEdgeSegments);
+            return new HexagonalGridFactory().createTriakisGrid(gridProperties);
+        }
+
+        if (gridType === 'kiteHexagonal') {
+            const numberOfEdgeSegments: number = 12;
+            const lengthOfEdgeSegments: number = 30;
+            const adjustedInsertionPoint: Coordinate =
+                insertionPoint.stepToNewCoordinate(stepRight(numberOfEdgeSegments * lengthOfEdgeSegments / 2));
+            const gridProperties: RegularShapedGridProperties =
+                new RegularShapedGridProperties(adjustedInsertionPoint, numberOfEdgeSegments, lengthOfEdgeSegments);
+            return new HexagonalGridFactory().createKiteGrid(gridProperties);
         }
         throw new Error('Invalid grid type');
 

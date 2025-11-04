@@ -1,10 +1,11 @@
 import { ArrayOperations } from '../../../service/arrayoperations';
 import { Coordinate } from '../../coordinate';
 import { Segment } from '../../segment';
+import { Region } from '../region';
 import { Border } from './border';
 import { Neighbour } from './neighbour';
 
-export class Cell {
+export class Cell implements Region<Cell> {
 
     private _center: Coordinate;
     private _visited: boolean = false;
@@ -30,6 +31,10 @@ export class Cell {
         }
         newBorders.push(new Border(this._corners[this._corners.length - 1], this._corners[0]));
         return newBorders;
+    }
+
+    getCells(): Cell[] {
+        return [this];
     }
 
     get center(): Coordinate {
@@ -106,7 +111,7 @@ export class Cell {
         this._corners = [];
     }
 
-    establishNeighbourRelationTo(otherCell: Cell): void {
+    establishNeighbourRelationsWith(otherCell: Cell): void {
         if (this.neighbourCells.includes(otherCell)) {
             return;
         }
@@ -182,9 +187,9 @@ export class Cell {
     }
 
     mergeWith(otherCell: Cell): Cell {
-        const thisCellsCorners: Coordinate[] = 
+        const thisCellsCorners: Coordinate[] =
             this.cornersInCounterClockwiseOrder();
-        const otherCellsCorners: Coordinate[] = 
+        const otherCellsCorners: Coordinate[] =
             otherCell.cornersInCounterClockwiseOrder();
 
         let newCorners: Coordinate[];
@@ -194,8 +199,8 @@ export class Cell {
             for (let j: number = 0; j < otherCellsCorners.length; j++) {
                 const otherCellsRotatedCorners: Coordinate[] =
                     ArrayOperations.rotateArray<Coordinate>(otherCellsCorners, j);
-                if(
-                    thisCellsRotatedCorners[0].distanceTo(otherCellsRotatedCorners[1]) < 0.01 && 
+                if (
+                    thisCellsRotatedCorners[0].distanceTo(otherCellsRotatedCorners[1]) < 0.01 &&
                     thisCellsRotatedCorners[1].distanceTo(otherCellsRotatedCorners[0]) < 0.01
                 ) {
                     newCenter = new Segment(thisCellsRotatedCorners[0], otherCellsRotatedCorners[0]).midpoint;
@@ -224,7 +229,7 @@ export class Cell {
 
         //establishing neighbour from the new cell to the old neighbours
         newNeighbourList.forEach(neighbour => {
-            neighbour.cell.establishNeighbourRelationTo(newCell);
+            neighbour.cell.establishNeighbourRelationsWith(newCell);
         });
 
         return newCell;

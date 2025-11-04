@@ -36,6 +36,7 @@ export class View implements Observer {
         //this.drawAllCellConnections();
         //this.drawAllNeighbourRelations();
         //this.drawNumberOfNeighbours();
+        //this.drawGridCenter();
         if (this._showSolution) {
             this.drawSolution();
         }
@@ -88,6 +89,15 @@ export class View implements Observer {
         this._model.grid.allUnconnectedCells.forEach(cell => {
             this._canvasPainter.drawText(cell.neighbourCells.length.toString(), cell.center, 10, BLACK_COLOR);
         });
+    }
+
+    private drawGridCenter(): void {
+        try {
+            this._canvasPainter.drawFilledCircle(this._model.grid.center, 10, LIGHT_RED_COLOR);
+        } catch {
+            console.log('Grid center is not defined');
+        }
+
     }
 
     private drawStartCell(): void {

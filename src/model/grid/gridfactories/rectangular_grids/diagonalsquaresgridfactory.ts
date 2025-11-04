@@ -127,19 +127,19 @@ export class DiagonalSquaresGridFactory extends GridFactory implements Rectangul
 
                 if (onOddColumn && notOnLastRow) {
                     const leftUpperCell: Cell = grid[columnIndex - 1][rowIndex];
-                    currentCell.establishNeighbourRelationTo(leftUpperCell);
+                    currentCell.establishNeighbourRelationsWith(leftUpperCell);
                 }
 
                 if (onOddColumn && notOnTheFirstRow) {
                     const leftLowerCell: Cell = grid[columnIndex - 1][rowIndex - 1];
-                    currentCell.establishNeighbourRelationTo(leftLowerCell);
+                    currentCell.establishNeighbourRelationsWith(leftLowerCell);
                 }
 
                 if (onEvenColumn) {
                     const leftUpperCell: Cell = grid[columnIndex - 1][rowIndex + 1];
                     const leftLowerCell: Cell = grid[columnIndex - 1][rowIndex];
-                    currentCell.establishNeighbourRelationTo(leftUpperCell);
-                    currentCell.establishNeighbourRelationTo(leftLowerCell);
+                    currentCell.establishNeighbourRelationsWith(leftUpperCell);
+                    currentCell.establishNeighbourRelationsWith(leftLowerCell);
                 }
 
             }

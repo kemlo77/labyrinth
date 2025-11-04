@@ -307,7 +307,7 @@ export class CellFactory {
 
     private static createKiteCell(insertionPoint: Coordinate, width: number): Cell {
         const sideLength1: number = width;
-        const sideLength2: number = width / (Math.sqrt(3))
+        const sideLength2: number = width / (Math.sqrt(3));
         const center: Coordinate =
             insertionPoint.stepToNewCoordinate(stepRight(sideLength1 / 2).then(stepUp(sideLength2 / 2)));
         return new CellBuilder()
