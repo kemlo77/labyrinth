@@ -1,3 +1,4 @@
+import { MatrixOperations } from '../../../../service/matrixoperations';
 import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { Region } from '../../region';
@@ -5,6 +6,20 @@ import { RegionCreator } from '../../typealiases';
 
 
 export abstract class GridAssembler<T extends Region<T>> {
+
+    protected createSequenceOfRegions(
+        insertionPoint: Coordinate,
+        step: Vector,
+        regionsToCreate: number,
+        regionCreator: RegionCreator<T>
+    ): T[] {
+        const regionSequence: T[] = [];
+        for (let stepNumber: number = 0; stepNumber < regionsToCreate; stepNumber++) {
+            const newInsertionPoint: Coordinate = insertionPoint.stepToNewCoordinate(step.times(stepNumber));
+            regionSequence.push(regionCreator(newInsertionPoint));
+        }
+        return regionSequence;
+    }
 
 
     protected createPointyTopFirstRowOfTriangles(
@@ -48,6 +63,19 @@ export abstract class GridAssembler<T extends Region<T>> {
             }
         }
         return rowOfRegions;
+    }
+
+    protected establishNeighbourRelationsInRows(regionMatrix: T[][]): void {
+        const transposedRegionMatrix: T[][] = MatrixOperations.transpose(regionMatrix);
+        for (const column of transposedRegionMatrix) {
+            this.establishNeighbourRelationsInSequence(column);
+        }
+    }
+
+    protected establishNeighbourRelationsInColumns(regionMatrix: T[][]): void {
+        for (const column of regionMatrix) {
+            this.establishNeighbourRelationsInSequence(column);
+        }
     }
 
     protected establishNeighbourRelationsInSequence(regionSequence: T[]): void {
