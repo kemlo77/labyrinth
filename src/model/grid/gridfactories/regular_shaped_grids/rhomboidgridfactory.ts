@@ -5,12 +5,12 @@ import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
 import { CellCreator } from '../../typealiases';
 import { Grid } from '../../grid';
-import { GridFactory } from '../gridfactory';
 import { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
+import { GridAssembler } from '../gridassemblers/gridassembler';
 
 
-export class RhomboidGridFactory extends GridFactory implements RegularShapedGridFactory {
+export class RhomboidGridFactory extends GridAssembler<Cell> implements RegularShapedGridFactory {
 
     createGrid(gridProperties: RegularShapedGridProperties): Grid {
         const cellGrid: Cell[][] = this.createCellMatrix(gridProperties);
@@ -38,7 +38,7 @@ export class RhomboidGridFactory extends GridFactory implements RegularShapedGri
             const columnInsertionPoint: Coordinate =
                 firstCellInsertionPoint.stepToNewCoordinate(columnStep.times(columnIndex));
             const cellSequence: Cell[] =
-                this.createSequenceOfCells(
+                this.createSequenceOfRegions(
                     columnInsertionPoint,
                     rowStep,
                     segmentsPerSide,

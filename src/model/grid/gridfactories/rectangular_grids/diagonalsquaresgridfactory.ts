@@ -5,11 +5,11 @@ import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
 import { CellCreator } from '../../typealiases';
 import { Grid } from '../../grid';
-import { GridFactory } from '../gridfactory';
 import { RectangularGridFactory } from './rectangulargridfactory.interface';
 import { RectangularGridProperties } from './rectangulargridproperties';
+import { GridAssembler } from '../gridassemblers/gridassembler';
 
-export class DiagonalSquaresGridFactory extends GridFactory implements RectangularGridFactory {
+export class DiagonalSquaresGridFactory extends GridAssembler<Cell> implements RectangularGridFactory {
 
     createGrid(gridProperties: RectangularGridProperties): Grid {
         const cellGrid: Cell[][] = this.createTiltedSquareCellGrid(gridProperties);
@@ -59,7 +59,7 @@ export class DiagonalSquaresGridFactory extends GridFactory implements Rectangul
 
         //Left column of triangles
         const firstColumn: Cell[] =
-            this.createSequenceOfCells(bottomLeftInsertionPoint, rowStep, numberOfRows, createLeftColumnTriangle);
+            this.createSequenceOfRegions(bottomLeftInsertionPoint, rowStep, numberOfRows, createLeftColumnTriangle);
         cellColumns.push(firstColumn);
 
         //Intermediate columns of squares and triangles
@@ -78,7 +78,7 @@ export class DiagonalSquaresGridFactory extends GridFactory implements Rectangul
 
                 //Squares
                 const sequenceOfSquareCells: Cell[] =
-                    this.createSequenceOfCells(columnInsertionPoint, rowStep, numberOfRows - 1, createSquareCell);
+                    this.createSequenceOfRegions(columnInsertionPoint, rowStep, numberOfRows - 1, createSquareCell);
                 cellColumn.push(...sequenceOfSquareCells);
 
                 //Top triangle
@@ -97,7 +97,7 @@ export class DiagonalSquaresGridFactory extends GridFactory implements Rectangul
                 const oddColumnInsertionPoint: Coordinate =
                     columnInsertionPoint.stepToNewCoordinate(oddColumnExtraStep);
                 const sequenceOfSquareCells: Cell[] =
-                    this.createSequenceOfCells(oddColumnInsertionPoint, rowStep, numberOfRows, createSquareCell);
+                    this.createSequenceOfRegions(oddColumnInsertionPoint, rowStep, numberOfRows, createSquareCell);
                 cellColumns.push(sequenceOfSquareCells);
             }
 
@@ -105,7 +105,7 @@ export class DiagonalSquaresGridFactory extends GridFactory implements Rectangul
 
         //Right column of triangles
         const rightColumn: Cell[] =
-            this.createSequenceOfCells(bottomRightInsertionPoint, rowStep, numberOfRows, createRightColumnTriangle);
+            this.createSequenceOfRegions(bottomRightInsertionPoint, rowStep, numberOfRows, createRightColumnTriangle);
         cellColumns.push(rightColumn);
 
         return cellColumns;

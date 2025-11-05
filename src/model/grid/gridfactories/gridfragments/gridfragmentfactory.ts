@@ -4,9 +4,8 @@ import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
 import { Grid } from '../../grid';
-import { GridFactory } from '../gridfactory';
 
-export class GridFragmentFactory extends GridFactory {
+export class GridFragmentFactory {
 
     createKiteGridFragment(insertionPoint: Coordinate, angle: number, sideLength: number): Grid {
         const leftCorner: Coordinate = insertionPoint;

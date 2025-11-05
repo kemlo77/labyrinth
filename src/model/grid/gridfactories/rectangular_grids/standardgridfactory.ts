@@ -5,13 +5,12 @@ import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
 import { CellCreator } from '../../typealiases';
 import { Grid } from '../../grid';
-import { GridFactory } from '../gridfactory';
 import { RectangularGridFactory } from './rectangulargridfactory.interface';
-
 import { RectangularGridProperties } from './rectangulargridproperties';
+import { GridAssembler } from '../gridassemblers/gridassembler';
 
 
-export class StandardGridFactory extends GridFactory implements RectangularGridFactory {
+export class StandardGridFactory extends GridAssembler<Cell> implements RectangularGridFactory {
 
     createGrid(gridProperties: RectangularGridProperties): Grid {
         const cellMatrix: Cell[][] = this.createCellMatrix(gridProperties);
@@ -43,7 +42,7 @@ export class StandardGridFactory extends GridFactory implements RectangularGridF
             const columnInsertionPoint: Coordinate =
                 firstCellInsertionPoint.stepToNewCoordinate(columnStep.times(columnIndex));
             const cellSequence: Cell[] =
-                this.createSequenceOfCells(columnInsertionPoint, rowStep, gridProperties.numberOfVerticalEdgeSegments,
+                this.createSequenceOfRegions(columnInsertionPoint, rowStep, gridProperties.numberOfVerticalEdgeSegments,
                     createRotatedSquareCell);
             cellColumns.push(cellSequence);
         }

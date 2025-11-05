@@ -5,11 +5,11 @@ import { CellFactory } from '../../cell/cellfactory';
 import { CellCreator } from '../../typealiases';
 import { Grid } from '../../grid';
 import { RectangularGridFactory } from './rectangulargridfactory.interface';
-import { GridFactory } from '../gridfactory';
 import { RectangularGridProperties } from './rectangulargridproperties';
 import { stepDown, stepRight, stepUp } from '../../../vector/vectorcreator';
+import { GridAssembler } from '../gridassemblers/gridassembler';
 
-export class OctagonsGridFactory extends GridFactory implements RectangularGridFactory {
+export class OctagonsGridFactory extends GridAssembler<Cell> implements RectangularGridFactory {
 
     createGrid(gridProperties: RectangularGridProperties): Grid {
         const cellGrid: Cell[][] = this.createCellGrid(gridProperties);
@@ -119,7 +119,7 @@ export class OctagonsGridFactory extends GridFactory implements RectangularGridF
             );
 
         if (gridProperties.numberOfVerticalEdgeSegments === 1) {
-            const rowOfCells: Cell[] = this.createSequenceOfCells(
+            const rowOfCells: Cell[] = this.createSequenceOfRegions(
                 gridInsertionPoint,
                 columnStep,
                 gridProperties.numberOfHorizontalEdgeSegments,
@@ -129,7 +129,7 @@ export class OctagonsGridFactory extends GridFactory implements RectangularGridF
         }
 
         if (gridProperties.numberOfHorizontalEdgeSegments === 1) {
-            const columnOfCells: Cell[] = this.createSequenceOfCells(
+            const columnOfCells: Cell[] = this.createSequenceOfRegions(
                 gridInsertionPoint,
                 rowStep,
                 gridProperties.numberOfVerticalEdgeSegments,
@@ -147,7 +147,7 @@ export class OctagonsGridFactory extends GridFactory implements RectangularGridF
         firstColumn.push(lowerLeftCornerCell);
 
         const leftColumnSecondCellInsertionPoint: Coordinate = gridInsertionPoint.stepToNewCoordinate(rowStep);
-        const leftColumnOfCells: Cell[] = this.createSequenceOfCells(
+        const leftColumnOfCells: Cell[] = this.createSequenceOfRegions(
             leftColumnSecondCellInsertionPoint,
             rowStep,
             numberOfRows - 2,
@@ -182,7 +182,7 @@ export class OctagonsGridFactory extends GridFactory implements RectangularGridF
                 const intermediateColumnSecondCellInsertionPoint: Coordinate =
                     firstOctagonalCellInsertionPoint.stepToNewCoordinate(rowStep);
                 const octagonalCellSequence: Cell[] =
-                    this.createSequenceOfCells(
+                    this.createSequenceOfRegions(
                         intermediateColumnSecondCellInsertionPoint,
                         rowStep,
                         numberOfRows - 2,
@@ -201,7 +201,7 @@ export class OctagonsGridFactory extends GridFactory implements RectangularGridF
 
             if (notOnLastColumn) {
                 const tiltedSquareCellSequence: Cell[] =
-                    this.createSequenceOfCells(
+                    this.createSequenceOfRegions(
                         fistTiltedSquareCellCenter,
                         rowStep,
                         numberOfRows - 1,
@@ -221,7 +221,7 @@ export class OctagonsGridFactory extends GridFactory implements RectangularGridF
 
         const rightColumnSecondCellInsertionPoint: Coordinate =
             lastColumnFirstCellInsertionPoint.stepToNewCoordinate(rowStep);
-        const rightColumnOfCells: Cell[] = this.createSequenceOfCells(
+        const rightColumnOfCells: Cell[] = this.createSequenceOfRegions(
             rightColumnSecondCellInsertionPoint,
             rowStep,
             numberOfRows - 2,
