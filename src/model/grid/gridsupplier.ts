@@ -151,6 +151,16 @@ export class GridSupplier {
                 new RegularShapedGridProperties(adjustedInsertionPoint, numberOfEdgeSegments, lengthOfEdgeSegments);
             return new HexagonalGridFactory().createKiteGrid(gridProperties);
         }
+        if (gridType === 'halfHexagonsInHexagon') {
+            const numberOfEdgeSegments: number = 12;
+            const lengthOfEdgeSegments: number = 30;
+            const adjustedInsertionPoint: Coordinate =
+                insertionPoint.stepToNewCoordinate(stepRight(numberOfEdgeSegments * lengthOfEdgeSegments / 2));
+            const gridProperties: RegularShapedGridProperties =
+                new RegularShapedGridProperties(adjustedInsertionPoint, numberOfEdgeSegments, lengthOfEdgeSegments);
+            return new HexagonalGridFactory().createHalfHexagonsGrid(gridProperties);
+        }
+
         throw new Error('Invalid grid type');
 
     }

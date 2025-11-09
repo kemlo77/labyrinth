@@ -55,6 +55,7 @@ export class CellFactory {
                 return CellFactory.createBottomRightQuarterHexagonalCell(insertionPoint, width);
             case 'bottom-left-quarter-hexagonal':
                 return CellFactory.createBottomLeftQuarterHexagonalCell(insertionPoint, width);
+            case 'half-hexagonal': return CellFactory.createHalfHexagonalCell(insertionPoint, width);
 
             case 'rhombus': return CellFactory.createRhombusCell(insertionPoint, width);
 
@@ -238,6 +239,22 @@ export class CellFactory {
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepInDirection(0, sideLength / 2))
             .addStepToNextCorner(stepInDirection(90, height / 2))
+            .addStepToNextCorner(stepInDirection(180, sideLength))
+            .defineCenter(center)
+            .build();
+    }
+
+    private static createHalfHexagonalCell(insertionPoint: Coordinate, baseLength: number): Cell {
+        const sideLength: number = baseLength / 2;
+        const height: number = sideLength * Math.sqrt(3);
+        const center: Coordinate =
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).then(stepUp(height / 4)));
+
+        return new CellBuilder()
+            .setStartCorner(insertionPoint)
+            .addStepToNextCorner(stepInDirection(0, sideLength))
+            .addStepToNextCorner(stepInDirection(0, sideLength))
+            .addStepToNextCorner(stepInDirection(120, sideLength))
             .addStepToNextCorner(stepInDirection(180, sideLength))
             .defineCenter(center)
             .build();

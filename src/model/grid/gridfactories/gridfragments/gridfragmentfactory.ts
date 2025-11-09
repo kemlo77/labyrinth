@@ -23,10 +23,26 @@ export class GridFragmentFactory {
                 return GridFragmentFactory.createKiteGridFragment(insertionPoint, angle, sideLength);
             case 'triakis-triangle':
                 return GridFragmentFactory.createTriakisGridFragment(insertionPoint, angle, sideLength);
+            case 'half-hexagon':
+                return GridFragmentFactory.createHalfHexagonGridFragment(insertionPoint, angle, sideLength);
             default:
                 throw new Error('Unknown grid fragment type');
         }
     }
+
+    private static createHalfHexagonGridFragment(insertionPoint: Coordinate, angle: number, sideLength: number): Grid {
+        const baseWidth: number = sideLength * 2 / 3;
+        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number ) => 
+            CellFactory.createCell(insertionPoint, baseWidth, 'half-hexagonal', angle);
+
+        return GridFragmentFactory.createTriangularGridFragment(
+            insertionPoint,
+            angle,
+            sideLength,
+            cellCreator
+        );
+    }
+
 
     private static createKiteGridFragment(insertionPoint: Coordinate, angle: number, sideLength: number): Grid {
         const cellWidth: number = sideLength / 2;

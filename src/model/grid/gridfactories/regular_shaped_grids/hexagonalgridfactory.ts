@@ -58,6 +58,22 @@ export class HexagonalGridFactory implements RegularShapedGridFactory {
         );
     }
 
+    createHalfHexagonsGrid(gridProperties: RegularShapedGridProperties): Grid {
+        const angle: number = gridProperties.angle;
+        const cellWidth: number = gridProperties.lengthOfEdgeSegments;
+
+        const createTriangleWithPointyTop: RegionCreator<Grid> = (insertionPoint: Coordinate) =>
+            GridFragmentFactory.createGridFragment(insertionPoint, angle, cellWidth, 'half-hexagon');
+        const createTriangleWithPointyBottom: RegionCreator<Grid> = (insertionPoint: Coordinate) =>
+            GridFragmentFactory.createGridFragment(insertionPoint, angle + 60, cellWidth, 'half-hexagon');
+
+        return new HexagonalGridAssembler<Grid>().createGrid(
+            gridProperties,
+            createTriangleWithPointyTop,
+            createTriangleWithPointyBottom
+        );
+    }
+
 
 
 }
