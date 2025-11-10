@@ -14,58 +14,58 @@ export class GridFragmentFactory {
 
     static createGridFragment(
         insertionPoint: Coordinate,
-        angle: number,
         sideLength: number,
-        type: string
+        type: string,
+        angle: number = 0
     ): Grid {
         switch (type) {
             case 'kite':
-                return GridFragmentFactory.createKiteGridFragment(insertionPoint, angle, sideLength);
+                return GridFragmentFactory.createKiteGridFragment(insertionPoint, sideLength, angle);
             case 'triakis-triangle':
-                return GridFragmentFactory.createTriakisGridFragment(insertionPoint, angle, sideLength);
+                return GridFragmentFactory.createTriakisGridFragment(insertionPoint, sideLength, angle);
             case 'half-hexagon':
-                return GridFragmentFactory.createHalfHexagonGridFragment(insertionPoint, angle, sideLength);
+                return GridFragmentFactory.createHalfHexagonGridFragment(insertionPoint, sideLength, angle);
             default:
                 throw new Error('Unknown grid fragment type');
         }
     }
 
-    private static createHalfHexagonGridFragment(insertionPoint: Coordinate, angle: number, sideLength: number): Grid {
-        const baseWidth: number = sideLength * 2 / 3;
+    private static createHalfHexagonGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
+        const cellBaseWidth: number = sideLength * 2 / 3;
         const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number ) => 
-            CellFactory.createCell(insertionPoint, baseWidth, 'half-hexagonal', angle);
+            CellFactory.createCell(insertionPoint, cellBaseWidth, 'half-hexagonal', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
             insertionPoint,
-            angle,
             sideLength,
+            angle,
             cellCreator
         );
     }
 
 
-    private static createKiteGridFragment(insertionPoint: Coordinate, angle: number, sideLength: number): Grid {
-        const cellWidth: number = sideLength / 2;
+    private static createKiteGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
+        const cellBaseWidth: number = sideLength / 2;
         const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number ) => 
-            CellFactory.createCell(insertionPoint, cellWidth, 'kite', angle);
+            CellFactory.createCell(insertionPoint, cellBaseWidth, 'kite', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
             insertionPoint,
-            angle,
             sideLength,
+            angle,
             cellCreator
         );
     }
 
-    private static createTriakisGridFragment(insertionPoint: Coordinate, angle: number, sideLength: number): Grid {
-        const cellWidth: number = sideLength;
+    private static createTriakisGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
+        const cellBaseWidth: number = sideLength;
         const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number ) => 
-            CellFactory.createCell(insertionPoint, cellWidth, 'triakis-triangle', angle);
+            CellFactory.createCell(insertionPoint, cellBaseWidth, 'triakis-triangle', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
             insertionPoint,
-            angle,
             sideLength,
+            angle,
             cellCreator
         );
 
@@ -73,8 +73,8 @@ export class GridFragmentFactory {
 
     private static createTriangularGridFragment(
         insertionPoint: Coordinate,
-        angle: number,
         sideLength: number,
+        angle: number,
         cellCreator: CellCreator
     ): Grid {
         const leftCorner: Coordinate = insertionPoint;
