@@ -33,8 +33,16 @@ export class Vector {
         return new Vector(this.x + otherVector.x, this.y + otherVector.y);
     }
 
+    getUnitVector(): Vector {
+        const magnitude: number = this.magnitude;
+        if (magnitude === 0) {
+            return new Vector(0, 0);
+        }
+        return new Vector(this.x / magnitude, this.y / magnitude);
+    }
 
-    createVectorFromCoordinates(coordinate1: Coordinate, coordinate2: Coordinate): Vector {
+
+    static createVectorFromCoordinates(coordinate1: Coordinate, coordinate2: Coordinate): Vector {
         return new Vector(coordinate2.x - coordinate1.x, coordinate2.y - coordinate1.y);
     }
 

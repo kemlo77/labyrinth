@@ -56,4 +56,12 @@ describe('Vector', () => {
         expect(vector.hasAngleTo(otherVector)).to.be.closeTo(0, 0.0001);
     });
 
+    it('should return an accurate unit vector', () => {
+        const vector: Vector = new Vector(3, 4);
+        const unitVector: Vector = vector.getUnitVector();
+        expect(unitVector.magnitude).to.be.closeTo(1, 0.0001);
+        expect(unitVector.x).to.be.closeTo(0.6, 0.0001);
+        expect(unitVector.y).to.be.closeTo(0.8, 0.0001);
+    });
+
 });
