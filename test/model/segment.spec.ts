@@ -21,4 +21,17 @@ describe('Segment', () => {
         expect(segment.length).to.equal(5);
     });
 
+    it('should split a segment into equal pieces', () => {
+        const segment: Segment = new Segment(new Coordinate(0,0), new Coordinate(4,0));
+        const numberOfSugsegments: number = 4;
+
+        const segments: Segment[] = segment.generateSubsegments(numberOfSugsegments);
+
+        expect(segments.length).to.equal(4);
+        expect(segments[0]).to.deep.equal({ p1: { x: 0, y: 0 }, p2: { x: 1, y: 0 } });
+        expect(segments[1]).to.deep.equal({ p1: { x: 1, y: 0 }, p2: { x: 2, y: 0 } });
+        expect(segments[2]).to.deep.equal({ p1: { x: 2, y: 0 }, p2: { x: 3, y: 0 } });
+        expect(segments[3]).to.deep.equal({ p1: { x: 3, y: 0 }, p2: { x: 4, y: 0 } });
+    });
+
 });

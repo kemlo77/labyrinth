@@ -1,15 +1,27 @@
+import { MazeGenerationAlgorithm } from '../algorithm/algorithm';
+import { RecursiveBacktrackerAlgorithm } from '../algorithm/recursivebacktracker';
+import { Coordinate } from '../coordinate';
+import { Segment } from '../segment';
 import { Cell } from './cell/cell';
+import { Region } from './region';
 
-export class Grid {
+export class Grid implements Region<Grid> {
 
     private _cells: Cell[];
     private _startCell: Cell;
     private _endCell: Cell;
+    private _center: Coordinate;
+    private _algorithm: MazeGenerationAlgorithm = new RecursiveBacktrackerAlgorithm();
 
-    constructor(interconnectedCells: Cell[], startCell: Cell, endCell: Cell) {
+    constructor(interconnectedCells: Cell[], startCell: Cell, endCell: Cell, center?: Coordinate) {
         this._cells = interconnectedCells;
         this._startCell = startCell;
         this._endCell = endCell;
+        this._center = center;
+    }
+
+    static fromSingleCell(cell: Cell): Grid {
+        return new Grid([cell], cell, cell);
     }
 
     get startCell(): Cell {
@@ -24,12 +36,29 @@ export class Grid {
         return [...this._cells];
     }
 
+    getCells(): Cell[] {
+        return this.allCells;
+    }
+
+    get topRightCell(): Cell {
+        if (this._cells.length === 0) {
+            throw new Error('No cells in grid');
+        }
+        // Find the cell with the largest x, and in case of tie, largest y
+        return this._cells.reduce((topRight, cell) => {
+            if (cell.center.x > topRight.center.x || cell.center.y > topRight.center.y) {
+                return cell;
+            }
+            return topRight;
+        }, this._cells[0]);
+    }
+
     private get allCellsWithRoomForMoreNeighbours(): Cell[] {
         return this.allCells.filter(cell => cell.hasRoomForMoreNeighbours);
     }
 
-    get allDisconnectedCells(): Cell[] {
-        return this.allCells.filter(cell => cell.connectedNeighbours.length == 0);
+    get allUnconnectedCells(): Cell[] {
+        return this.allCells.filter(cell => cell.hasNoOpenBorders);
     }
 
     get totalNumberOfCells(): number {
@@ -40,17 +69,29 @@ export class Grid {
         return this.allCells.filter(cell => cell.visited).length;
     }
 
+    set center(center: Coordinate) {
+        this._center = center;
+    }
+
+    get center(): Coordinate {
+        if (this._center) {
+            return this._center;
+        } else {
+            throw new Error('Center is not set');
+        }
+    }
+
     public resetGrid(): void {
         this.resetVisitedStatusOnCells();
-        this.removeEstablishedConnectionsInCells();
+        this.closeEstablishedConnectionsInCells();
     }
 
     private resetVisitedStatusOnCells(): void {
         this.allCells.forEach(cell => cell.visited = false);
     }
 
-    private removeEstablishedConnectionsInCells(): void {
-        this.allCells.forEach(cell => cell.removeEstablishedConnections());
+    private closeEstablishedConnectionsInCells(): void {
+        this.allCells.forEach(cell => cell.closeEstablishedConnections());
     }
 
     public disconnectCellsWithOnlyOneConnection(): void {
@@ -59,7 +100,7 @@ export class Grid {
             .filter(cell => cell != this.startCell)
             .filter(cell => cell != this.endCell)
             .forEach(cell => {
-                cell.removeConnectionsToCell();
+                cell.closeEstablishedConnections();
             });
     }
 
@@ -74,11 +115,32 @@ export class Grid {
                     break;
                 }
 
-                if ( cell.hasCommonBorderWith(otherCell)) {
-                    cell.establishNeighbourRelationTo(otherCell);
+                if (cell.hasCommonBorderWith(otherCell)) {
+                    cell.establishNeighbourRelationsWith(otherCell);
                 }
             }
         }
+    }
+
+    public mergeNeighbouringCells(grid: Grid): Cell[] {
+        const mergedCells: Cell[] = [];
+        for (const cell of this.allCellsWithRoomForMoreNeighbours) {
+            for (const otherCell of grid.allCellsWithRoomForMoreNeighbours) {
+                if (!otherCell.hasRoomForMoreNeighbours) {
+                    continue;
+                }
+
+                if (!cell.hasRoomForMoreNeighbours) {
+                    break;
+                }
+
+                if (cell.hasCommonBorderWith(otherCell)) {
+                    const newCell: Cell = cell.mergeWith(otherCell);
+                    mergedCells.push(newCell);
+                }
+            }
+        }
+        return mergedCells;
     }
 
     public mergeWith(grid: Grid): Grid {
@@ -88,6 +150,12 @@ export class Grid {
                 ...this.allCells,
                 ...grid.allCells
             ], this.startCell, grid.endCell);
+    }
+
+    public generateMaze(): Segment[] {
+        this.resetGrid();
+        this.startCell.visited = true;
+        return this._algorithm.generateMaze(this);
     }
 
 }

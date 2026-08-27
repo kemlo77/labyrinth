@@ -10,11 +10,13 @@ import {
     LIGHT_RED_COLOR,
     LIGHT_GRAY_COLOR
 } from './canvaspainter';
+import { Border } from '../model/grid/cell/border';
 
 export class View implements Observer {
 
     private _model: Model;
     private _canvasPainter: CanvasPainter;
+    private _showSolution: boolean = false;
 
 
     constructor(canvasPainter: CanvasPainter, model: Model) {
@@ -34,10 +36,14 @@ export class View implements Observer {
         //this.drawAllCellConnections();
         //this.drawAllNeighbourRelations();
         //this.drawNumberOfNeighbours();
+        //this.drawGridCenter();
+        if (this._showSolution) {
+            this.drawSolution();
+        }
     }
 
     private shadeDisconnectedCells(): void {
-        this._model.grid.allDisconnectedCells
+        this._model.grid.allUnconnectedCells
             .forEach(cell => this.fillCell(cell, LIGHT_GRAY_COLOR, BLACK_COLOR));
     }
 
@@ -46,9 +52,15 @@ export class View implements Observer {
     }
 
     private drawAllCellBorders(): void {
-        this._model.grid.allCells.forEach(cell => {
-            this._canvasPainter.drawSegments(cell.closedBorders, 1, BLACK_COLOR);
-        });
+        const borders: Border[] = this._model.grid.allCells
+            .flatMap(cell => cell.closedBorders);
+        const uniqueBorders: Border[] = [...new Set(borders)];
+
+        const bordersBetweenCells: Border[] = uniqueBorders.filter(border => border.bordersToNeighbour);
+        this._canvasPainter.drawSegments(bordersBetweenCells, 1, BLACK_COLOR);
+
+        const edgeBorders: Border[] = uniqueBorders.filter(border => !border.bordersToNeighbour);
+        this._canvasPainter.drawSegments(edgeBorders, 2, BLACK_COLOR);
     }
 
     private drawAllCellCenters(): void {
@@ -67,16 +79,25 @@ export class View implements Observer {
 
     private drawAllNeighbourRelations(): void {
         this._model.grid.allCells.forEach(cell => {
-            cell.neighbours.forEach(neighbour => {
+            cell.neighbourCells.forEach(neighbour => {
                 this._canvasPainter.drawLine(cell.center, neighbour.center, 1, BLUE_COLOR);
             });
         });
     }
 
     private drawNumberOfNeighbours(): void {
-        this._model.grid.allDisconnectedCells.forEach(cell => {
-            this._canvasPainter.drawText(cell.neighbours.length.toString(), cell.center, 10, BLACK_COLOR);
+        this._model.grid.allUnconnectedCells.forEach(cell => {
+            this._canvasPainter.drawText(cell.neighbourCells.length.toString(), cell.center, 10, BLACK_COLOR);
         });
+    }
+
+    private drawGridCenter(): void {
+        try {
+            this._canvasPainter.drawFilledCircle(this._model.grid.center, 10, LIGHT_RED_COLOR);
+        } catch {
+            //console.log('Grid center is not defined');
+        }
+
     }
 
     private drawStartCell(): void {
@@ -87,12 +108,18 @@ export class View implements Observer {
         this._canvasPainter.fillPolygon(this._model.grid.endCell.corners, LIGHT_RED_COLOR, LIGHT_RED_COLOR);
     }
 
-    public showSolution(): void {
+    private drawSolution(): void {
         this._canvasPainter.drawSegments(this._model.solutionTrail, 2, BLUE_COLOR);
     }
 
+    public showSolution(): void {
+        this._showSolution = true;
+        this.update();
+    }
+
     public hideSolution(): void {
-        this._canvasPainter.drawSegments(this._model.solutionTrail, 4, WHITE_COLOR);
+        this._showSolution = false;
+        this.update();
     }
 
 }

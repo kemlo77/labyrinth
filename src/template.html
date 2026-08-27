@@ -17,13 +17,23 @@
     <br>
     Select type of grid:<br>
     <form>
+        Regular: <br>
         <input type="radio" id="triangular" name="mazeType" value="triangular">
         <label for="triangular">Triangular</label><br>
         <input type="radio" id="square" name="mazeType" value="square">
         <label for="square">Square</label><br>
         <input type="radio" id="hexagonal" name="mazeType" value="hexagonal">
-        <label for="hexagonal">Hexagonal</label><br><br>
+        <label for="hexagonal">Hexagonal</label><br>
+        <input type="radio" id="triakisHexagonal" name="mazeType" value="triakisHexagonal">
+        <label for="triakisHexagonal">Triakis Hexagon</label><br>
+        <input type="radio" id="kiteHexagonal" name="mazeType" value="kiteHexagonal">
+        <label for="kiteHexagonal">Kite Hexagon</label><br>
+        <input type="radio" id="halfHexagonsInHexagon" name="mazeType" value="halfHexagonsInHexagon">
+        <label for="halfHexagonsInHexagon">Half hexagons in hexagon</label><br>
+        <input type="radio" id="rhomboid" name="mazeType" value="rhomboid">
+        <label for="rhomboid">Rhomboid</label><br><br>
 
+        Rectangular: <br>
         <input type="radio" id="standard" name="mazeType" value="standard" checked>
         <label for="standard">Standard</label><br>
         <input type="radio" id="runningBond" name="mazeType" value="runningBond">
@@ -37,16 +47,30 @@
         <input type="radio" id="diagonalSquares" name="mazeType" value="diagonalSquares">
         <label for="diagonalSquares">Diagonal squares</label><br><br>
 
+        Complex: <br>
         <input type="radio" id="swedishFlag" name="mazeType" value="swedishFlag">
         <label for="swedishFlag">Swedish flag</label><br>
+        <input type="radio" id="starGrid" name="mazeType" value="starGrid">
+        <label for="starGrid">Star</label><br>
+        <input type="radio" id="sierpinskiTriangle" name="mazeType" value="sierpinskiTriangle">
+        <label for="sierpinskiTriangle">Sierpinski triangle</label><br>
+        <input type="radio" id="sierpinskySquare" name="mazeType" value="sierpinskySquare">
+        <label for="sierpinskySquare">Sierpinsky square</label><br>
+        <input type="radio" id="mazeInMaze" name="mazeType" value="mazeInMaze">
+        <label for="mazeInMaze">Maze in maze</label><br>
+        <input type="radio" id="spiralMaze" name="mazeType" value="spiralMaze">
+        <label for="spiralMaze">Spiral Maze</label><br>
+        <input type="radio" id="waveMaze" name="mazeType" value="waveMaze">
+        <label for="waveMaze">Wave maze</label><br>
+        <input type="radio" id="tiltedSpiralMaze" name="mazeType" value="tiltedSpiralMaze">
+        <label for="tiltedSpiralMaze">Tilted spiral maze</label><br>
     </form>
     <br>
-    <button type="button" id="generateButton">Generate labyrinth</button>
+    <button type="button" id="generateButton">Generate</button>
+    <button type="button" id="simplifyButton">Make simpler</button>
+    <label><input type="checkbox" id="solutionTrailCheckbox"> Show solution trail</label>
     <br>
     <canvas id="myCanvas" width="1050" height="660"></canvas><br>
-    <button type="button" id="simplifyButton">Make simpler</button> tap tap tap ...<br>
-    <button type="button" id="showTrailButton">Show solution</button>
-    <button type="button" id="hideTrailButton">Hide solution</button><br><br>
     Check out source code at <a href="https://github.com/kemlo77/labyrinth">github</a>.
 
 

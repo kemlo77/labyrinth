@@ -10,6 +10,10 @@ export class Coordinate {
         return Math.sqrt(Math.pow(coordinate.x - this.x, 2) + Math.pow(coordinate.y - this.y, 2));
     }
 
+    vectorTo(coordinate: Coordinate): Vector {
+        return new Vector(coordinate.x - this.x, coordinate.y - this.y);
+    }
+
     rotateCounterclockwise(angleInDegrees: number): Coordinate {
         if (angleInDegrees === 0) {
             return this;
@@ -51,6 +55,10 @@ export class Coordinate {
 
     clone(): Coordinate {
         return new Coordinate(this.x, this.y);
+    }
+
+    toString(): string {
+        return `(${this.x}, ${this.y})`;
     }
 
 }

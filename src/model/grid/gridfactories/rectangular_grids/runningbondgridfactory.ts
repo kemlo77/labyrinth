@@ -4,13 +4,13 @@ import { Vector } from '../../../vector/vector';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
-import { CellCreator } from '../../cell/celltypealiases';
+import { CellCreator } from '../../typealiases';
 import { Grid } from '../../grid';
-import { GridFactory } from '../gridfactory';
 import { RectangularGridFactory } from './rectangulargridfactory.interface';
 import { RectangularGridProperties } from './rectangulargridproperties';
+import { GridAssembler } from '../gridassemblers/gridassembler';
 
-export class RunningBondGridFactory extends GridFactory implements RectangularGridFactory {
+export class RunningBondGridFactory extends GridAssembler<Cell> implements RectangularGridFactory {
 
 
     createGrid(gridProperties: RectangularGridProperties): Grid {
@@ -57,7 +57,7 @@ export class RunningBondGridFactory extends GridFactory implements RectangularGr
             if (onEvenRow) {
                 //rectangular cells
                 const evenRowStartPoint: Coordinate = rowInsertionPoint.stepToNewCoordinate(aHalfStepRight);
-                const rectangularCells: Cell[] = this.createSequenceOfCells(
+                const rectangularCells: Cell[] = this.createSequenceOfRegions(
                     rowInsertionPoint,
                     twoStepsRight,
                     evenRowNumberOfWideCells,
@@ -80,7 +80,7 @@ export class RunningBondGridFactory extends GridFactory implements RectangularGr
                 //rectangular cells
                 const rectangularCellsInsertionPoint: Coordinate = oddRowStartPoint
                     .stepToNewCoordinate(oneStepRight);
-                const rectangularCells: Cell[] = this.createSequenceOfCells(
+                const rectangularCells: Cell[] = this.createSequenceOfRegions(
                     rectangularCellsInsertionPoint,
                     twoStepsRight,
                     oddRowNumberOfWideCells,
@@ -125,13 +125,13 @@ export class RunningBondGridFactory extends GridFactory implements RectangularGr
                     continue;
                 }
                 const lowerRowLeftNeighbour: Cell = grid[rowIndex - 1][columnIndex - 1];
-                cell.establishNeighbourRelationTo(lowerRowLeftNeighbour);
+                cell.establishNeighbourRelationsWith(lowerRowLeftNeighbour);
 
                 if (onLastRow) {
                     continue;
                 }
                 const upperRowLeftNeighbour: Cell = grid[rowIndex + 1][columnIndex - 1];
-                cell.establishNeighbourRelationTo(upperRowLeftNeighbour);
+                cell.establishNeighbourRelationsWith(upperRowLeftNeighbour);
             }
         }
     }

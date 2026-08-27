@@ -6,8 +6,21 @@ export class Vector {
         //
     }
 
+    static unitVectorInDirection(angleInDegrees: number): Vector {
+        const angleInRadians: number = angleInDegrees * Math.PI / 180;
+        return new Vector(Math.cos(angleInRadians), Math.sin(angleInRadians));
+    }
+
     get magnitude(): number {
         return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+
+    get direction(): number {
+        if (this.magnitude === 0) {
+            return 0;
+        }
+        const angle: number = Math.atan2(this.y, this.x) * 180 / Math.PI;
+        return angle < 0 ? angle + 360 : angle;
     }
 
     //scaling vectors
@@ -20,8 +33,16 @@ export class Vector {
         return new Vector(this.x + otherVector.x, this.y + otherVector.y);
     }
 
+    getUnitVector(): Vector {
+        const magnitude: number = this.magnitude;
+        if (magnitude === 0) {
+            return new Vector(0, 0);
+        }
+        return new Vector(this.x / magnitude, this.y / magnitude);
+    }
 
-    createVectorFromCoordinates(coordinate1: Coordinate, coordinate2: Coordinate): Vector {
+
+    static createVectorFromCoordinates(coordinate1: Coordinate, coordinate2: Coordinate): Vector {
         return new Vector(coordinate2.x - coordinate1.x, coordinate2.y - coordinate1.y);
     }
 

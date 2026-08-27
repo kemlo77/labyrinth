@@ -2,14 +2,14 @@ import { Coordinate } from '../../../coordinate';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
 import { Grid } from '../../grid';
-import { CellCreator } from '../../cell/celltypealiases';
+import { CellCreator } from '../../typealiases';
 import { Vector } from '../../../vector/vector';
 import { RectangularGridFactory } from './rectangulargridfactory.interface';
 import { RectangularGridProperties } from './rectangulargridproperties';
-import { GridFactory } from '../gridfactory';
-import { stepDown, stepLeft, stepRight, stepUp } from '../../../vector/vectorcreator';
+import { stepLeft, stepRight, stepUp } from '../../../vector/vectorcreator';
+import { GridAssembler } from '../gridassemblers/gridassembler';
 
-export class HexagonsGridFactory extends GridFactory implements RectangularGridFactory {
+export class HexagonsGridFactory extends GridAssembler<Cell> implements RectangularGridFactory {
 
     createGrid(gridProperties: RectangularGridProperties): Grid {
         const cellGrid: Cell[][] = this.createCellMatrix(gridProperties);
@@ -110,14 +110,14 @@ export class HexagonsGridFactory extends GridFactory implements RectangularGridF
 
             if (onFirstColumn) {
                 const columnOfCells: Cell[] =
-                    this.createSequenceOfCells(firstcolumnInsertionPoint, rowStep, numberOfRows, createLeftSideCell);
+                    this.createSequenceOfRegions(firstcolumnInsertionPoint, rowStep, numberOfRows, createLeftSideCell);
                 cellColumns.push(columnOfCells);
                 continue;
             }
 
             if (onLastColumn && onEvenColumn) {
                 const columnOfCells: Cell[] =
-                    this.createSequenceOfCells(columnInsertionPoint, rowStep, numberOfRows, createRightSideCell);
+                    this.createSequenceOfRegions(columnInsertionPoint, rowStep, numberOfRows, createRightSideCell);
                 cellColumns.push(columnOfCells);
                 continue;
             }
@@ -129,7 +129,7 @@ export class HexagonsGridFactory extends GridFactory implements RectangularGridF
 
                 const bottomCell: Cell = createBottomRightQuarterCell(columnInsertionPoint);
                 const intermediateCellsInColumn: Cell[] =
-                    this.createSequenceOfCells(
+                    this.createSequenceOfRegions(
                         cellColumnInsertionPoint,
                         rowStep,
                         numberOfRows - 1,
@@ -143,7 +143,7 @@ export class HexagonsGridFactory extends GridFactory implements RectangularGridF
 
             if (onEvenColumn) {
                 const columnOfCells: Cell[] =
-                    this.createSequenceOfCells(columnInsertionPoint, rowStep, numberOfRows, createRegularCell);
+                    this.createSequenceOfRegions(columnInsertionPoint, rowStep, numberOfRows, createRegularCell);
                 cellColumns.push(columnOfCells);
             }
 
@@ -154,7 +154,12 @@ export class HexagonsGridFactory extends GridFactory implements RectangularGridF
 
                 const bottomCell: Cell = createBottomHalfCell(columnInsertionPoint);
                 const intermediateCellsInColumn: Cell[] =
-                    this.createSequenceOfCells(cellColumnInsertionPoint, rowStep, numberOfRows - 1, createRegularCell);
+                    this.createSequenceOfRegions(
+                        cellColumnInsertionPoint,
+                        rowStep,
+                        numberOfRows - 1,
+                        createRegularCell
+                    );
                 const topCell: Cell = createTopHalfCell(topCellInsertionPoint);
 
                 cellColumns.push([bottomCell, ...intermediateCellsInColumn, topCell]);
@@ -186,12 +191,12 @@ export class HexagonsGridFactory extends GridFactory implements RectangularGridF
 
                 if (onEvenColumn) {
                     const neighbourUpRight: Cell = grid[columnIndex + 1][rowIndex + 1];
-                    currentCell.establishNeighbourRelationTo(neighbourUpRight);
+                    currentCell.establishNeighbourRelationsWith(neighbourUpRight);
                 }
 
                 if (onOddColumn && notOnFirstRow) {
                     const neighbourDownRight: Cell = grid[columnIndex + 1][rowIndex - 1];
-                    currentCell.establishNeighbourRelationTo(neighbourDownRight);
+                    currentCell.establishNeighbourRelationsWith(neighbourDownRight);
                 }
             }
         }

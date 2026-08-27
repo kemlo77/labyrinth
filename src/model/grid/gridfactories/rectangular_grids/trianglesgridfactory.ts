@@ -3,14 +3,14 @@ import { Vector } from '../../../vector/vector';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
-import { CellCreator } from '../../cell/celltypealiases';
+import { CellCreator } from '../../typealiases';
 import { Grid } from '../../grid';
-import { GridFactory } from '../gridfactory';
 import { RectangularGridFactory } from './rectangulargridfactory.interface';
 import { RectangularGridProperties } from './rectangulargridproperties';
+import { GridAssembler } from '../gridassemblers/gridassembler';
 
 
-export class TrianglesGridFactory extends GridFactory implements RectangularGridFactory {
+export class TrianglesGridFactory extends GridAssembler<Cell> implements RectangularGridFactory {
 
     createGrid(gridProperties: RectangularGridProperties): Grid {
         const cellGrid: Cell[][] = this.createCellMatrix(gridProperties);
@@ -145,7 +145,7 @@ export class TrianglesGridFactory extends GridFactory implements RectangularGrid
                 const currentCell: Cell = grid[rowIndex][columnIndex];
                 const neighbourCellAbove: Cell = grid[rowIndex + 1][columnIndex];
                 if (currentCell.hasCommonBorderWith(neighbourCellAbove)) {
-                    currentCell.establishNeighbourRelationTo(neighbourCellAbove);
+                    currentCell.establishNeighbourRelationsWith(neighbourCellAbove);
                 }
             }
         }

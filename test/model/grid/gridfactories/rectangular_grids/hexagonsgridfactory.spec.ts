@@ -20,11 +20,11 @@ describe('HexagonsGridFactory', () => {
         const cellMatrix: Cell[][] = hexagonalgridfactory['createCellMatrix'](gridProperties);
         hexagonalgridfactory['establishNeighbourRelationsInGrid'](cellMatrix);
 
-        expect(cellMatrix[0].map(cell => cell.neighbours.length)).to.deep.equal([3, 4, 4, 4, 3]);
-        expect(cellMatrix[1].map(cell => cell.neighbours.length)).to.deep.equal([3, 6, 6, 6, 6, 3]);
-        expect(cellMatrix[2].map(cell => cell.neighbours.length)).to.deep.equal([5, 6, 6, 6, 5]);
-        expect(cellMatrix[3].map(cell => cell.neighbours.length)).to.deep.equal([3, 6, 6, 6, 6, 3]);
-        expect(cellMatrix[4].map(cell => cell.neighbours.length)).to.deep.equal([3, 4, 4, 4, 3]);
+        expect(cellMatrix[0].map(cell => cell.neighbourCells.length)).to.deep.equal([3, 4, 4, 4, 3]);
+        expect(cellMatrix[1].map(cell => cell.neighbourCells.length)).to.deep.equal([3, 6, 6, 6, 6, 3]);
+        expect(cellMatrix[2].map(cell => cell.neighbourCells.length)).to.deep.equal([5, 6, 6, 6, 5]);
+        expect(cellMatrix[3].map(cell => cell.neighbourCells.length)).to.deep.equal([3, 6, 6, 6, 6, 3]);
+        expect(cellMatrix[4].map(cell => cell.neighbourCells.length)).to.deep.equal([3, 4, 4, 4, 3]);
     });
 
     it('numberOfVisitedCells', () => {

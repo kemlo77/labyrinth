@@ -1,17 +1,40 @@
-import { Segment } from '../../segment';
+import { ArrayOperations } from '../../../service/arrayoperations';
 import { Coordinate } from '../../coordinate';
+import { Segment } from '../../segment';
+import { Region } from '../region';
+import { Border } from './border';
+import { Neighbour } from './neighbour';
 
-export class Cell {
+export class Cell implements Region<Cell> {
 
     private _center: Coordinate;
     private _visited: boolean = false;
-    private _neighbours: Cell[] = [];
-    private _connectedNeighbours: Cell[] = [];
+    private _isDead: boolean = false;
+    private _neighbours: Neighbour[] = [];
     private _corners: Coordinate[];
+    private _borders: Border[] = [];
 
     constructor(center: Coordinate, corners: Coordinate[]) {
         this._center = center;
         this._corners = corners;
+        this._borders = this.createAllBorders();
+    }
+
+    private createAllBorders(): Border[] {
+        const newBorders: Border[] = [];
+        for (let i: number = 0; i < this._corners.length; i++) {
+            const lastCorner: boolean = i === this._corners.length - 1;
+            if (lastCorner) {
+                break;
+            }
+            newBorders.push(new Border(this._corners[i], this._corners[i + 1]));
+        }
+        newBorders.push(new Border(this._corners[this._corners.length - 1], this._corners[0]));
+        return newBorders;
+    }
+
+    getCells(): Cell[] {
+        return [this];
     }
 
     get center(): Coordinate {
@@ -26,16 +49,40 @@ export class Cell {
         this._visited = visited;
     }
 
-    get neighbours(): Cell[] {
-        return this._neighbours;
+    get isDead(): boolean {
+        return this._isDead;
+    }
+
+    get corners(): Coordinate[] {
+        return [... this._corners];
+    }
+
+    get allBorders(): Border[] {
+        return this._borders;
+    }
+
+    get closedBorders(): Border[] {
+        return this._borders.filter(border => border.isClosed);
+    }
+
+    get bordersWithNoNeighbour(): Border[] {
+        return this.allBorders.filter(border => !border.bordersToNeighbour);
+    }
+
+    get bordersToNeighbour(): Border[] {
+        return this.allBorders.filter(border => border.bordersToNeighbour);
+    }
+
+    get neighbourCells(): Cell[] {
+        return this._neighbours.map(neighbour => neighbour.cell);
     }
 
     get hasRoomForMoreNeighbours(): boolean {
-        return this._neighbours.length < this._corners.length;
+        return this.neighbourCells.length < this._borders.length;
     }
 
     get unvisitedNeighbours(): Cell[] {
-        return this._neighbours.filter(cell => !cell.visited);
+        return this.neighbourCells.filter(cell => !cell.visited);
     }
 
     get hasNoUnvisitedNeighbours(): boolean {
@@ -47,112 +94,87 @@ export class Cell {
         return this.unvisitedNeighbours[randomIndex];
     }
 
-    establishNeighbourRelationTo(cell: Cell): void {
-        this.addNeighbour(cell);
-        cell.addNeighbour(this);
-    }
-
-    private addNeighbour(cell: Cell): void {
-        if (this._neighbours.includes(cell)) {
-            return;
-        }
-        this._neighbours.push(cell);
-    }
-
     get connectedNeighbours(): Cell[] {
-        return this._connectedNeighbours;
+        return this._neighbours
+            .filter(neighbour => neighbour.commonBorder.isOpen)
+            .map(neighbour => neighbour.cell);
     }
 
-
-    establishConnectionTo(cell: Cell): void {
-        this.addConnection(cell);
-        cell.addConnection(this);
+    get hasNoOpenBorders(): boolean {
+        return this._neighbours.every(neighbour => neighbour.commonBorder.isClosed);
     }
 
-    private addConnection(toCell: Cell): void {
-        if (this._connectedNeighbours.includes(toCell)) {
+    kill(): void {
+        this._isDead = true;
+        this.disestablishNeighbourRelations();
+        this._borders = [];
+        this._corners = [];
+    }
+
+    establishNeighbourRelationsWith(otherCell: Cell): void {
+        if (this.neighbourCells.includes(otherCell)) {
             return;
         }
-        this._connectedNeighbours.push(toCell);
+        const commonBorder: Border = this.findCommonBorderWith(otherCell);
+        commonBorder.bordersToNeighbour = true;
+        this._neighbours.push(new Neighbour(otherCell, commonBorder));
+        otherCell._neighbours.push(new Neighbour(this, commonBorder));
+        otherCell.replaceAdjacentBorderWith(commonBorder);
     }
 
-    removeEstablishedConnections(): void {
-        this._connectedNeighbours = [];
+    disestablishNeighbourRelations(): void {
+        for (const neighbour of this._neighbours) {
+            const otherCell: Cell = neighbour.cell;
+            const commonBorder: Border = neighbour.commonBorder;
+            commonBorder.bordersToNeighbour = false;
+            const index: number = otherCell._neighbours.findIndex(n => n.cell === this);
+            if (index !== -1) {
+                otherCell._neighbours.splice(index, 1);
+            }
+        }
+        this._neighbours = [];
     }
 
-    removeConnectionsToCell(): void {
-        const connectedCells: Cell[] = [...this.connectedNeighbours];
-        connectedCells.forEach(otherCell => {
-            this.removeConnection(otherCell);
-            otherCell.removeConnection(this);
-        });
+    private findCommonBorderWith(neighbourCell: Cell): Border {
+        for (const ownBorder of this.bordersWithNoNeighbour) {
+            for (const otherCellsBorderCandidate of neighbourCell.bordersWithNoNeighbour) {
+                if (ownBorder.isAdjacentTo(otherCellsBorderCandidate)) {
+                    return ownBorder;
+                }
+            }
+        }
+        throw new Error('No common border found between cells');
     }
 
-    private removeConnection(toCell: Cell): void {
-        this._connectedNeighbours = this._connectedNeighbours.filter(cell => cell !== toCell);
+    private replaceAdjacentBorderWith(newBorder: Border): void {
+        const index: number = this._borders.findIndex(border => border.isAdjacentTo(newBorder));
+        if (index === -1) {
+            throw new Error('Border not found in borders with no neighbour');
+        }
+        this._borders.splice(index, 1);
+        this._borders.push(newBorder);
+    }
+
+    openConnectionTo(toCell: Cell): void {
+        const neighbour: Neighbour | undefined = this._neighbours.find(neighbour => neighbour.cell === toCell);
+        if (neighbour === undefined) {
+            throw new Error('No neighbour found to open connection to');
+        }
+        neighbour.commonBorder.open();
+    }
+
+    closeEstablishedConnections(): void {
+        for (const neighbour of this._neighbours) {
+            neighbour.commonBorder.close();
+        }
     }
 
     hasCommonBorderWith(cell: Cell): boolean {
-        return this.borders.some(border => {
-            return cell.borders.some(otherBorder => {
-                return this.bordersAreAdjacent(border, otherBorder);
+        return this.allBorders.some(border => {
+            return cell.allBorders.some(otherBorder => {
+                return border.isAdjacentTo(otherBorder);
             });
         });
-    }
-
-    commonCornersWith(cell: Cell): Coordinate[] {
-        const commonCorners: Coordinate[] = [];
-        for (const corner of this._corners) {
-            for (const otherCorner of cell.corners) {
-                if (corner.distanceTo(otherCorner) < 0.1) {
-                    commonCorners.push(corner);
-                }
-            }
-        }
-        return commonCorners;
-    }
-
-    private bordersAreAdjacent(border: Segment, otherBorder: Segment): boolean {
-        return border.midpoint.distanceTo(otherBorder.midpoint) < 0.1;
-    }
-
-    get corners(): Coordinate[] {
-        return [... this._corners];
-    }
-
-    get borders(): Segment[] {
-        const newBorders: Segment[] = [];
-        for (let i: number = 0; i < this._corners.length; i++) {
-            const lastCorner: boolean = i === this._corners.length - 1;
-            if (lastCorner) {
-                break;
-            }
-            newBorders.push(new Segment(this._corners[i], this._corners[i + 1]));
-        }
-        newBorders.push(new Segment(this._corners[this._corners.length - 1], this._corners[0]));
-        return newBorders;
-    }
-
-    get closedBorders(): Segment[] {
-        const closedBorders: Segment[] = [];
-        const allConnectedNeighbourBorders: Segment[] =
-            this.connectedNeighbours.reduce((acc, neighbour) => acc.concat(neighbour.borders), []);
-
-        for (const border of this.borders) {
-            let borderIsOpen: boolean = false;
-
-            for (const neighbourBorder of allConnectedNeighbourBorders) {
-                if (this.bordersAreAdjacent(border, neighbourBorder)) {
-                    borderIsOpen = true;
-                    break;
-                }
-            }
-
-            if (!borderIsOpen) {
-                closedBorders.push(border);
-            }
-        }
-        return closedBorders;
     }
 
     rotateAroundCenter(angle: number, center?: Coordinate): Cell {
@@ -162,6 +184,88 @@ export class Cell {
         const newCenter: Coordinate = this._center.rotateAroundCenter(angle, center);
         const newCorners: Coordinate[] = this._corners.map(corner => corner.rotateAroundCenter(angle, center));
         return new Cell(newCenter, newCorners);
+    }
+
+    mergeWith(otherCell: Cell): Cell {
+        const thisCellsCorners: Coordinate[] =
+            this.cornersInCounterClockwiseOrder();
+        const otherCellsCorners: Coordinate[] =
+            otherCell.cornersInCounterClockwiseOrder();
+
+        let newCorners: Coordinate[];
+        let newCenter: Coordinate;
+        for (let i: number = 0; i < thisCellsCorners.length; i++) {
+            const thisCellsRotatedCorners: Coordinate[] = ArrayOperations.rotateArray<Coordinate>(thisCellsCorners, i);
+            for (let j: number = 0; j < otherCellsCorners.length; j++) {
+                const otherCellsRotatedCorners: Coordinate[] =
+                    ArrayOperations.rotateArray<Coordinate>(otherCellsCorners, j);
+                if (
+                    thisCellsRotatedCorners[0].distanceTo(otherCellsRotatedCorners[1]) < 0.01 &&
+                    thisCellsRotatedCorners[1].distanceTo(otherCellsRotatedCorners[0]) < 0.01
+                ) {
+                    newCenter = new Segment(thisCellsRotatedCorners[0], otherCellsRotatedCorners[0]).midpoint;
+                    // removing duplicate corners
+                    thisCellsRotatedCorners.shift();
+                    otherCellsRotatedCorners.shift();
+                    newCorners = [...thisCellsRotatedCorners, ...otherCellsRotatedCorners];
+                    break;
+                }
+            }
+        }
+        if (newCorners === undefined || newCenter === undefined) {
+            throw new Error('No common border found between cells');
+        }
+
+        const newCell: Cell = new Cell(newCenter, newCorners);
+
+        //the old neighbours
+        const oldCellsAllNeighbours: Neighbour[] = [...new Set([...this._neighbours, ...otherCell._neighbours])];
+        const newNeighbourList: Neighbour[] = oldCellsAllNeighbours
+            .filter(neighbour => neighbour.cell !== this && neighbour.cell !== otherCell);
+
+        //killing the old cells will remove neighbour relations and free up the borders
+        this.kill();
+        otherCell.kill();
+
+        //establishing neighbour from the new cell to the old neighbours
+        newNeighbourList.forEach(neighbour => {
+            neighbour.cell.establishNeighbourRelationsWith(newCell);
+        });
+
+        return newCell;
+    }
+
+    private cornersInCounterClockwiseOrder(): Coordinate[] {
+        if (this.cornersAreInClockwiseOrder()) {
+            return this._corners.reverse();
+        }
+        return this._corners;
+    }
+
+    private cornersAreInClockwiseOrder(): boolean {
+        const area: number = this.gaussShoelace();
+        return area < 0;
+    }
+
+    /**
+     * Calculates the area of the polygon defined by the corners using the
+     * Gauss's shoelace formula.
+     * @returns The area of the polygon.
+     * if the area is negative, the corners are in clockwise order,
+     * if the area is positive, the corners are in counter-clockwise order.
+     */
+    private gaussShoelace(): number {
+        let theSum: number = 0;
+        for (let i: number = 0; i < this._corners.length; i++) {
+            const j: number = (i + 1) % this._corners.length;
+            const x1: number = this._corners[i].x;
+            const y1: number = this._corners[i].y;
+            const x2: number = this._corners[j].x;
+            const y2: number = this._corners[j].y;
+            theSum += (x1 * y2) - (x2 * y1);
+        }
+        const area: number = theSum / 2;
+        return area;
     }
 
 }
