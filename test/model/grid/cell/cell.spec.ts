@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { Cell } from '../../../../src/model/grid/cell/cell';
 import { Coordinate } from '../../../../src/model/coordinate';
 import { CellFactory } from '../../../../src/model/grid/cell/cellfactory';

@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, it, expect } from 'vitest';
 import { TrianglesGridFactory }
     from '../../../../../src/model/grid/gridfactories/rectangular_grids/trianglesgridfactory';
 import { Cell } from '../../../../../src/model/grid/cell/cell';

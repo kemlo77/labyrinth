@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, it, expect } from 'vitest';
 import { Coordinate } from '../../src/model/coordinate';
 import { Segment } from '../../src/model/segment';
 
@@ -22,7 +22,7 @@ describe('Segment', () => {
     });
 
     it('should split a segment into equal pieces', () => {
-        const segment: Segment = new Segment(new Coordinate(0,0), new Coordinate(4,0));
+        const segment: Segment = new Segment(new Coordinate(0, 0), new Coordinate(4, 0));
         const numberOfSugsegments: number = 4;
 
         const segments: Segment[] = segment.generateSubsegments(numberOfSugsegments);
