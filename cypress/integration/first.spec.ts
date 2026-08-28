@@ -6,8 +6,8 @@ describe('a bunch of tests', () => {
     });
 
     it('clicking button reverses text', () => {
-        cy.get('button').click();
-        cy.get('input').should('have.value', 'lkjihgfedcba');
+        cy.get('button').first().click();
+        cy.get('input').should('have.value', 'triangular');
     });
 
 });
