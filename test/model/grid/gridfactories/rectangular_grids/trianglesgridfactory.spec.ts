@@ -17,7 +17,7 @@ describe('TrianglesGridFactory', () => {
         const cellMatrix: Cell[][] = triangularGridFactory['createCellMatrix'](gridProperties);
         triangularGridFactory['establishNeighbourRelationsInMatrix'](cellMatrix);
         const middleCell: Cell = cellMatrix[1][1];
-        expect(middleCell.neighbourCells.length).to.equal(3);
+        expect(middleCell.neighbourCells).to.have.lengthOf(3);
     });
 
     it('verifying neighbour count', () => {

@@ -9,7 +9,7 @@ export class Model implements Subject {
     private _grid: Grid;
 
     private _solutionTrail: Segment[] = [];
-    private _observers: Observer[] = [];
+    private readonly _observers: Observer[] = [];
 
     changeGridType(gridType: string): void {
         this._grid = GridSupplier.getGrid(gridType);

@@ -86,7 +86,7 @@ export class MazeGridFactory {
             const gridInsertionPoint: Coordinate = neighbourGridCenter
                 .stepToNewCoordinate(
                     stepDown(gridWidth / 2)
-                        .then(stepRight(gridWidth / 2))
+                        .thenTake(stepRight(gridWidth / 2))
                         .newRotatedVector(angle)
                 );
             const gridProperties: RectangularGridProperties = new RectangularGridProperties(

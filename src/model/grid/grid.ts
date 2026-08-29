@@ -7,11 +7,11 @@ import { Region } from './region';
 
 export class Grid implements Region<Grid> {
 
-    private _cells: Cell[];
-    private _startCell: Cell;
-    private _endCell: Cell;
-    private _center: Coordinate;
-    private _algorithm: MazeGenerationAlgorithm = new RecursiveBacktrackerAlgorithm();
+    private readonly _cells: Cell[];
+    private readonly _startCell: Cell;
+    private readonly _endCell: Cell;
+    private _center?: Coordinate;
+    private readonly _algorithm: MazeGenerationAlgorithm = new RecursiveBacktrackerAlgorithm();
 
     constructor(interconnectedCells: Cell[], startCell: Cell, endCell: Cell, center?: Coordinate) {
         this._cells = interconnectedCells;

@@ -31,7 +31,7 @@ export class SquareGridAssembler<T extends Region<T>> extends GridAssembler<T> {
         const gridSideWidth: number = gridProperties.numberOfEdgeSegments * regionWidth;
         const insertionPoint: Coordinate = gridProperties.insertionPoint;
         const stepToGridCenter: Vector = stepRight(gridSideWidth / 2)
-            .then(stepUp(gridSideWidth / 2))
+            .thenTake(stepUp(gridSideWidth / 2))
             .newRotatedVector(angle);
 
         return insertionPoint.stepToNewCoordinate(stepToGridCenter);

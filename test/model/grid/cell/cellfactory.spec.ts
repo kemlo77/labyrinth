@@ -13,7 +13,7 @@ describe('CellFactory', () => {
     it('creating an equilateral triangle cell', () => {
         const insertionPoint: Coordinate = new Coordinate(0, 0);
         const triangleCell: Cell = CellFactory.createCell(insertionPoint, 15, 'equilateral-triangular');
-        expect(triangleCell.corners.length).to.equal(3);
+        expect(triangleCell.corners).to.have.lengthOf(3);
         expect(triangleCell.center.x).to.be.closeTo(7.5, 0.0001);
         expect(triangleCell.center.y).to.be.closeTo(4.3301, 0.0001);
         expect(triangleCell.corners[0].x).to.be.closeTo(0, 0.0001);
@@ -26,32 +26,32 @@ describe('CellFactory', () => {
 
     it('creating a square cell', () => {
         const squareCell: Cell = CellFactory.createCell(insertionPoint, 10, 'square');
-        expect(squareCell.corners.length).to.equal(4);
-        expect(squareCell.center.equals(new Coordinate(10, 10))).to.equal(true);
-        expect(squareCell.corners[0].equals(new Coordinate(5, 5))).to.equal(true);
-        expect(squareCell.corners[1].equals(new Coordinate(15, 5))).to.equal(true);
-        expect(squareCell.corners[2].equals(new Coordinate(15, 15))).to.equal(true);
-        expect(squareCell.corners[3].equals(new Coordinate(5, 15))).to.equal(true);
+        expect(squareCell.corners).to.have.lengthOf(4);
+        expect(squareCell.center.equals(new Coordinate(10, 10))).to.be.true;
+        expect(squareCell.corners[0].equals(new Coordinate(5, 5))).to.be.true;
+        expect(squareCell.corners[1].equals(new Coordinate(15, 5))).to.be.true;
+        expect(squareCell.corners[2].equals(new Coordinate(15, 15))).to.be.true;
+        expect(squareCell.corners[3].equals(new Coordinate(5, 15))).to.be.true;
     });
 
     it('creating an isosceles right triangle cell', () => {
         const triangleCell: Cell = CellFactory.createCell(insertionPoint, 15, 'isosceles-right-triangular');
-        expect(triangleCell.corners.length).to.equal(3);
-        expect(triangleCell.corners[0].equals(new Coordinate(5, 5))).to.equal(true);
-        expect(triangleCell.corners[1].equals(new Coordinate(20, 5))).to.equal(true);
-        expect(triangleCell.corners[2].equals(new Coordinate(5, 20))).to.equal(true);
+        expect(triangleCell.corners).to.have.lengthOf(3);
+        expect(triangleCell.corners[0].equals(new Coordinate(5, 5))).to.be.true;
+        expect(triangleCell.corners[1].equals(new Coordinate(20, 5))).to.be.true;
+        expect(triangleCell.corners[2].equals(new Coordinate(5, 20))).to.be.true;
     });
 
     it('creating a double square rectangle cell', () => {
         const rectangleCell: Cell = CellFactory.createCell(insertionPoint, 10, 'double-square-rectangle');
-        expect(rectangleCell.corners.length).to.equal(6);
-        expect(rectangleCell.center.equals(new Coordinate(10, 7.5))).to.equal(true);
-        expect(rectangleCell.corners[0].equals(new Coordinate(5, 5))).to.equal(true);
-        expect(rectangleCell.corners[1].equals(new Coordinate(10, 5))).to.equal(true);
-        expect(rectangleCell.corners[2].equals(new Coordinate(15, 5))).to.equal(true);
-        expect(rectangleCell.corners[3].equals(new Coordinate(15, 10))).to.equal(true);
-        expect(rectangleCell.corners[4].equals(new Coordinate(10, 10))).to.equal(true);
-        expect(rectangleCell.corners[5].equals(new Coordinate(5, 10))).to.equal(true);
+        expect(rectangleCell.corners).to.have.lengthOf(6);
+        expect(rectangleCell.center.equals(new Coordinate(10, 7.5))).to.be.true;
+        expect(rectangleCell.corners[0].equals(new Coordinate(5, 5))).to.be.true;
+        expect(rectangleCell.corners[1].equals(new Coordinate(10, 5))).to.be.true;
+        expect(rectangleCell.corners[2].equals(new Coordinate(15, 5))).to.be.true;
+        expect(rectangleCell.corners[3].equals(new Coordinate(15, 10))).to.be.true;
+        expect(rectangleCell.corners[4].equals(new Coordinate(10, 10))).to.be.true;
+        expect(rectangleCell.corners[5].equals(new Coordinate(5, 10))).to.be.true;
     });
 
     it('creating a rotated double square rectangle cell', () => {
@@ -70,7 +70,7 @@ describe('CellFactory', () => {
         expect(rectangleCell.corners[4].y).to.be.closeTo(5, 0.0001);
         expect(rectangleCell.corners[5].x).to.be.closeTo(-5, 0.0001);
         expect(rectangleCell.corners[5].y).to.be.closeTo(0, 0.0001);
-        expect(rectangleCell.corners.length).to.equal(6);
+        expect(rectangleCell.corners).to.have.lengthOf(6);
         expect(rectangleCell.center.x).to.be.closeTo(-2.5, 0.0001);
         expect(rectangleCell.center.y).to.be.closeTo(5, 0.0001);
     });
@@ -78,7 +78,7 @@ describe('CellFactory', () => {
     it('creating a hexagon cell', () => {
         const insertionPoint: Coordinate = new Coordinate(0, 0);
         const hexagonCell: Cell = CellFactory.createCell(insertionPoint, 10, 'hexagonal');
-        expect(hexagonCell.corners.length).to.equal(6);
+        expect(hexagonCell.corners).to.have.lengthOf(6);
         expect(hexagonCell.center.x).to.be.closeTo(5, 0.0001);
         expect(hexagonCell.center.y).to.be.closeTo(8.6603, 0.0001);
         expect(hexagonCell.corners[0].x).to.be.closeTo(0, 0.0001);
@@ -97,7 +97,7 @@ describe('CellFactory', () => {
 
     it('creating an octagon cell', () => {
         const octagonCell: Cell = CellFactory.createCell(insertionPoint, 10, 'octagonal');
-        expect(octagonCell.corners.length).to.equal(8);
+        expect(octagonCell.corners).to.have.lengthOf(8);
         expect(octagonCell.center.x).to.be.closeTo(7.0711, 0.0001);
         expect(octagonCell.center.x).to.be.closeTo(7.0711, 0.0001);
         expect(octagonCell.corners[0].x).to.be.closeTo(5, 0.0001);

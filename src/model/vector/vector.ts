@@ -12,7 +12,7 @@ export class Vector {
     }
 
     get magnitude(): number {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
+        return Math.hypot(this.x, this.y);
     }
 
     get direction(): number {
@@ -29,7 +29,7 @@ export class Vector {
     }
 
     //adding vectors
-    then(otherVector: Vector): Vector {
+    thenTake(otherVector: Vector): Vector {
         return new Vector(this.x + otherVector.x, this.y + otherVector.y);
     }
 

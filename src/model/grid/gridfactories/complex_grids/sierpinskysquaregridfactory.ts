@@ -31,7 +31,7 @@ export class SierpinskySquareGridFactory {
         const getSubCoordinate: SubCoordinateGetter = (up, right) =>
             insertionPoint.stepToNewCoordinate(
                 stepUp(sideLength / 3).times(up)
-                    .then(stepRight(sideLength / 3).times(right))
+                    .thenTake(stepRight(sideLength / 3).times(right))
                     .newRotatedVector(angle)
             );
 

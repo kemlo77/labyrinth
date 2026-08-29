@@ -15,7 +15,7 @@ import { TriangularGridFactory }
 import { SquareGridFactory } from './gridfactories/regular_shaped_grids/squaregridfactory';
 import { HexagonalGridFactory } from './gridfactories/regular_shaped_grids/hexagonalgridfactory';
 import { stepRight } from '../vector/vectorcreator';
-import { RhomboidGridFactory as RhomboidGridFactory } from './gridfactories/regular_shaped_grids/rhomboidgridfactory';
+import { RhomboidGridFactory } from './gridfactories/regular_shaped_grids/rhomboidgridfactory';
 import { StarGridFactory } from './gridfactories/complex_grids/stargridfactory';
 import { SierpinskiTriangleGridFactory } from './gridfactories/complex_grids/sierpinskitrianglegridfactory';
 import { SierpinskySquareGridFactory } from './gridfactories/complex_grids/sierpinskysquaregridfactory';

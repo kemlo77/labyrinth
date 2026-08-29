@@ -50,7 +50,7 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
             );
         const createTriangleWithPointyBottom: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.then(stepUpCellHeight)),
+                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.thenTake(stepUpCellHeight)),
                 cellWidth,
                 'triangular',
                 angle + 180
@@ -71,7 +71,7 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
             );
         const createLeftHalfPointyBottomTriangle: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.then(stepUpCellHeight)),
+                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.thenTake(stepUpCellHeight)),
                 cellWidth,
                 'left-half-triangular',
                 angle + 180

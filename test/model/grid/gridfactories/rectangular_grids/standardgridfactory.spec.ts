@@ -43,7 +43,7 @@ describe('StandardGridFactory', () => {
     });
 
     it('totalNumberOfCells', () => {
-        expect(cellMatrix.flat().length).to.equal(9);
+        expect(cellMatrix.flat()).to.have.lengthOf(9);
     });
 
 });

@@ -54,7 +54,7 @@ export class SierpinskiTriangleGridFactory {
         const baseMidPoint: Coordinate = insertionPoint
             .stepToNewCoordinate(stepRight(halfWidth).newRotatedVector(angle));
         const topInsertionPoint: Coordinate = insertionPoint
-            .stepToNewCoordinate(stepRight(quarterWidth).then(stepUp(height)).newRotatedVector(angle));
+            .stepToNewCoordinate(stepRight(quarterWidth).thenTake(stepUp(height)).newRotatedVector(angle));
 
         const bottomLeft: Grid = createSubdivision(insertionPoint);
         const middle: Grid = createMiddle(baseMidPoint);

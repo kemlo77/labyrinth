@@ -36,7 +36,7 @@ export class TriangularGridAssembler<T extends Region<T>> extends GridAssembler<
         const gridHeight: number = (gridBaseWidth * Math.sqrt(3)) / 2;
         const insertionPoint: Coordinate = gridProperties.insertionPoint;
         const stepToGridCenter: Vector = stepRight(gridBaseWidth / 2)
-            .then(stepUp(gridHeight / 3))
+            .thenTake(stepUp(gridHeight / 3))
             .newRotatedVector(angle);
 
         return insertionPoint.stepToNewCoordinate(stepToGridCenter);

@@ -7,7 +7,7 @@ import { Neighbour } from './neighbour';
 
 export class Cell implements Region<Cell> {
 
-    private _center: Coordinate;
+    private readonly _center: Coordinate;
     private _visited: boolean = false;
     private _isDead: boolean = false;
     private _neighbours: Neighbour[] = [];
@@ -177,10 +177,7 @@ export class Cell implements Region<Cell> {
         });
     }
 
-    rotateAroundCenter(angle: number, center?: Coordinate): Cell {
-        if (center === undefined) {
-            center = this._center;
-        }
+    rotateAroundCenter(angle: number, center: Coordinate = this._center): Cell {
         const newCenter: Coordinate = this._center.rotateAroundCenter(angle, center);
         const newCorners: Coordinate[] = this._corners.map(corner => corner.rotateAroundCenter(angle, center));
         return new Cell(newCenter, newCorners);
