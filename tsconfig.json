@@ -2,10 +2,24 @@
     "compilerOptions": {
         "outDir": "./dist",
         "allowJs": true,
-        "target": "es6",
-        "lib": ["es2016", "dom"]
+        "target": "esnext",
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "types": [
+            "vitest/globals"
+        ],
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "resolveJsonModule": true,
+        "verbatimModuleSyntax": true
     },
     "include": [
-        "./src/**/*"
+        "./src/**/*",
+        "./tests/**/*",
+        "./*.ts"
     ]
 }

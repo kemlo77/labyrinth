@@ -3,9 +3,9 @@ import { Vector } from '../../../vector/vector';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
-import { CellCreator } from '../../typealiases';
+import type { CellCreator } from '../../typealiases';
 import { Grid } from '../../grid';
-import { RectangularGridFactory } from './rectangulargridfactory.interface';
+import type { RectangularGridFactory } from './rectangulargridfactory.interface';
 import { RectangularGridProperties } from './rectangulargridproperties';
 import { GridAssembler } from '../gridassemblers/gridassembler';
 
@@ -50,7 +50,7 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
             );
         const createTriangleWithPointyBottom: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.then(stepUpCellHeight)),
+                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.thenTake(stepUpCellHeight)),
                 cellWidth,
                 'triangular',
                 angle + 180
@@ -71,7 +71,7 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
             );
         const createLeftHalfPointyBottomTriangle: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.then(stepUpCellHeight)),
+                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.thenTake(stepUpCellHeight)),
                 cellWidth,
                 'left-half-triangular',
                 angle + 180

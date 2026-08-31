@@ -3,8 +3,8 @@ import { Vector } from '../../../vector/vector';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { Grid } from '../../grid';
-import { Region } from '../../region';
-import { RegionCreator } from '../../typealiases';
+import type { Region } from '../../region';
+import type { RegionCreator } from '../../typealiases';
 import { RegularShapedGridProperties } from '../regular_shaped_grids/regularshapedgridproperties';
 import { GridAssembler } from './gridassembler';
 
@@ -31,7 +31,7 @@ export class SquareGridAssembler<T extends Region<T>> extends GridAssembler<T> {
         const gridSideWidth: number = gridProperties.numberOfEdgeSegments * regionWidth;
         const insertionPoint: Coordinate = gridProperties.insertionPoint;
         const stepToGridCenter: Vector = stepRight(gridSideWidth / 2)
-            .then(stepUp(gridSideWidth / 2))
+            .thenTake(stepUp(gridSideWidth / 2))
             .newRotatedVector(angle);
 
         return insertionPoint.stepToNewCoordinate(stepToGridCenter);

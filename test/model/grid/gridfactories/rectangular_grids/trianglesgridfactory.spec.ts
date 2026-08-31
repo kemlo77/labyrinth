@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, it, expect } from 'vitest';
 import { TrianglesGridFactory }
     from '../../../../../src/model/grid/gridfactories/rectangular_grids/trianglesgridfactory';
 import { Cell } from '../../../../../src/model/grid/cell/cell';
@@ -17,7 +17,7 @@ describe('TrianglesGridFactory', () => {
         const cellMatrix: Cell[][] = triangularGridFactory['createCellMatrix'](gridProperties);
         triangularGridFactory['establishNeighbourRelationsInMatrix'](cellMatrix);
         const middleCell: Cell = cellMatrix[1][1];
-        expect(middleCell.neighbourCells.length).to.equal(3);
+        expect(middleCell.neighbourCells).to.have.lengthOf(3);
     });
 
     it('verifying neighbour count', () => {

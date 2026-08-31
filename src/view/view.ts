@@ -1,11 +1,10 @@
 import { Cell } from '../model/grid/cell/cell';
 import { Model } from '../model/model';
-import { Observer } from './observer';
+import type { Observer } from './observer';
 import {
     CanvasPainter,
     BLACK_COLOR,
     BLUE_COLOR,
-    WHITE_COLOR,
     LIGHT_GREEN_COLOR,
     LIGHT_RED_COLOR,
     LIGHT_GRAY_COLOR
@@ -14,8 +13,8 @@ import { Border } from '../model/grid/cell/border';
 
 export class View implements Observer {
 
-    private _model: Model;
-    private _canvasPainter: CanvasPainter;
+    private readonly _model: Model;
+    private readonly _canvasPainter: CanvasPainter;
     private _showSolution: boolean = false;
 
 
