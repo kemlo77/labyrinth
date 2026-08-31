@@ -2,10 +2,10 @@ import { Coordinate } from '../../../coordinate';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
 import { Grid } from '../../grid';
-import { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
+import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
 import { HexagonalGridAssembler } from '../gridassemblers/hexagonalgridassembler';
-import { RegionCreator } from '../../typealiases';
+import type { RegionCreator } from '../../typealiases';
 import { GridFragmentFactory } from '../gridfragments/gridfragmentfactory';
 
 export class HexagonalGridFactory implements RegularShapedGridFactory {

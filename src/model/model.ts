@@ -1,6 +1,6 @@
 import { Grid } from './grid/grid';
-import { Observer } from '../view/observer';
-import { Subject } from './subject';
+import type { Observer } from '../view/observer';
+import type { Subject } from './subject';
 import { GridSupplier } from './grid/gridsupplier';
 import { Segment } from './segment';
 

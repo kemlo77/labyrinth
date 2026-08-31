@@ -1,15 +1,22 @@
 {
     "compilerOptions": {
         "outDir": "./dist",
+        "rootDir": "./cypress",
         "allowJs": true,
-        "target": "es2022",
+        "target": "esnext",
         "lib": [
-            "es2022",
+            "esnext",
             "dom"
         ],
+        "module": "esnext",
+        "moduleResolution": "bundler",
         "types": [
             "vitest/globals"
-        ]
+        ],
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "resolveJsonModule": true,
+        "verbatimModuleSyntax": true
     },
     "include": [
         "./src/**/*",

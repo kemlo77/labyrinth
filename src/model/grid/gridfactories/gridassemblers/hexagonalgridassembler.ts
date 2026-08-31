@@ -3,8 +3,8 @@ import { Vector } from '../../../vector/vector';
 import { stepInDirection, stepLeft, stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { Grid } from '../../grid';
-import { Region } from '../../region';
-import { RegionCreator } from '../../typealiases';
+import type { Region } from '../../region';
+import type { RegionCreator } from '../../typealiases';
 import { RegularShapedGridProperties } from '../regular_shaped_grids/regularshapedgridproperties';
 import { GridAssembler } from './gridassembler';
 

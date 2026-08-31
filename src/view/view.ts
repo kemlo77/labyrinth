@@ -1,6 +1,6 @@
 import { Cell } from '../model/grid/cell/cell';
 import { Model } from '../model/model';
-import { Observer } from './observer';
+import type { Observer } from './observer';
 import {
     CanvasPainter,
     BLACK_COLOR,

@@ -1,7 +1,7 @@
 import { ArrayOperations } from '../../../service/arrayoperations';
 import { Coordinate } from '../../coordinate';
 import { Segment } from '../../segment';
-import { Region } from '../region';
+import type { Region } from '../region';
 import { Border } from './border';
 import { Neighbour } from './neighbour';
 
