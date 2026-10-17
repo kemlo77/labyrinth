@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, it, expect } from 'vitest';
 import { HexagonsGridFactory }
     from '../../../../../src/model/grid/gridfactories/rectangular_grids/hexagonsgridfactory';
 import { Grid } from '../../../../../src/model/grid/grid';

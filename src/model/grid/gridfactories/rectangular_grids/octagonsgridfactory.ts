@@ -2,9 +2,9 @@ import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
-import { CellCreator } from '../../typealiases';
+import type { CellCreator } from '../../typealiases';
 import { Grid } from '../../grid';
-import { RectangularGridFactory } from './rectangulargridfactory.interface';
+import type { RectangularGridFactory } from './rectangulargridfactory.interface';
 import { RectangularGridProperties } from './rectangulargridproperties';
 import { stepDown, stepRight, stepUp } from '../../../vector/vectorcreator';
 import { GridAssembler } from '../gridassemblers/gridassembler';
@@ -61,7 +61,7 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
             );
         const createRightHalfOctagonalCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(rowStep.then(columnStep)),
+                insertionPoint.stepToNewCoordinate(rowStep.thenTake(columnStep)),
                 cellWidth,
                 'semi-octagonal-semi-square',
                 angle + 180
@@ -97,7 +97,7 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
             );
         const createUpperRightCornerCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(rowStep.then(columnStep)),
+                insertionPoint.stepToNewCoordinate(rowStep.thenTake(columnStep)),
                 cellWidth,
                 'chamfered-square',
                 angle + 180
@@ -171,7 +171,7 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
             const firstOctagonalCellInsertionPoint: Coordinate = gridInsertionPoint
                 .stepToNewCoordinate(columnStep.times(columnIndex));
             const fistTiltedSquareCellCenter: Coordinate = firstOctagonalCellInsertionPoint
-                .stepToNewCoordinate(columnStep.then(rowStep));
+                .stepToNewCoordinate(columnStep.thenTake(rowStep));
 
 
             if (notOnFirstColumn && notOnLastColumn) {

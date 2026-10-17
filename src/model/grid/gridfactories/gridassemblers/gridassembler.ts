@@ -1,8 +1,8 @@
 import { MatrixOperations } from '../../../../service/matrixoperations';
 import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
-import { Region } from '../../region';
-import { RegionCreator } from '../../typealiases';
+import type { Region } from '../../region';
+import type { RegionCreator } from '../../typealiases';
 
 
 export abstract class GridAssembler<T extends Region<T>> {

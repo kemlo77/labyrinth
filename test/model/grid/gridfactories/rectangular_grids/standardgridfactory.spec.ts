@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { StandardGridFactory }
     from '../../../../../src/model/grid/gridfactories/rectangular_grids/standardgridfactory';
 import { Cell } from '../../../../../src/model/grid/cell/cell';
@@ -43,7 +43,7 @@ describe('StandardGridFactory', () => {
     });
 
     it('totalNumberOfCells', () => {
-        expect(cellMatrix.flat().length).to.equal(9);
+        expect(cellMatrix.flat()).to.have.lengthOf(9);
     });
 
 });

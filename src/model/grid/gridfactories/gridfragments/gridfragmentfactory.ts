@@ -4,7 +4,7 @@ import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
 import { Grid } from '../../grid';
-import { CellCreator } from '../../typealiases';
+import type { CellCreator } from '../../typealiases';
 
 export class GridFragmentFactory {
 
@@ -32,7 +32,7 @@ export class GridFragmentFactory {
 
     private static createHalfHexagonGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
         const cellBaseWidth: number = sideLength * 2 / 3;
-        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number ) => 
+        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number) =>
             CellFactory.createCell(insertionPoint, cellBaseWidth, 'half-hexagonal', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
@@ -46,7 +46,7 @@ export class GridFragmentFactory {
 
     private static createKiteGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
         const cellBaseWidth: number = sideLength / 2;
-        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number ) => 
+        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number) =>
             CellFactory.createCell(insertionPoint, cellBaseWidth, 'kite', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
@@ -59,7 +59,7 @@ export class GridFragmentFactory {
 
     private static createTriakisGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
         const cellBaseWidth: number = sideLength;
-        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number ) => 
+        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number) =>
             CellFactory.createCell(insertionPoint, cellBaseWidth, 'triakis-triangle', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
@@ -82,8 +82,8 @@ export class GridFragmentFactory {
         const gridHeight: number = sideLength * Math.sqrt(3) / 2;
 
         const stepToRightCorner: Vector = stepRight(gridWidth).newRotatedVector(angle);
-        const stepToTopCorner: Vector = stepRight(gridWidth / 2).then(stepUp(gridHeight)).newRotatedVector(angle);
-        const stepToGridCenter: Vector = stepRight(gridWidth / 2).then(stepUp(gridHeight / 3)).newRotatedVector(angle);
+        const stepToTopCorner: Vector = stepRight(gridWidth / 2).thenTake(stepUp(gridHeight)).newRotatedVector(angle);
+        const stepToGridCenter: Vector = stepRight(gridWidth / 2).thenTake(stepUp(gridHeight / 3)).newRotatedVector(angle);
 
         const rightCorner: Coordinate = leftCorner.stepToNewCoordinate(stepToRightCorner);
         const topCorner: Coordinate = leftCorner.stepToNewCoordinate(stepToTopCorner);

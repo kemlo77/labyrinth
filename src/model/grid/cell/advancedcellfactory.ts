@@ -49,7 +49,7 @@ export class AdvancedCellFactory {
     ): Cell {
         const segmentLength: number = width / numberOfSideSegments;
         const center: Coordinate = insertionPoint.stepToNewCoordinate(
-            stepRight(width / 2).then(stepUp(width / 2))
+            stepRight(width / 2).thenTake(stepUp(width / 2))
         );
 
         const cellBuilder: CellBuilder = new CellBuilder().setStartCorner(insertionPoint);
@@ -82,7 +82,7 @@ export class AdvancedCellFactory {
         const thirdHeight: number = triangleHeight / 3;
         const halvSideLength: number = sideLength / 2;
         const center: Coordinate = insertionPoint
-            .stepToNewCoordinate(stepRight(halvSideLength).then(stepUp(thirdHeight)));
+            .stepToNewCoordinate(stepRight(halvSideLength).thenTake(stepUp(thirdHeight)));
 
         const cellBuilder: CellBuilder = new CellBuilder().setStartCorner(insertionPoint);
 

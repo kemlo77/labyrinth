@@ -34,17 +34,17 @@ export class TrailGridFactory {
     createWaveStepAngleSequence(width: number, height: number): number[] {
         const angleSequence: number[] = [];
 
-        for (let i:number = 0; i < width; i++) {
+        for (let i: number = 0; i < width; i++) {
             if (i % 2 === 0) {
-                
-                angleSequence.push(...Array(height -1).fill(90));
+
+                angleSequence.push(...new Array(height - 1).fill(90));
             } else {
-                angleSequence.push(...Array(height -1).fill(270));
+                angleSequence.push(...new Array(height - 1).fill(270));
             }
             if (i < width - 1) {
                 angleSequence.push(0);
             }
-            
+
         }
         return angleSequence;
     }
@@ -53,16 +53,16 @@ export class TrailGridFactory {
         const angleSequence: number[] = [];
         let stepsLeft: number = width * height;
         let xSteps: number = width;
-        let ySteps: number = height -1;
+        let ySteps: number = height - 1;
         let angle: number = 0;
         while (stepsLeft > 0) {
             if (xSteps > 0) {
-                angleSequence.push(...Array(xSteps).fill(angle));
+                angleSequence.push(...new Array(xSteps).fill(angle));
                 stepsLeft -= xSteps;
                 xSteps -= 1;
             }
             if (ySteps > 0) {
-                angleSequence.push(...Array(ySteps).fill(angle + 90));
+                angleSequence.push(...new Array(ySteps).fill(angle + 90));
                 stepsLeft -= ySteps;
                 ySteps -= 1;
             }
@@ -74,10 +74,10 @@ export class TrailGridFactory {
     }
 
     createTrailingGrid(
-        insertionPoint: Coordinate, 
-        stepAngleSequence: number[], 
-        cellsPerSide: number, 
-        cellWidth: number, 
+        insertionPoint: Coordinate,
+        stepAngleSequence: number[],
+        cellsPerSide: number,
+        cellWidth: number,
         cellOffset: number
     ): Grid {
         const cellsInNewGrid: Cell[] = [];
@@ -89,9 +89,9 @@ export class TrailGridFactory {
 
         //create the consequtive grid blocks
         let previousGridBlock: Grid = startGridBlock;
-        
-        stepAngleSequence.forEach((angle: number)=>{
-            const nextGridBlock: Grid = this.createConsecutiveGridBlock(previousGridBlock.center,cellsPerSide,
+
+        stepAngleSequence.forEach((angle: number) => {
+            const nextGridBlock: Grid = this.createConsecutiveGridBlock(previousGridBlock.center, cellsPerSide,
                 cellWidth, cellOffset, angle);
             previousGridBlock.establishNeighbourRelationsWith(nextGridBlock);
             cellsInNewGrid.push(...nextGridBlock.allCells);
@@ -104,27 +104,27 @@ export class TrailGridFactory {
     createSquareGridBlock(insertionPoint: Coordinate, cellsPerSide: number, cellWidth: number): Grid {
         const gridWidth: number = cellWidth * cellsPerSide;
         const gridProperties: RectangularGridProperties =
-                new RectangularGridProperties(insertionPoint, cellsPerSide,cellsPerSide, cellWidth);
+            new RectangularGridProperties(insertionPoint, cellsPerSide, cellsPerSide, cellWidth);
         const squareGrid: Grid = new StandardGridFactory().createGrid(gridProperties);
         const center: Coordinate = insertionPoint.stepToNewCoordinate(
-            stepRight(gridWidth/2).then(stepUp(gridWidth/2))
+            stepRight(gridWidth / 2).thenTake(stepUp(gridWidth / 2))
         );
         squareGrid.center = center;
         return squareGrid;
     }
 
     createConsecutiveGridBlock(
-        neighbourGridCenter: Coordinate, 
-        numberOfCellsInWidth: number, 
-        cellWidth: number, 
-        gridOffset: number, 
+        neighbourGridCenter: Coordinate,
+        numberOfCellsInWidth: number,
+        cellWidth: number,
+        gridOffset: number,
         angle: number
     ): Grid {
         const theWidth: number = cellWidth * numberOfCellsInWidth;
         const gridInsertionPoint: Coordinate = neighbourGridCenter
             .stepToNewCoordinate(
                 stepDown(theWidth / 2)
-                    .then(stepRight(theWidth / 2))
+                    .thenTake(stepRight(theWidth / 2))
                     .newRotatedVector(angle)
             );
         const gridProperties: RectangularGridProperties = new RectangularGridProperties(

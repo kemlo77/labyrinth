@@ -1,6 +1,6 @@
 import { Grid } from './grid/grid';
-import { Observer } from '../view/observer';
-import { Subject } from './subject';
+import type { Observer } from '../view/observer';
+import type { Subject } from './subject';
 import { GridSupplier } from './grid/gridsupplier';
 import { Segment } from './segment';
 
@@ -9,7 +9,7 @@ export class Model implements Subject {
     private _grid: Grid;
 
     private _solutionTrail: Segment[] = [];
-    private _observers: Observer[] = [];
+    private readonly _observers: Observer[] = [];
 
     changeGridType(gridType: string): void {
         this._grid = GridSupplier.getGrid(gridType);

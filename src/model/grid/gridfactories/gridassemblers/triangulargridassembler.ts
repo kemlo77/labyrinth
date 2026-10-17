@@ -3,8 +3,8 @@ import { Vector } from '../../../vector/vector';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { Grid } from '../../grid';
-import { Region } from '../../region';
-import { RegionCreator } from '../../typealiases';
+import type { Region } from '../../region';
+import type { RegionCreator } from '../../typealiases';
 import { RegularShapedGridProperties } from '../regular_shaped_grids/regularshapedgridproperties';
 import { GridAssembler } from './gridassembler';
 
@@ -36,7 +36,7 @@ export class TriangularGridAssembler<T extends Region<T>> extends GridAssembler<
         const gridHeight: number = (gridBaseWidth * Math.sqrt(3)) / 2;
         const insertionPoint: Coordinate = gridProperties.insertionPoint;
         const stepToGridCenter: Vector = stepRight(gridBaseWidth / 2)
-            .then(stepUp(gridHeight / 3))
+            .thenTake(stepUp(gridHeight / 3))
             .newRotatedVector(angle);
 
         return insertionPoint.stepToNewCoordinate(stepToGridCenter);

@@ -5,7 +5,7 @@ import { Grid } from '../../grid';
 import { DiagonalSquaresGridFactory } from '../rectangular_grids/diagonalsquaresgridfactory';
 import { RectangularGridProperties } from '../rectangular_grids/rectangulargridproperties';
 import { StandardGridFactory } from '../rectangular_grids/standardgridfactory';
-import { ComplexGridFactory } from './complexgridfactory.interface';
+import type { ComplexGridFactory } from './complexgridfactory.interface';
 import { ComplexGridProperties } from './complexgridproperties';
 
 export class SwedishFlagGridFactory implements ComplexGridFactory {

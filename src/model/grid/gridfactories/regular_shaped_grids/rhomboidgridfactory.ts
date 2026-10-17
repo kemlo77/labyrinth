@@ -3,9 +3,9 @@ import { Vector } from '../../../vector/vector';
 import { stepInDirection, stepRight } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
-import { CellCreator } from '../../typealiases';
+import type { CellCreator } from '../../typealiases';
 import { Grid } from '../../grid';
-import { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
+import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
 import { GridAssembler } from '../gridassemblers/gridassembler';
 

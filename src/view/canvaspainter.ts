@@ -10,12 +10,12 @@ export const LIGHT_GRAY_COLOR: string = 'rgba(128,128,128,0.2)';
 
 export class CanvasPainter {
 
-    private _canvasElement: HTMLCanvasElement;
-    private _canvasCtx: CanvasRenderingContext2D;
+    private readonly _canvasElement: HTMLCanvasElement;
+    private readonly _canvasCtx: CanvasRenderingContext2D;
 
     constructor(canvasElement: HTMLCanvasElement) {
         this._canvasElement = canvasElement;
-        this._canvasCtx = this._canvasElement.getContext('2d');
+        this._canvasCtx = this._canvasElement.getContext('2d') as CanvasRenderingContext2D;
         this._canvasCtx.scale(1, -1);
         this._canvasCtx.translate(0, -this._canvasElement.height);
         this._canvasCtx.save();

@@ -2,9 +2,9 @@ import { Coordinate } from '../../../coordinate';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
 import { Grid } from '../../grid';
-import { CellCreator } from '../../typealiases';
+import type { CellCreator } from '../../typealiases';
 import { Vector } from '../../../vector/vector';
-import { RectangularGridFactory } from './rectangulargridfactory.interface';
+import type { RectangularGridFactory } from './rectangulargridfactory.interface';
 import { RectangularGridProperties } from './rectangulargridproperties';
 import { stepLeft, stepRight, stepUp } from '../../../vector/vectorcreator';
 import { GridAssembler } from '../gridassemblers/gridassembler';
@@ -58,7 +58,7 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
             );
         const createBottomHalfCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(sideLengthRight.then(halfCellHeightUp)),
+                insertionPoint.stepToNewCoordinate(sideLengthRight.thenTake(halfCellHeightUp)),
                 cellSideLength,
                 'bottom-half-hexagonal',
                 angle + 180
@@ -73,7 +73,7 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
             );
         const createRightSideCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(cellHeightUp.then(halfSideLengthRight)),
+                insertionPoint.stepToNewCoordinate(cellHeightUp.thenTake(halfSideLengthRight)),
                 cellSideLength,
                 'right-half-hexagonal',
                 angle + 180
@@ -81,7 +81,7 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
         const createBottomRightQuarterCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(halfSideLengthRight.then(halfCellHeightUp)),
+                insertionPoint.stepToNewCoordinate(halfSideLengthRight.thenTake(halfCellHeightUp)),
                 cellSideLength,
                 'bottom-right-quarter-hexagonal',
                 angle + 180
@@ -105,7 +105,7 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
             const firstcolumnInsertionPoint: Coordinate = insertionPoint;
             const columnInsertionPoint: Coordinate =
-                insertionPoint.stepToNewCoordinate(columnStep.times(columnIndex).then(halfSideLengthToLeft));
+                insertionPoint.stepToNewCoordinate(columnStep.times(columnIndex).thenTake(halfSideLengthToLeft));
 
 
             if (onFirstColumn) {

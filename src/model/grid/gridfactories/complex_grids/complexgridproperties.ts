@@ -2,9 +2,9 @@ import { Coordinate } from '../../../coordinate';
 
 export class ComplexGridProperties {
 
-    private _insertionPoint: Coordinate;
-    private _lengthOfEdgeSegments: number;
-    private _angle: number;
+    private readonly _insertionPoint: Coordinate;
+    private readonly _lengthOfEdgeSegments: number;
+    private readonly _angle: number;
 
     constructor(
         insertionPoint: Coordinate,

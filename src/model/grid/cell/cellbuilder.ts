@@ -5,25 +5,21 @@ import { Cell } from './cell';
 export class CellBuilder {
 
     private _startCorner: Coordinate;
-    private _steps: Vector[] = [];
+    private readonly _steps: Vector[] = [];
     private _corners: Coordinate[] = [];
     private _center: Coordinate;
 
-    constructor() {
-        //
-    }
-
-    setStartCorner(startCorner: Coordinate): CellBuilder {
+    setStartCorner(startCorner: Coordinate): this {
         this._startCorner = startCorner.clone();
         return this;
     }
 
-    addStepToNextCorner(step: Vector): CellBuilder {
+    addStepToNextCorner(step: Vector): this {
         this._steps.push(step);
         return this;
     }
 
-    defineCenter(center: Coordinate): CellBuilder {
+    defineCenter(center: Coordinate): this {
         this._center = center;
         return this;
     }

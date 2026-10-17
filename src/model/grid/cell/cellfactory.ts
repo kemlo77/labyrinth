@@ -74,7 +74,8 @@ export class CellFactory {
         const thirdHeight: number = height / 3;
         const halfWidth: number = width / 2;
         const sideLength: number = width;
-        const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(halfWidth).then(stepUp(thirdHeight)));
+        const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(halfWidth)
+            .thenTake(stepUp(thirdHeight)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(sideLength))
@@ -88,11 +89,12 @@ export class CellFactory {
         const height: number = width;
         const thirdHeight: number = height / 3;
         const halfWidth: number = width / 2;
-        const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(halfWidth).then(stepUp(thirdHeight)));
+        const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(halfWidth)
+            .thenTake(stepUp(thirdHeight)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(width))
-            .addStepToNextCorner(stepUp(height).then(stepLeft(width / 2)))
+            .addStepToNextCorner(stepUp(height).thenTake(stepLeft(width / 2)))
             .defineCenter(center)
             .build();
     }
@@ -103,7 +105,7 @@ export class CellFactory {
         const halfWidth: number = width / 2;
         const sixthOfWidth: number = width / 6;
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sixthOfWidth).then(stepUp(thirdHeight)));
+            insertionPoint.stepToNewCoordinate(stepRight(sixthOfWidth).thenTake(stepUp(thirdHeight)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(halfWidth))
@@ -118,18 +120,19 @@ export class CellFactory {
         const halfWidth: number = width / 2;
         const thirdOfWidth: number = width / 3;
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(thirdOfWidth).then(stepUp(thirdHeight)));
+            insertionPoint.stepToNewCoordinate(stepRight(thirdOfWidth).thenTake(stepUp(thirdHeight)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(halfWidth))
-            .addStepToNextCorner(stepUp(height).then(stepLeft(halfWidth)))
+            .addStepToNextCorner(stepUp(height).thenTake(stepLeft(halfWidth)))
             .defineCenter(center)
             .build();
     }
 
     private static createSquareCell(insertionPoint: Coordinate, width: number): Cell {
         const height: number = width;
-        const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(width / 2).then(stepUp(height / 2)));
+        const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(width / 2)
+            .thenTake(stepUp(height / 2)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(width))
@@ -142,7 +145,7 @@ export class CellFactory {
     private static createDoubleSquareRectangleCell(insertionPoint: Coordinate, width: number): Cell {
         const height: number = width / 2;
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(width / 2).then(stepUp(height / 2)));
+            insertionPoint.stepToNewCoordinate(stepRight(width / 2).thenTake(stepUp(height / 2)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight((width / 2)))
@@ -156,8 +159,9 @@ export class CellFactory {
 
     private static createIsoscelesRightTriangleCell(insertionPoint: Coordinate, width: number): Cell {
         const height: number = width;
-        const hypotenuseLength: number = Math.sqrt(height * height + width * width);
-        const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(width / 3).then(stepUp(height / 3)));
+        const hypotenuseLength: number = Math.hypot(width, height);
+        const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(width / 3)
+            .thenTake(stepUp(height / 3)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(width))
@@ -170,7 +174,7 @@ export class CellFactory {
         // width = sideLength * 2;
         const height: number = sideLength * Math.sqrt(3);
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).then(stepUp(height / 2)));
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 2)));
 
         return new CellBuilder()
             .setStartCorner(insertionPoint)
@@ -184,10 +188,10 @@ export class CellFactory {
     }
 
     private static createRightHalfHexagonalCell(insertionPoint: Coordinate, sideLength: number): Cell {
-        const width: number = sideLength * 2;
+        // width = sideLength * 2;
         const height: number = sideLength * Math.sqrt(3);
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 4).then(stepUp(height / 2)));
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 4).thenTake(stepUp(height / 2)));
 
         return new CellBuilder()
             .setStartCorner(insertionPoint)
@@ -203,7 +207,7 @@ export class CellFactory {
         const width: number = sideLength * 2;
         const height: number = sideLength * Math.sqrt(3);
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).then(stepUp(height / 4)));
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 4)));
 
         return new CellBuilder()
             .setStartCorner(insertionPoint)
@@ -215,10 +219,10 @@ export class CellFactory {
     }
 
     private static createBottomRightQuarterHexagonalCell(insertionPoint: Coordinate, sideLength: number): Cell {
-        const width: number = sideLength * 2;
+        // width = sideLength * 2;
         const height: number = sideLength * Math.sqrt(3);
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 4).then(stepUp(height / 4)));
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 4).thenTake(stepUp(height / 4)));
 
         return new CellBuilder()
             .setStartCorner(insertionPoint)
@@ -230,10 +234,10 @@ export class CellFactory {
     }
 
     private static createBottomLeftQuarterHexagonalCell(insertionPoint: Coordinate, sideLength: number): Cell {
-        const width: number = sideLength * 2;
+        // width = sideLength * 2;
         const height: number = sideLength * Math.sqrt(3);
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 4).then(stepUp(height / 4)));
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 4).thenTake(stepUp(height / 4)));
 
         return new CellBuilder()
             .setStartCorner(insertionPoint)
@@ -248,7 +252,7 @@ export class CellFactory {
         const sideLength: number = baseLength / 2;
         const height: number = sideLength * Math.sqrt(3);
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).then(stepUp(height / 4)));
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 4)));
 
         return new CellBuilder()
             .setStartCorner(insertionPoint)
@@ -264,7 +268,7 @@ export class CellFactory {
         const height: number = width;
         const sideLength: number = width / (1 + Math.SQRT2);
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).then(stepUp(height / 2)));
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 2)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(width))
@@ -279,7 +283,7 @@ export class CellFactory {
         const height: number = width;
         const sideLength: number = width / (1 + Math.SQRT2);
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).then(stepUp(height / 2)));
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 2)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(width / 2 + sideLength / 2))
@@ -295,7 +299,7 @@ export class CellFactory {
         const height: number = width;
         const sideLength: number = width / (1 + Math.SQRT2);
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).then(stepUp(height / 2)));
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 2)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(sideLength))
@@ -312,7 +316,7 @@ export class CellFactory {
     private static createRhombusCell(insertionPoint: Coordinate, width: number): Cell {
         const sideLength: number = width;
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength).then(stepInDirection(120, sideLength / 2)));
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength).thenTake(stepInDirection(120, sideLength / 2)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(sideLength))
@@ -326,7 +330,7 @@ export class CellFactory {
         const sideLength1: number = width;
         const sideLength2: number = width / (Math.sqrt(3));
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(sideLength1 / 2).then(stepUp(sideLength2 / 2)));
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength1 / 2).thenTake(stepUp(sideLength2 / 2)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(sideLength1))
@@ -339,11 +343,11 @@ export class CellFactory {
     private static createTriakisTriangle(insertionPoint: Coordinate, width: number): Cell {
         const height: number = width / (2 * Math.sqrt(3));
         const center: Coordinate =
-            insertionPoint.stepToNewCoordinate(stepRight(width / 2).then(stepUp(height / 3)));
+            insertionPoint.stepToNewCoordinate(stepRight(width / 2).thenTake(stepUp(height / 3)));
         return new CellBuilder()
             .setStartCorner(insertionPoint)
             .addStepToNextCorner(stepRight(width))
-            .addStepToNextCorner(stepUp(height).then(stepLeft(width / 2)))
+            .addStepToNextCorner(stepUp(height).thenTake(stepLeft(width / 2)))
             .defineCenter(center)
             .build();
     }

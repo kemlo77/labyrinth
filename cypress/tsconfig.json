@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "types": [
+            "cypress"
+        ],
+        "rootDir": "./"
+    },
+    "include": [
+        "**/*.ts",
+        "../cypress.config.ts"
+    ]
+}

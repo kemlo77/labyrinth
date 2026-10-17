@@ -1,11 +1,11 @@
-import { MazeGenerationAlgorithm } from '../../../algorithm/algorithm';
+import type { MazeGenerationAlgorithm } from '../../../algorithm/algorithm';
 import { RecursiveBacktrackerAlgorithm } from '../../../algorithm/recursivebacktracker';
 import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { stepRight, stepDown } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { Grid } from '../../grid';
-import { GridCreator } from '../../typealiases';
+import type { GridCreator } from '../../typealiases';
 import { RectangularGridProperties } from '../rectangular_grids/rectangulargridproperties';
 import { StandardGridFactory } from '../rectangular_grids/standardgridfactory';
 import { RegularShapedGridProperties } from '../regular_shaped_grids/regularshapedgridproperties';
@@ -86,7 +86,7 @@ export class MazeGridFactory {
             const gridInsertionPoint: Coordinate = neighbourGridCenter
                 .stepToNewCoordinate(
                     stepDown(gridWidth / 2)
-                        .then(stepRight(gridWidth / 2))
+                        .thenTake(stepRight(gridWidth / 2))
                         .newRotatedVector(angle)
                 );
             const gridProperties: RectangularGridProperties = new RectangularGridProperties(

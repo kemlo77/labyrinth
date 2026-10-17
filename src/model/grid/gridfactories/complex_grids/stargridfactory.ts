@@ -2,7 +2,7 @@ import { Coordinate } from '../../../coordinate';
 import { Grid } from '../../grid';
 import { RegularShapedGridProperties } from '../regular_shaped_grids/regularshapedgridproperties';
 import { RhomboidGridFactory } from '../regular_shaped_grids/rhomboidgridfactory';
-import { ComplexGridFactory } from './complexgridfactory.interface';
+import type { ComplexGridFactory } from './complexgridfactory.interface';
 import { ComplexGridProperties } from './complexgridproperties';
 
 export class StarGridFactory implements ComplexGridFactory {
@@ -23,13 +23,13 @@ export class StarGridFactory implements ComplexGridFactory {
     }
 
     private createRhombusGrid(
-        insertionPoint: Coordinate, 
-        segmentsPerSide: number, 
-        cellWidth: number, 
+        insertionPoint: Coordinate,
+        segmentsPerSide: number,
+        cellWidth: number,
         angle: number
     ): Grid {
-        const gridProperties: RegularShapedGridProperties = 
-            new RegularShapedGridProperties(insertionPoint, segmentsPerSide,cellWidth, angle);
+        const gridProperties: RegularShapedGridProperties =
+            new RegularShapedGridProperties(insertionPoint, segmentsPerSide, cellWidth, angle);
         return new RhomboidGridFactory().createGrid(gridProperties);
     }
 }

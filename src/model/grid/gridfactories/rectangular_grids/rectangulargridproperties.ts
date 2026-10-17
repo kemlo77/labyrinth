@@ -2,11 +2,11 @@ import { Coordinate } from '../../../coordinate';
 
 export class RectangularGridProperties {
 
-    private _insertionPoint: Coordinate;
-    private _numberOfHorizontalEdgeSegments: number;
-    private _numberOfVerticalEdgeSegments: number;
-    private _lengthOfEdgeSegments: number;
-    private _angle: number;
+    private readonly _insertionPoint: Coordinate;
+    private readonly _numberOfHorizontalEdgeSegments: number;
+    private readonly _numberOfVerticalEdgeSegments: number;
+    private readonly _lengthOfEdgeSegments: number;
+    private readonly _angle: number;
 
     constructor(
         insertionPoint: Coordinate,

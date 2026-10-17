@@ -1,7 +1,7 @@
 import { Cell } from '../grid/cell/cell';
 import { Grid } from '../grid/grid';
 import { Segment } from '../segment';
-import { MazeGenerationAlgorithm } from './algorithm';
+import type { MazeGenerationAlgorithm } from './algorithm';
 
 export class RecursiveBacktrackerAlgorithm implements MazeGenerationAlgorithm {
 

@@ -3,7 +3,7 @@ import { Grid } from '../../grid';
 import { AdvancedCellFactory } from '../../cell/advancedcellfactory';
 import { Cell } from '../../cell/cell';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
-import { GridCreator } from '../../typealiases';
+import type { GridCreator } from '../../typealiases';
 
 export class SierpinskiTriangleGridFactory {
 
@@ -54,7 +54,7 @@ export class SierpinskiTriangleGridFactory {
         const baseMidPoint: Coordinate = insertionPoint
             .stepToNewCoordinate(stepRight(halfWidth).newRotatedVector(angle));
         const topInsertionPoint: Coordinate = insertionPoint
-            .stepToNewCoordinate(stepRight(quarterWidth).then(stepUp(height)).newRotatedVector(angle));
+            .stepToNewCoordinate(stepRight(quarterWidth).thenTake(stepUp(height)).newRotatedVector(angle));
 
         const bottomLeft: Grid = createSubdivision(insertionPoint);
         const middle: Grid = createMiddle(baseMidPoint);

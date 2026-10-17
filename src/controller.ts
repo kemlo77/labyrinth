@@ -4,8 +4,8 @@ import { View } from './view/view';
 
 export class Controller {
 
-    private _model: Model;
-    private _view: View;
+    private readonly _model: Model;
+    private readonly _view: View;
 
     constructor(model: Model, view: View) {
         this._model = model;

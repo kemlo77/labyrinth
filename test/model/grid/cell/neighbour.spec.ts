@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { describe, it, expect } from 'vitest';
 import { Neighbour } from '../../../../src/model/grid/cell/neighbour';
 import { Cell } from '../../../../src/model/grid/cell/cell';
 import { Border } from '../../../../src/model/grid/cell/border';
