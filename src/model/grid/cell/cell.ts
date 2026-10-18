@@ -3,14 +3,14 @@ import { Coordinate } from '../../coordinate';
 import { Segment } from '../../segment';
 import type { Region } from '../region';
 import { Border } from './border';
-import { Neighbour } from './neighbour';
+import { NeighbourRelation } from './neighbourrelation';
 
 export class Cell implements Region<Cell> {
 
     private readonly _center: Coordinate;
     private _visited: boolean = false;
     private _isDead: boolean = false;
-    private _neighbours: Neighbour[] = [];
+    private _neighbourRelations: NeighbourRelation[] = [];
     private _corners: Coordinate[];
     private _borders: Border[] = [];
 
@@ -66,15 +66,15 @@ export class Cell implements Region<Cell> {
     }
 
     get bordersWithNoNeighbour(): Border[] {
-        return this.allBorders.filter(border => !border.bordersToNeighbour);
+        return this.allBorders.filter(border => !border.isBorderingToNeighbour);
     }
 
     get bordersToNeighbour(): Border[] {
-        return this.allBorders.filter(border => border.bordersToNeighbour);
+        return this.allBorders.filter(border => border.isBorderingToNeighbour);
     }
 
     get neighbourCells(): Cell[] {
-        return this._neighbours.map(neighbour => neighbour.cell);
+        return this._neighbourRelations.map(neighbourRelation => neighbourRelation.neighbourCell);
     }
 
     get hasRoomForMoreNeighbours(): boolean {
@@ -95,13 +95,15 @@ export class Cell implements Region<Cell> {
     }
 
     get connectedNeighbours(): Cell[] {
-        return this._neighbours
-            .filter(neighbour => neighbour.commonBorder.isOpen)
-            .map(neighbour => neighbour.cell);
+        return this._neighbourRelations
+            .filter(neighbourRelation => neighbourRelation.commonBorders.some(border => border.isOpen))
+            .map(neighbourRelation => neighbourRelation.neighbourCell);
     }
 
     get hasNoOpenBorders(): boolean {
-        return this._neighbours.every(neighbour => neighbour.commonBorder.isClosed);
+        return this._neighbourRelations.every(neighbourRelation =>
+            neighbourRelation.commonBorders.every(border => border.isClosed)
+        );
     }
 
     kill(): void {
@@ -115,57 +117,71 @@ export class Cell implements Region<Cell> {
         if (this.neighbourCells.includes(otherCell)) {
             return;
         }
-        const commonBorder: Border = this.findCommonBorderWith(otherCell);
-        commonBorder.bordersToNeighbour = true;
-        this._neighbours.push(new Neighbour(otherCell, commonBorder));
-        otherCell._neighbours.push(new Neighbour(this, commonBorder));
-        otherCell.replaceAdjacentBorderWith(commonBorder);
+        const commonBorders: Border[] = this.findCommonBorderWith(otherCell);
+        commonBorders.forEach(border => border.isBorderingToNeighbour = true);
+        this._neighbourRelations.push(new NeighbourRelation(otherCell, commonBorders));
+        otherCell._neighbourRelations.push(new NeighbourRelation(this, commonBorders));
+        otherCell.replaceAdjacentBorderWith(commonBorders);
     }
 
     disestablishNeighbourRelations(): void {
-        for (const neighbour of this._neighbours) {
-            const otherCell: Cell = neighbour.cell;
-            const commonBorder: Border = neighbour.commonBorder;
-            commonBorder.bordersToNeighbour = false;
-            const index: number = otherCell._neighbours.findIndex(n => n.cell === this);
-            if (index !== -1) {
-                otherCell._neighbours.splice(index, 1);
-            }
+        for (const neighbourRelation of this._neighbourRelations) {
+            const otherCell: Cell = neighbourRelation.neighbourCell;
+            neighbourRelation.commonBorders.forEach(border => border.isBorderingToNeighbour = false);
+            otherCell.removeNeighbourRelationWith(this);
         }
-        this._neighbours = [];
+        this._neighbourRelations = [];
     }
 
-    private findCommonBorderWith(neighbourCell: Cell): Border {
+    private removeNeighbourRelationWith(otherCell: Cell): void {
+        const index: number = this._neighbourRelations.findIndex(n => n.neighbourCell === otherCell);
+        if (index !== -1) {
+            this._neighbourRelations.splice(index, 1);
+        }
+    }
+
+    private findCommonBorderWith(neighbourCell: Cell): Border[] {
+        const foundCommonBorders: Border[] = [];
+
         for (const ownBorder of this.bordersWithNoNeighbour) {
             for (const otherCellsBorderCandidate of neighbourCell.bordersWithNoNeighbour) {
                 if (ownBorder.isAdjacentTo(otherCellsBorderCandidate)) {
-                    return ownBorder;
+                    foundCommonBorders.push(ownBorder);
                 }
             }
         }
-        throw new Error('No common border found between cells');
+        if (foundCommonBorders.length === 0) {
+            throw new Error('No common border found between cells');
+        }
+        return foundCommonBorders;
     }
 
-    private replaceAdjacentBorderWith(newBorder: Border): void {
-        const index: number = this._borders.findIndex(border => border.isAdjacentTo(newBorder));
-        if (index === -1) {
-            throw new Error('Border not found in borders with no neighbour');
+    private replaceAdjacentBorderWith(newBorders: Border[]): void {
+        for (const newBorder of newBorders) {
+            const index: number = this._borders.findIndex(border => border.isAdjacentTo(newBorder));
+            if (index === -1) {
+                throw new Error('Border not found in borders with no neighbour');
+            }
+            this._borders.splice(index, 1);
+            this._borders.push(newBorder);
         }
-        this._borders.splice(index, 1);
-        this._borders.push(newBorder);
+
     }
 
     openConnectionTo(toCell: Cell): void {
-        const neighbour: Neighbour | undefined = this._neighbours.find(neighbour => neighbour.cell === toCell);
+        const neighbour: NeighbourRelation | undefined =
+            this._neighbourRelations.find(neighbourRelation => neighbourRelation.neighbourCell === toCell);
         if (neighbour === undefined) {
             throw new Error('No neighbour found to open connection to');
         }
-        neighbour.commonBorder.open();
+        //TODO: bara öppna en av borders, inte alla. Slumpmässigt?!
+        //neighbour.commonBorders.forEach(border => border.open());
+        neighbour.commonBorders[0].open();
     }
 
     closeEstablishedConnections(): void {
-        for (const neighbour of this._neighbours) {
-            neighbour.commonBorder.close();
+        for (const neighbourRelation of this._neighbourRelations) {
+            neighbourRelation.commonBorders.forEach(border => border.close());
         }
     }
 
@@ -216,17 +232,20 @@ export class Cell implements Region<Cell> {
         const newCell: Cell = new Cell(newCenter, newCorners);
 
         //the old neighbours
-        const oldCellsAllNeighbours: Neighbour[] = [...new Set([...this._neighbours, ...otherCell._neighbours])];
-        const newNeighbourList: Neighbour[] = oldCellsAllNeighbours
-            .filter(neighbour => neighbour.cell !== this && neighbour.cell !== otherCell);
+        const oldCellsAllNeighbourRelations: NeighbourRelation[] =
+            [...new Set([...this._neighbourRelations, ...otherCell._neighbourRelations])];
+        const newNeighbourRelationList: NeighbourRelation[] = oldCellsAllNeighbourRelations
+            .filter(neighbourRelation => neighbourRelation
+                .neighbourCell !== this && neighbourRelation.neighbourCell !== otherCell
+            );
 
         //killing the old cells will remove neighbour relations and free up the borders
         this.kill();
         otherCell.kill();
 
         //establishing neighbour from the new cell to the old neighbours
-        newNeighbourList.forEach(neighbour => {
-            neighbour.cell.establishNeighbourRelationsWith(newCell);
+        newNeighbourRelationList.forEach(neighbourRelation => {
+            neighbourRelation.neighbourCell.establishNeighbourRelationsWith(newCell);
         });
 
         return newCell;

@@ -12,7 +12,7 @@ describe('Border', () => {
         expect(border.p1).to.equal(start);
         expect(border.p2).to.equal(end);
         expect(border.isOpen).to.be.false;
-        expect(border.bordersToNeighbour).to.be.false;
+        expect(border.isBorderingToNeighbour).to.be.false;
     });
 
     it('should close and open border', () => {
@@ -53,8 +53,8 @@ describe('Border', () => {
         const end: Coordinate = new Coordinate(2, 2);
         const border: Border = new Border(start, end);
 
-        expect(border.bordersToNeighbour).to.be.false;
-        border.bordersToNeighbour = true;
-        expect(border.bordersToNeighbour).to.be.true;
+        expect(border.isBorderingToNeighbour).to.be.false;
+        border.isBorderingToNeighbour = true;
+        expect(border.isBorderingToNeighbour).to.be.true;
     });
 });

@@ -55,10 +55,10 @@ export class View implements Observer {
             .flatMap(cell => cell.closedBorders);
         const uniqueBorders: Border[] = [...new Set(borders)];
 
-        const bordersBetweenCells: Border[] = uniqueBorders.filter(border => border.bordersToNeighbour);
+        const bordersBetweenCells: Border[] = uniqueBorders.filter(border => border.isBorderingToNeighbour);
         this._canvasPainter.drawSegments(bordersBetweenCells, 1, BLACK_COLOR);
 
-        const edgeBorders: Border[] = uniqueBorders.filter(border => !border.bordersToNeighbour);
+        const edgeBorders: Border[] = uniqueBorders.filter(border => !border.isBorderingToNeighbour);
         this._canvasPainter.drawSegments(edgeBorders, 2, BLACK_COLOR);
     }
 

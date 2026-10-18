@@ -3,17 +3,17 @@ import { Segment } from '../../segment';
 
 export class Border extends Segment {
 
-    private _bordersToNeighbour: boolean = false;
+    private _isBorderingToNeighbour: boolean = false;
     private _isOpen: boolean = false;
 
     constructor(start: Coordinate, end: Coordinate) {
         super(start, end);
     }
-    get bordersToNeighbour(): boolean {
-        return this._bordersToNeighbour;
+    get isBorderingToNeighbour(): boolean {
+        return this._isBorderingToNeighbour;
     }
-    set bordersToNeighbour(bordersToNeighbour: boolean) {
-        this._bordersToNeighbour = bordersToNeighbour;
+    set isBorderingToNeighbour(bordersToNeighbour: boolean) {
+        this._isBorderingToNeighbour = bordersToNeighbour;
     }
     get isOpen(): boolean {
         return this._isOpen;
