@@ -13,7 +13,7 @@ import { RegularShapedGridProperties } from './gridfactories/regular_shaped_grid
 import { TriangularGridFactory }
     from './gridfactories/regular_shaped_grids/triangulargridfactory';
 import { SquareGridFactory } from './gridfactories/regular_shaped_grids/squaregridfactory';
-import { HexagonalGridFactory } from './gridfactories/regular_shaped_grids/hexagonalgridfactory';
+import { LargeHexagonGridFactory } from './gridfactories/regular_shaped_grids/largehexagongridfactory';
 import { stepRight } from '../vector/vectorcreator';
 import { RhomboidGridFactory } from './gridfactories/regular_shaped_grids/rhomboidgridfactory';
 import { StarGridFactory } from './gridfactories/complex_grids/stargridfactory';
@@ -52,14 +52,39 @@ export class GridSupplier {
             return new SquareGridFactory().createGrid(gridProperties);
         }
 
+
+
         if (gridType === 'hexagonal') {
-            const numberOfEdgeSegments: number = 12;
-            const lengthOfEdgeSegments: number = 30;
-            const adjustedInsertionPoint: Coordinate =
-                insertionPoint.stepToNewCoordinate(stepRight(numberOfEdgeSegments * lengthOfEdgeSegments / 2));
-            const gridProperties: RegularShapedGridProperties =
-                new RegularShapedGridProperties(adjustedInsertionPoint, numberOfEdgeSegments, lengthOfEdgeSegments);
-            return new HexagonalGridFactory().createGrid(gridProperties);
+            const gridProperties: RegularShapedGridProperties = this.getLargeHexagonGridProperties(insertionPoint);
+            return new LargeHexagonGridFactory()
+                .createGridWithNamedCellElements(gridProperties, 'equilateral-triangular');
+        }
+
+        if (gridType === 'triakisHexagonal') {
+            const gridProperties: RegularShapedGridProperties = this.getLargeHexagonGridProperties(insertionPoint);
+            return new LargeHexagonGridFactory()
+                .createGridWithNamedGridElements(gridProperties, 'triakis-grid-fragment-triangle');
+        }
+
+        if (gridType === 'kiteHexagonal') {
+            const gridProperties: RegularShapedGridProperties = this.getLargeHexagonGridProperties(insertionPoint);
+            return new LargeHexagonGridFactory()
+                .createGridWithNamedGridElements(gridProperties, 'kite-grid-fragment-triangle');
+        }
+        if (gridType === 'halfHexagonsInHexagon') {
+            const gridProperties: RegularShapedGridProperties = this.getLargeHexagonGridProperties(insertionPoint);
+            return new LargeHexagonGridFactory()
+                .createGridWithNamedGridElements(gridProperties, 'reversed-half-hexagon-grid-fragment-triangle');
+        }
+
+        if (gridType === 'alternateHalfHexagonsInHexagon') {
+            const gridProperties: RegularShapedGridProperties = this.getLargeHexagonGridProperties(insertionPoint);
+            return new LargeHexagonGridFactory()
+                .createGridWithNamedGridElements(
+                    gridProperties,
+                    'reversed-half-hexagon-grid-fragment-triangle',
+                    'half-hexagon-grid-fragment-triangle'
+                );
         }
 
         if (gridType === 'rhomboid') {
@@ -132,36 +157,19 @@ export class GridSupplier {
         if (gridType === 'tiltedSpiralMaze') {
             return new TiltedTrailGridFactory().createSpiralGrid(insertionPoint, 11, 7, 6, 1, 13);
         }
-        if (gridType === 'triakisHexagonal') {
-            const numberOfEdgeSegments: number = 12;
-            const lengthOfEdgeSegments: number = 30;
-            const adjustedInsertionPoint: Coordinate =
-                insertionPoint.stepToNewCoordinate(stepRight(numberOfEdgeSegments * lengthOfEdgeSegments / 2));
-            const gridProperties: RegularShapedGridProperties =
-                new RegularShapedGridProperties(adjustedInsertionPoint, numberOfEdgeSegments, lengthOfEdgeSegments);
-            return new HexagonalGridFactory().createTriakisGrid(gridProperties);
-        }
 
-        if (gridType === 'kiteHexagonal') {
-            const numberOfEdgeSegments: number = 12;
-            const lengthOfEdgeSegments: number = 30;
-            const adjustedInsertionPoint: Coordinate =
-                insertionPoint.stepToNewCoordinate(stepRight(numberOfEdgeSegments * lengthOfEdgeSegments / 2));
-            const gridProperties: RegularShapedGridProperties =
-                new RegularShapedGridProperties(adjustedInsertionPoint, numberOfEdgeSegments, lengthOfEdgeSegments);
-            return new HexagonalGridFactory().createKiteGrid(gridProperties);
-        }
-        if (gridType === 'halfHexagonsInHexagon') {
-            const numberOfEdgeSegments: number = 12;
-            const lengthOfEdgeSegments: number = 30;
-            const adjustedInsertionPoint: Coordinate =
-                insertionPoint.stepToNewCoordinate(stepRight(numberOfEdgeSegments * lengthOfEdgeSegments / 2));
-            const gridProperties: RegularShapedGridProperties =
-                new RegularShapedGridProperties(adjustedInsertionPoint, numberOfEdgeSegments, lengthOfEdgeSegments);
-            return new HexagonalGridFactory().createHalfHexagonsGrid(gridProperties);
-        }
 
         throw new Error('Invalid grid type');
 
+    }
+
+    private static getLargeHexagonGridProperties(insertionPoint: Coordinate): RegularShapedGridProperties {
+        const numberOfEdgeSegments: number = 9;
+        const lengthOfEdgeSegments: number = 40;
+        const adjustedInsertionPoint: Coordinate =
+            insertionPoint.stepToNewCoordinate(stepRight(numberOfEdgeSegments * lengthOfEdgeSegments / 2));
+        const gridProperties: RegularShapedGridProperties =
+            new RegularShapedGridProperties(adjustedInsertionPoint, numberOfEdgeSegments, lengthOfEdgeSegments);
+        return gridProperties;
     }
 }

@@ -4,11 +4,11 @@ import { CellFactory } from '../../cell/cellfactory';
 import { Grid } from '../../grid';
 import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
-import { HexagonalGridAssembler } from '../gridassemblers/hexagonalgridassembler';
+import { LargeHexagonGridAssembler } from '../gridassemblers/largehexagongridassembler';
 import type { RegionCreator } from '../../typealiases';
 import { GridFragmentFactory } from '../gridfragments/gridfragmentfactory';
 
-export class HexagonalGridFactory implements RegularShapedGridFactory {
+export class LargeHexagonGridFactory implements RegularShapedGridFactory {
 
     createGrid(gridProperties: RegularShapedGridProperties): Grid {
         const angle: number = gridProperties.angle;
@@ -19,61 +19,51 @@ export class HexagonalGridFactory implements RegularShapedGridFactory {
         const createTriangleWithPointyBottom: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
             CellFactory.createCell(insertionPoint, cellWidth, 'equilateral-triangular', angle + 60);
 
-        return new HexagonalGridAssembler<Cell>().createGrid(
+        return new LargeHexagonGridAssembler<Cell>().createGrid(
             gridProperties,
             createTriangleWithPointyTop,
             createTriangleWithPointyBottom
         );
     }
 
-    createKiteGrid(gridProperties: RegularShapedGridProperties): Grid {
+    createGridWithNamedCellElements(gridProperties: RegularShapedGridProperties,
+        pointyTopTriangle: string, pointyBottomTriangle?: string): Grid {
+        if (!pointyBottomTriangle) {
+            pointyBottomTriangle = pointyTopTriangle;
+        }
+        const angle: number = gridProperties.angle;
+        const cellWidth: number = gridProperties.lengthOfEdgeSegments;
+
+        const createTriangleWithPointyTop: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
+            CellFactory.createCell(insertionPoint, cellWidth, pointyTopTriangle, angle);
+        const createTriangleWithPointyBottom: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
+            CellFactory.createCell(insertionPoint, cellWidth, pointyBottomTriangle, angle + 60);
+
+        return new LargeHexagonGridAssembler<Cell>().createGrid(
+            gridProperties,
+            createTriangleWithPointyTop,
+            createTriangleWithPointyBottom
+        );
+    }
+
+    createGridWithNamedGridElements(gridProperties: RegularShapedGridProperties,
+        pointyTopTriangle: string, pointyBottomTriangle?: string): Grid {
+        if (!pointyBottomTriangle) {
+            pointyBottomTriangle = pointyTopTriangle;
+        }
         const angle: number = gridProperties.angle;
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
         const createTriangleWithPointyTop: RegionCreator<Grid> = (insertionPoint: Coordinate) =>
-            GridFragmentFactory.createGridFragment(insertionPoint, cellWidth, 'kite', angle);
+            GridFragmentFactory.createGridFragment(insertionPoint, cellWidth, pointyTopTriangle, angle);
         const createTriangleWithPointyBottom: RegionCreator<Grid> = (insertionPoint: Coordinate) =>
-            GridFragmentFactory.createGridFragment(insertionPoint, cellWidth, 'kite', angle + 60);
+            GridFragmentFactory.createGridFragment(insertionPoint, cellWidth, pointyBottomTriangle, angle + 60);
 
-        return new HexagonalGridAssembler<Grid>().createGrid(
+        return new LargeHexagonGridAssembler<Grid>().createGrid(
             gridProperties,
             createTriangleWithPointyTop,
             createTriangleWithPointyBottom
         );
     }
-
-    createTriakisGrid(gridProperties: RegularShapedGridProperties): Grid {
-        const angle: number = gridProperties.angle;
-        const cellWidth: number = gridProperties.lengthOfEdgeSegments;
-
-        const createTriangleWithPointyTop: RegionCreator<Grid> = (insertionPoint: Coordinate) =>
-            GridFragmentFactory.createGridFragment(insertionPoint, cellWidth, 'triakis-triangle', angle);
-        const createTriangleWithPointyBottom: RegionCreator<Grid> = (insertionPoint: Coordinate) =>
-            GridFragmentFactory.createGridFragment(insertionPoint, cellWidth, 'triakis-triangle', angle + 60);
-
-        return new HexagonalGridAssembler<Grid>().createGrid(
-            gridProperties,
-            createTriangleWithPointyTop,
-            createTriangleWithPointyBottom
-        );
-    }
-
-    createHalfHexagonsGrid(gridProperties: RegularShapedGridProperties): Grid {
-        const angle: number = gridProperties.angle;
-        const cellWidth: number = gridProperties.lengthOfEdgeSegments;
-
-        const createTriangleWithPointyTop: RegionCreator<Grid> = (insertionPoint: Coordinate) =>
-            GridFragmentFactory.createGridFragment(insertionPoint, cellWidth, 'half-hexagon', angle);
-        const createTriangleWithPointyBottom: RegionCreator<Grid> = (insertionPoint: Coordinate) =>
-            GridFragmentFactory.createGridFragment(insertionPoint, cellWidth, 'half-hexagon', angle + 60);
-
-        return new HexagonalGridAssembler<Grid>().createGrid(
-            gridProperties,
-            createTriangleWithPointyTop,
-            createTriangleWithPointyBottom
-        );
-    }
-
-
 
 }

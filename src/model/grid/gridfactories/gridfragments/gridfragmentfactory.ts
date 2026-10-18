@@ -1,6 +1,6 @@
 import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
-import { stepRight, stepUp } from '../../../vector/vectorcreator';
+import { stepLeft, stepRight, stepUp, stepInDirection } from '../../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
 import { Grid } from '../../grid';
@@ -19,12 +19,14 @@ export class GridFragmentFactory {
         angle: number = 0
     ): Grid {
         switch (type) {
-            case 'kite':
+            case 'kite-grid-fragment-triangle':
                 return GridFragmentFactory.createKiteGridFragment(insertionPoint, sideLength, angle);
-            case 'triakis-triangle':
+            case 'triakis-grid-fragment-triangle':
                 return GridFragmentFactory.createTriakisGridFragment(insertionPoint, sideLength, angle);
-            case 'half-hexagon':
+            case 'half-hexagon-grid-fragment-triangle':
                 return GridFragmentFactory.createHalfHexagonGridFragment(insertionPoint, sideLength, angle);
+            case 'reversed-half-hexagon-grid-fragment-triangle':
+                return GridFragmentFactory.createReversedHalfHexagonGridFragment(insertionPoint, sideLength, angle);
             default:
                 throw new Error('Unknown grid fragment type');
         }
@@ -32,8 +34,24 @@ export class GridFragmentFactory {
 
     private static createHalfHexagonGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
         const cellBaseWidth: number = sideLength * 2 / 3;
-        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number) =>
+        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle?: number) =>
             CellFactory.createCell(insertionPoint, cellBaseWidth, 'half-hexagonal', angle);
+
+        return GridFragmentFactory.createTriangularGridFragment(
+            insertionPoint,
+            sideLength,
+            angle,
+            cellCreator
+        );
+    }
+
+    private static createReversedHalfHexagonGridFragment(
+        insertionPoint: Coordinate, sideLength: number, angle: number = 0): Grid {
+        const cellBaseWidth: number = sideLength * 2 / 3;
+
+        const cellCreator: CellCreator = (insertionPoint2: Coordinate, angle?: number) =>
+            CellFactory.createCell(insertionPoint2.stepToNewCoordinate(stepInDirection(angle, cellBaseWidth / 2)),
+                cellBaseWidth, 'half-hexagonal', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
             insertionPoint,
@@ -46,7 +64,7 @@ export class GridFragmentFactory {
 
     private static createKiteGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
         const cellBaseWidth: number = sideLength / 2;
-        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number) =>
+        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle?: number) =>
             CellFactory.createCell(insertionPoint, cellBaseWidth, 'kite', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
@@ -59,7 +77,7 @@ export class GridFragmentFactory {
 
     private static createTriakisGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
         const cellBaseWidth: number = sideLength;
-        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle: number) =>
+        const cellCreator: CellCreator = (insertionPoint: Coordinate, angle?: number) =>
             CellFactory.createCell(insertionPoint, cellBaseWidth, 'triakis-triangle', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
@@ -83,7 +101,8 @@ export class GridFragmentFactory {
 
         const stepToRightCorner: Vector = stepRight(gridWidth).newRotatedVector(angle);
         const stepToTopCorner: Vector = stepRight(gridWidth / 2).thenTake(stepUp(gridHeight)).newRotatedVector(angle);
-        const stepToGridCenter: Vector = stepRight(gridWidth / 2).thenTake(stepUp(gridHeight / 3)).newRotatedVector(angle);
+        const stepToGridCenter: Vector =
+            stepRight(gridWidth / 2).thenTake(stepUp(gridHeight / 3)).newRotatedVector(angle);
 
         const rightCorner: Coordinate = leftCorner.stepToNewCoordinate(stepToRightCorner);
         const topCorner: Coordinate = leftCorner.stepToNewCoordinate(stepToTopCorner);

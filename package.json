@@ -25,8 +25,8 @@
     "@vitest/coverage-v8": "^4.1.11",
     "cypress": "^15.21.1",
     "eslint": "^8.1.0",
-    "@sonar/scan": "5.0.0",
-    "typescript": "^6.0.3",
+    "@sonar/scan": "^5.0.2",
+    "typescript": "^7.0.2",
     "vite": "^8.2.2",
     "vitest": "^4.1.11"
   }

@@ -37,6 +37,6 @@ export function stepDownRight(length: number): Vector {
     return Vector.unitVectorInDirection(315).times(length);
 }
 
-export function stepInDirection(angleInDegrees: number, length: number): Vector {
+export function stepInDirection(angleInDegrees: number = 0, length: number): Vector {
     return Vector.unitVectorInDirection(angleInDegrees).times(length);
 }
