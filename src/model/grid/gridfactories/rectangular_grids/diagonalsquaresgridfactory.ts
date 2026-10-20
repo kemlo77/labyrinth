@@ -32,15 +32,15 @@ export class DiagonalSquaresGridFactory extends GridAssembler<Cell> implements R
         const angle: number = gridProperties.angle;
 
         const createTopRowTriangle: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'isosceles-right-triangular', angle + 45);
+            CellFactory.createCell(insertionPoint, cellWidth, 'isosceles-right-triangular-cell', angle + 45);
         const createLeftColumnTriangle: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'isosceles-right-triangular', angle + 135);
+            CellFactory.createCell(insertionPoint, cellWidth, 'isosceles-right-triangular-cell', angle + 135);
         const createBottomRowTriangle: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'isosceles-right-triangular', angle + 225);
+            CellFactory.createCell(insertionPoint, cellWidth, 'isosceles-right-triangular-cell', angle + 225);
         const createRightColumnTriangle: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'isosceles-right-triangular', angle + 315);
+            CellFactory.createCell(insertionPoint, cellWidth, 'isosceles-right-triangular-cell', angle + 315);
         const createSquareCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'square', 45 + angle);
+            CellFactory.createCell(insertionPoint, cellWidth, 'square-cell', 45 + angle);
 
         const stepToLeftInsertionPoint: Vector = stepUpRight(cellWidth).newRotatedVector(angle);
         const stepToRightInsertionPoint: Vector =

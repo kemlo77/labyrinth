@@ -44,7 +44,7 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
                             .newRotatedVector(angle)
                     ),
                     cellWidth,
-                    'octagonal',
+                    'octagonal-cell',
                     angle
                 );
 
@@ -52,28 +52,28 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
             CellFactory.createCell(
                 insertionPoint,
                 cellWidth,
-                'semi-octagonal-semi-square',
+                'semi-octagonal-semi-square-cell',
                 angle
             );
         const createBottomHalfOctagonalCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint.stepToNewCoordinate(columnStep),
                 cellWidth,
-                'semi-octagonal-semi-square',
+                'semi-octagonal-semi-square-cell',
                 angle + 90
             );
         const createRightHalfOctagonalCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint.stepToNewCoordinate(rowStep.thenTake(columnStep)),
                 cellWidth,
-                'semi-octagonal-semi-square',
+                'semi-octagonal-semi-square-cell',
                 angle + 180
             );
         const createTopHalfOctagonalCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint.stepToNewCoordinate(rowStep),
                 cellWidth,
-                'semi-octagonal-semi-square',
+                'semi-octagonal-semi-square-cell',
                 angle + 270
             );
 
@@ -81,28 +81,28 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
             CellFactory.createCell(
                 insertionPoint,
                 cellWidth,
-                'chamfered-square',
+                'chamfered-square-cell',
                 angle + 0
             );
         const createLowerRightCornerCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint.stepToNewCoordinate(columnStep),
                 cellWidth,
-                'chamfered-square',
+                'chamfered-square-cell',
                 angle + 90
             );
         const createUpperLeftCornerCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint.stepToNewCoordinate(rowStep),
                 cellWidth,
-                'chamfered-square',
+                'chamfered-square-cell',
                 angle + 270
             );
         const createUpperRightCornerCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint.stepToNewCoordinate(rowStep.thenTake(columnStep)),
                 cellWidth,
-                'chamfered-square',
+                'chamfered-square-cell',
                 angle + 180
             );
 
@@ -110,14 +110,14 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
             CellFactory.createCell(
                 center.stepToNewCoordinate(stepDown(tiltedSquareCellDiagonalLength / 2).newRotatedVector(angle)),
                 tiltedSquareWidth,
-                'square',
+                'square-cell',
                 angle + 45
             );
         const createSquareCell: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint,
                 cellWidth,
-                'square',
+                'square-cell',
                 angle
             );
 

@@ -45,42 +45,42 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
             CellFactory.createCell(
                 insertionPoint,
                 cellWidth,
-                'triangular',
+                'triangular-cell',
                 angle
             );
         const createTriangleWithPointyBottom: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.thenTake(stepUpCellHeight)),
                 cellWidth,
-                'triangular',
+                'triangular-cell',
                 angle + 180
             );
         const createLeftHalfPointyTopTriangle: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint,
                 cellWidth,
-                'right-half-triangular',
+                'right-half-triangular-cell',
                 angle
             );
         const createRightHalfPointyTopTriangle: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth),
                 cellWidth,
-                'left-half-triangular',
+                'left-half-triangular-cell',
                 angle
             );
         const createLeftHalfPointyBottomTriangle: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.thenTake(stepUpCellHeight)),
                 cellWidth,
-                'left-half-triangular',
+                'left-half-triangular-cell',
                 angle + 180
             );
         const createRightHalfPointyBottomTriangle: CellCreator = (insertionPoint: Coordinate) =>
             CellFactory.createCell(
                 insertionPoint.stepToNewCoordinate(stepUpCellHeight),
                 cellWidth,
-                'right-half-triangular',
+                'right-half-triangular-cell',
                 angle + 180
             );
 

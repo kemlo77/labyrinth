@@ -31,42 +31,45 @@ export class CellFactory {
         angle: number = 0): Cell {
 
         switch (type) {
-            case 'equilateral-triangular': return CellFactory
+            case 'equilateral-triangular-cell': return CellFactory
                 .createEquilateralTriangleCell(insertionPoint, width, angle);
 
-            case 'triangular': return CellFactory.createTriangleCell(insertionPoint, width, angle);
-            case 'left-half-triangular': return CellFactory.createLeftHalfTriangleCell(insertionPoint, width, angle);
-            case 'right-half-triangular': return CellFactory.createRightHalfTriangleCell(insertionPoint, width, angle);
+            case 'triangular-cell': return CellFactory.createTriangleCell(insertionPoint, width, angle);
+            case 'left-half-triangular-cell': return CellFactory
+                .createLeftHalfTriangleCell(insertionPoint, width, angle);
+            case 'right-half-triangular-cell': return CellFactory
+                .createRightHalfTriangleCell(insertionPoint, width, angle);
 
-            case 'square': return CellFactory.createSquareCell(insertionPoint, width, angle);
-            case 'isosceles-right-triangular':
+            case 'square-cell': return CellFactory.createSquareCell(insertionPoint, width, angle);
+            case 'isosceles-right-triangular-cell':
                 return CellFactory.createIsoscelesRightTriangleCell(insertionPoint, width, angle);
 
-            case 'double-square-rectangle': return CellFactory
+            case 'double-square-rectangle-cell': return CellFactory
                 .createDoubleSquareRectangleCell(insertionPoint, width, angle);
 
-            case 'octagonal': return CellFactory.createOctagonalCell(insertionPoint, width, angle);
-            case 'chamfered-square': return CellFactory.createChamferedSquareCell(insertionPoint, width, angle);
-            case 'semi-octagonal-semi-square':
+            case 'octagonal-cell': return CellFactory.createOctagonalCell(insertionPoint, width, angle);
+            case 'chamfered-square-cell': return CellFactory.createChamferedSquareCell(insertionPoint, width, angle);
+            case 'semi-octagonal-semi-square-cell':
                 return CellFactory.createSemiOctagonalSemiSquareCell(insertionPoint, width, angle);
 
-            case 'hexagonal': return CellFactory.createHexagonalCell(insertionPoint, width, angle);
-            case 'right-half-hexagonal': return CellFactory.createRightHalfHexagonalCell(insertionPoint, width, angle);
-            case 'bottom-half-hexagonal': return CellFactory
+            case 'hexagonal-cell': return CellFactory.createHexagonalCell(insertionPoint, width, angle);
+            case 'right-half-hexagonal-cell': return CellFactory
+                .createRightHalfHexagonalCell(insertionPoint, width, angle);
+            case 'bottom-half-hexagonal-cell': return CellFactory
                 .createBottomHalfHexagonalCell(insertionPoint, width, angle);
-            case 'bottom-right-quarter-hexagonal':
+            case 'bottom-right-quarter-hexagonal-cell':
                 return CellFactory.createBottomRightQuarterHexagonalCell(insertionPoint, width, angle);
-            case 'bottom-left-quarter-hexagonal':
+            case 'bottom-left-quarter-hexagonal-cell':
                 return CellFactory.createBottomLeftQuarterHexagonalCell(insertionPoint, width, angle);
-            case 'half-hexagonal': return CellFactory.createHalfHexagonalCell(insertionPoint, width, angle);
+            case 'half-hexagonal-cell': return CellFactory.createHalfHexagonalCell(insertionPoint, width, angle);
 
-            case 'rhombus': return CellFactory.createRhombusCell(insertionPoint, width, angle);
+            case 'rhombus-cell': return CellFactory.createRhombusCell(insertionPoint, width, angle);
 
             case 'kite-cell': return CellFactory.createKiteCell(insertionPoint, width, angle);
             case 'triakis-triangle-cell':
                 return CellFactory.createTriakisTriangle(insertionPoint, width, angle);
 
-            default: throw new Error('Unknown cell type');
+            default: throw new Error('Unknown cell type: ' + type);
         }
 
     }

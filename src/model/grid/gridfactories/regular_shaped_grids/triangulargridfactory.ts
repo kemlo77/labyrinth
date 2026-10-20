@@ -14,9 +14,9 @@ export class TriangularGridFactory implements RegularShapedGridFactory {
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
         const createTriangleWithPointyTop: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'equilateral-triangular', angle);
+            CellFactory.createCell(insertionPoint, cellWidth, 'equilateral-triangular-cell', angle);
         const createTriangleWithPointyBottom: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'equilateral-triangular', angle + 60);
+            CellFactory.createCell(insertionPoint, cellWidth, 'equilateral-triangular-cell', angle + 60);
 
         return new TriangularGridAssembler<Cell>().createGrid(
             gridProperties,

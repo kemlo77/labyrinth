@@ -35,7 +35,7 @@ export class GridFragmentFactory {
     private static createHalfHexagonGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
         const cellBaseWidth: number = sideLength * 2 / 3;
         const cellCreator: CellCreator = (insertionPoint: Coordinate, angle?: number) =>
-            CellFactory.createCell(insertionPoint, cellBaseWidth, 'half-hexagonal', angle);
+            CellFactory.createCell(insertionPoint, cellBaseWidth, 'half-hexagonal-cell', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
             insertionPoint,
@@ -51,7 +51,7 @@ export class GridFragmentFactory {
 
         const cellCreator: CellCreator = (insertionPoint2: Coordinate, angle?: number) =>
             CellFactory.createCell(insertionPoint2.stepToNewCoordinate(stepInDirection(angle, cellBaseWidth / 2)),
-                cellBaseWidth, 'half-hexagonal', angle);
+                cellBaseWidth, 'half-hexagonal-cell', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
             insertionPoint,

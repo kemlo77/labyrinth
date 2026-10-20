@@ -37,10 +37,10 @@ export class RunningBondGridFactory extends GridAssembler<Cell> implements Recta
         const twoStepsRight: Vector = stepRight(doubleCellWidth).newRotatedVector(angle);
 
         const createSquareCell: CellCreator =
-            (insertionPoint: Coordinate) => CellFactory.createCell(insertionPoint, cellWidth, 'square', angle);
+            (insertionPoint: Coordinate) => CellFactory.createCell(insertionPoint, cellWidth, 'square-cell', angle);
         const createRectangularCell: CellCreator =
             (insertionPoint: Coordinate) =>
-                CellFactory.createCell(insertionPoint, cellWidth * 2, 'double-square-rectangle', 0 + angle);
+                CellFactory.createCell(insertionPoint, cellWidth * 2, 'double-square-rectangle-cell', 0 + angle);
 
         const firstCellInsertionPoint: Coordinate = gridProperties.insertionPoint;
 

@@ -57,7 +57,7 @@ export class GridSupplier {
         if (gridType === 'hexagonal') {
             const gridProperties: RegularShapedGridProperties = this.getLargeHexagonGridProperties(insertionPoint);
             return new LargeHexagonGridFactory()
-                .createGridWithNamedCellElements(gridProperties, 'equilateral-triangular');
+                .createGridWithNamedCellElements(gridProperties, 'equilateral-triangular-cell');
         }
 
         if (gridType === 'triakisHexagonal') {

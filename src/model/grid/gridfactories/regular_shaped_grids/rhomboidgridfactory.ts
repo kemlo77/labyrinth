@@ -31,7 +31,7 @@ export class RhomboidGridFactory extends GridAssembler<Cell> implements RegularS
         const rowStep: Vector = stepInDirection(60, cellWidth).newRotatedVector(angle);
 
         const createRhombusCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'rhombus', angle);
+            CellFactory.createCell(insertionPoint, cellWidth, 'rhombus-cell', angle);
 
         const cellColumns: Cell[][] = [];
         for (let columnIndex: number = 0; columnIndex < segmentsPerSide; columnIndex++) {

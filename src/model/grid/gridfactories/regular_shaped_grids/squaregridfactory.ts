@@ -15,7 +15,7 @@ export class SquareGridFactory implements RegularShapedGridFactory {
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
         const createSquareCell: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'square', angle);
+            CellFactory.createCell(insertionPoint, cellWidth, 'square-cell', angle);
 
         return new SquareGridAssembler<Cell>().createGrid(
             gridProperties,

@@ -34,7 +34,7 @@ export class StandardGridFactory extends GridAssembler<Cell> implements Rectangu
 
         const createRotatedSquareCell: CellCreator =
             (insertionPoint: Coordinate) =>
-                CellFactory.createCell(insertionPoint, cellWidth, 'square', gridProperties.angle);
+                CellFactory.createCell(insertionPoint, cellWidth, 'square-cell', gridProperties.angle);
 
 
         const cellColumns: Cell[][] = [];
