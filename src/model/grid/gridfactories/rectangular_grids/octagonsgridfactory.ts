@@ -39,7 +39,10 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
         const createOctagonalCell: CellCreator =
             (insertionPoint: Coordinate) =>
                 CellFactory.createCell(
-                    insertionPoint.stepToNewCoordinate(stepRight(cellWidth / 2 - sideLength / 2)),
+                    insertionPoint.stepToNewCoordinate(
+                        stepRight(cellWidth / 2 - sideLength / 2)
+                            .newRotatedVector(angle)
+                    ),
                     cellWidth,
                     'octagonal',
                     angle
@@ -105,7 +108,7 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
         const createTiltedSquareCell: CellCreator = (center: Coordinate) =>
             CellFactory.createCell(
-                center.stepToNewCoordinate(stepDown(tiltedSquareCellDiagonalLength / 2)),
+                center.stepToNewCoordinate(stepDown(tiltedSquareCellDiagonalLength / 2).newRotatedVector(angle)),
                 tiltedSquareWidth,
                 'square',
                 angle + 45

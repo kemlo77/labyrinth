@@ -6,8 +6,8 @@ export class CellBuilder {
 
     private _startCorner: Coordinate;
     private readonly _steps: Vector[] = [];
-    private _corners: Coordinate[] = [];
     private _center: Coordinate;
+    private _rotationAngle: number = 0;
 
     setStartCorner(startCorner: Coordinate): this {
         this._startCorner = startCorner.clone();
@@ -24,6 +24,11 @@ export class CellBuilder {
         return this;
     }
 
+    rotateAroundStartCorner(angleInDegrees: number): this {
+        this._rotationAngle = angleInDegrees;
+        return this;
+    }
+
     build(): Cell {
         if (!this._startCorner) {
             throw new Error('Start corner is missing');
@@ -35,8 +40,17 @@ export class CellBuilder {
             throw new Error('Center is missing');
         }
 
-        this._corners = this.calculateCorners();
-        return new Cell(this._center, this._corners);
+        const corners: Coordinate[] = this.calculateCorners();
+
+        if (this._rotationAngle !== 0) {
+            const rotatedCorners: Coordinate[] =
+                corners.map(corner => corner.rotateAroundCenter(this._rotationAngle, this._startCorner));
+            const rotatedCenter: Coordinate =
+                this._center.rotateAroundCenter(this._rotationAngle, this._startCorner);
+            return new Cell(rotatedCenter, rotatedCorners);
+        }
+
+        return new Cell(this._center, corners);
     }
 
     private calculateCorners(): Coordinate[] {

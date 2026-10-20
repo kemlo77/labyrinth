@@ -65,7 +65,7 @@ export class GridFragmentFactory {
     private static createKiteGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
         const cellBaseWidth: number = sideLength / 2;
         const cellCreator: CellCreator = (insertionPoint: Coordinate, angle?: number) =>
-            CellFactory.createCell(insertionPoint, cellBaseWidth, 'kite', angle);
+            CellFactory.createCell(insertionPoint, cellBaseWidth, 'kite-cell', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
             insertionPoint,
@@ -78,7 +78,7 @@ export class GridFragmentFactory {
     private static createTriakisGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
         const cellBaseWidth: number = sideLength;
         const cellCreator: CellCreator = (insertionPoint: Coordinate, angle?: number) =>
-            CellFactory.createCell(insertionPoint, cellBaseWidth, 'triakis-triangle', angle);
+            CellFactory.createCell(insertionPoint, cellBaseWidth, 'triakis-triangle-cell', angle);
 
         return GridFragmentFactory.createTriangularGridFragment(
             insertionPoint,

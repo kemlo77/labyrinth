@@ -94,32 +94,33 @@ export class GridSupplier {
 
 
         if (gridType === 'standard') {
-            const gridProperties: RectangularGridProperties = new RectangularGridProperties(insertionPoint, 34, 21, 30);
+            const gridProperties: RectangularGridProperties = this.getRectangularGridProperties(insertionPoint);
             return new StandardGridFactory().createGrid(gridProperties);
         }
 
         if (gridType === 'runningBond') {
-            const gridProperties: RectangularGridProperties = new RectangularGridProperties(insertionPoint, 34, 21, 30);
+            const gridProperties: RectangularGridProperties = this.getRectangularGridProperties(insertionPoint);
             return new RunningBondGridFactory().createGrid(gridProperties);
         }
 
         if (gridType === 'hexagons') {
-            const gridProperties: RectangularGridProperties = new RectangularGridProperties(insertionPoint, 40, 21, 30);
+            const gridProperties: RectangularGridProperties =
+                new RectangularGridProperties(insertionPoint, 40, 21, 30);
             return new HexagonsGridFactory().createGrid(gridProperties);
         }
 
         if (gridType === 'triangles') {
-            const gridProperties: RectangularGridProperties = new RectangularGridProperties(insertionPoint, 34, 21, 30);
+            const gridProperties: RectangularGridProperties = this.getRectangularGridProperties(insertionPoint);
             return new TrianglesGridFactory().createGrid(gridProperties);
         }
 
         if (gridType === 'octagons') {
-            const gridProperties: RectangularGridProperties = new RectangularGridProperties(insertionPoint, 34, 21, 30);
+            const gridProperties: RectangularGridProperties = this.getRectangularGridProperties(insertionPoint);
             return new OctagonsGridFactory().createGrid(gridProperties);
         }
 
         if (gridType === 'diagonalSquares') {
-            const gridProperties: RectangularGridProperties = new RectangularGridProperties(insertionPoint, 34, 21, 30);
+            const gridProperties: RectangularGridProperties = this.getRectangularGridProperties(insertionPoint);
             return new DiagonalSquaresGridFactory().createGrid(gridProperties);
         }
 
@@ -161,6 +162,13 @@ export class GridSupplier {
 
         throw new Error('Invalid grid type');
 
+    }
+
+    private static getRectangularGridProperties(insertionPoint: Coordinate): RectangularGridProperties {
+        const numberOfRows: number = 34;
+        const numberOfColumns: number = 21;
+        const cellWidth: number = 30;
+        return new RectangularGridProperties(insertionPoint, numberOfRows, numberOfColumns, cellWidth);
     }
 
     private static getLargeHexagonGridProperties(insertionPoint: Coordinate): RegularShapedGridProperties {
