@@ -32,9 +32,8 @@ export class StandardGridFactory extends GridAssembler<Cell> implements Rectangu
         const firstCellInsertionPoint: Coordinate =
             gridProperties.insertionPoint;
 
-        const createRotatedSquareCell: CellCreator =
-            (insertionPoint: Coordinate) =>
-                CellFactory.createCell(insertionPoint, cellWidth, 'square-cell', gridProperties.angle);
+        const squareCellCreator: CellCreator =
+            CellFactory.getCellCreatorByType('square-cell', cellWidth, gridProperties.angle);
 
 
         const cellColumns: Cell[][] = [];
@@ -43,7 +42,7 @@ export class StandardGridFactory extends GridAssembler<Cell> implements Rectangu
                 firstCellInsertionPoint.stepToNewCoordinate(columnStep.times(columnIndex));
             const cellSequence: Cell[] =
                 this.createSequenceOfRegions(columnInsertionPoint, rowStep, gridProperties.numberOfVerticalEdgeSegments,
-                    createRotatedSquareCell);
+                    squareCellCreator);
             cellColumns.push(cellSequence);
         }
 

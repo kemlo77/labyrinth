@@ -39,14 +39,8 @@ export class Coordinate {
         return rotated.translate(center.x, center.y);
     }
 
-    stepToNewCoordinate(...steps: Vector[]): Coordinate {
-        let xCoordinate: number = this.x;
-        let yCoordinate: number = this.y;
-        for (const step of steps) {
-            xCoordinate += step.x;
-            yCoordinate += step.y;
-        }
-        return new Coordinate(xCoordinate, yCoordinate);
+    stepToNewCoordinate(step: Vector): Coordinate {
+        return new Coordinate(this.x + step.x, this.y + step.y);
     }
 
     equals(coordinate: Coordinate): boolean {

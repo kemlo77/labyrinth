@@ -14,15 +14,15 @@ export class LargeHexagonGridFactory implements RegularShapedGridFactory {
         const angle: number = gridProperties.angle;
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
-        const createTriangleWithPointyTop: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'equilateral-triangular-cell', angle);
-        const createTriangleWithPointyBottom: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'equilateral-triangular-cell', angle + 60);
+        const triangleWithPointyTopCreator: RegionCreator<Cell> =
+            CellFactory.getCellCreatorByType('equilateral-triangular-cell', cellWidth, angle);
+        const riangleWithPointyBottomCreator: RegionCreator<Cell> =
+            CellFactory.getCellCreatorByType('equilateral-triangular-cell', cellWidth, angle + 60);
 
         return new LargeHexagonGridAssembler<Cell>().createGrid(
             gridProperties,
-            createTriangleWithPointyTop,
-            createTriangleWithPointyBottom
+            triangleWithPointyTopCreator,
+            riangleWithPointyBottomCreator
         );
     }
 
@@ -34,15 +34,15 @@ export class LargeHexagonGridFactory implements RegularShapedGridFactory {
         const angle: number = gridProperties.angle;
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
-        const createTriangleWithPointyTop: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, pointyTopTriangle, angle);
-        const createTriangleWithPointyBottom: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, pointyBottomTriangle, angle + 60);
+        const triangleWithPointyTopCreator: RegionCreator<Cell> =
+            CellFactory.getCellCreatorByType(pointyTopTriangle, cellWidth, angle);
+        const triangleWithPointyBottomCreator: RegionCreator<Cell> =
+            CellFactory.getCellCreatorByType(pointyBottomTriangle, cellWidth, angle + 60);
 
         return new LargeHexagonGridAssembler<Cell>().createGrid(
             gridProperties,
-            createTriangleWithPointyTop,
-            createTriangleWithPointyBottom
+            triangleWithPointyTopCreator,
+            triangleWithPointyBottomCreator
         );
     }
 

@@ -42,57 +42,23 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
         const halfRowStep: Vector = halfCellHeightUp;
 
 
-        const createRegularCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint,
-                cellSideLength,
-                'hexagonal-cell',
-                angle
-            );
-        const createTopHalfCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint,
-                cellSideLength,
-                'bottom-half-hexagonal-cell',
-                angle + 0
-            );
-        const createBottomHalfCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(sideLengthRight.thenTake(halfCellHeightUp)),
-                cellSideLength,
-                'bottom-half-hexagonal-cell',
-                angle + 180
-            );
-
-        const createLeftSideCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint,
-                cellSideLength,
-                'right-half-hexagonal-cell',
-                angle
-            );
-        const createRightSideCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(cellHeightUp.thenTake(halfSideLengthRight)),
-                cellSideLength,
-                'right-half-hexagonal-cell',
-                angle + 180
-            );
-
-        const createBottomRightQuarterCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(halfSideLengthRight.thenTake(halfCellHeightUp)),
-                cellSideLength,
-                'bottom-right-quarter-hexagonal-cell',
-                angle + 180
-            );
-        const createUpRightQuarterCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint,
-                cellSideLength,
-                'bottom-left-quarter-hexagonal-cell',
-                angle
-            );
+        const regularCellCreator: CellCreator =
+            CellFactory.getCellCreatorByType('hexagonal-cell', cellSideLength, angle);
+        const topHalfCellCreator: CellCreator =
+            CellFactory.getCellCreatorByType('bottom-half-hexagonal-cell', cellSideLength, angle);
+        const bottomHalfCellCreator: CellCreator =
+            CellFactory.getCellCreatorByType('bottom-half-hexagonal-cell', cellSideLength, angle + 180,
+                sideLengthRight.thenTake(halfCellHeightUp));
+        const leftSideCellCreator: CellCreator =
+            CellFactory.getCellCreatorByType('right-half-hexagonal-cell', cellSideLength, angle);
+        const rightSideCellCreator: CellCreator =
+            CellFactory.getCellCreatorByType('right-half-hexagonal-cell', cellSideLength, angle + 180,
+                cellHeightUp.thenTake(halfSideLengthRight));
+        const bottomRightQuarterCellCreator: CellCreator =
+            CellFactory.getCellCreatorByType('bottom-right-quarter-hexagonal-cell', cellSideLength, angle + 180,
+                halfSideLengthRight.thenTake(halfCellHeightUp));
+        const upRightQuarterCellCreator: CellCreator =
+            CellFactory.getCellCreatorByType('bottom-left-quarter-hexagonal-cell', cellSideLength, angle);
 
         const insertionPoint: Coordinate = gridProperties.insertionPoint;
 
@@ -110,14 +76,14 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
             if (onFirstColumn) {
                 const columnOfCells: Cell[] =
-                    this.createSequenceOfRegions(firstcolumnInsertionPoint, rowStep, numberOfRows, createLeftSideCell);
+                    this.createSequenceOfRegions(firstcolumnInsertionPoint, rowStep, numberOfRows, leftSideCellCreator);
                 cellColumns.push(columnOfCells);
                 continue;
             }
 
             if (onLastColumn && onEvenColumn) {
                 const columnOfCells: Cell[] =
-                    this.createSequenceOfRegions(columnInsertionPoint, rowStep, numberOfRows, createRightSideCell);
+                    this.createSequenceOfRegions(columnInsertionPoint, rowStep, numberOfRows, rightSideCellCreator);
                 cellColumns.push(columnOfCells);
                 continue;
             }
@@ -127,15 +93,15 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
                 const topCellInsertionPoint: Coordinate =
                     cellColumnInsertionPoint.stepToNewCoordinate(rowStep.times(numberOfRows - 1));
 
-                const bottomCell: Cell = createBottomRightQuarterCell(columnInsertionPoint);
+                const bottomCell: Cell = bottomRightQuarterCellCreator(columnInsertionPoint);
                 const intermediateCellsInColumn: Cell[] =
                     this.createSequenceOfRegions(
                         cellColumnInsertionPoint,
                         rowStep,
                         numberOfRows - 1,
-                        createRightSideCell
+                        rightSideCellCreator
                     );
-                const topCell: Cell = createUpRightQuarterCell(topCellInsertionPoint);
+                const topCell: Cell = upRightQuarterCellCreator(topCellInsertionPoint);
 
                 cellColumns.push([bottomCell, ...intermediateCellsInColumn, topCell]);
                 continue;
@@ -143,7 +109,7 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
             if (onEvenColumn) {
                 const columnOfCells: Cell[] =
-                    this.createSequenceOfRegions(columnInsertionPoint, rowStep, numberOfRows, createRegularCell);
+                    this.createSequenceOfRegions(columnInsertionPoint, rowStep, numberOfRows, regularCellCreator);
                 cellColumns.push(columnOfCells);
             }
 
@@ -152,15 +118,15 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
                 const topCellInsertionPoint: Coordinate =
                     cellColumnInsertionPoint.stepToNewCoordinate(rowStep.times(numberOfRows - 1));
 
-                const bottomCell: Cell = createBottomHalfCell(columnInsertionPoint);
+                const bottomCell: Cell = bottomHalfCellCreator(columnInsertionPoint);
                 const intermediateCellsInColumn: Cell[] =
                     this.createSequenceOfRegions(
                         cellColumnInsertionPoint,
                         rowStep,
                         numberOfRows - 1,
-                        createRegularCell
+                        regularCellCreator
                     );
-                const topCell: Cell = createTopHalfCell(topCellInsertionPoint);
+                const topCell: Cell = topHalfCellCreator(topCellInsertionPoint);
 
                 cellColumns.push([bottomCell, ...intermediateCellsInColumn, topCell]);
             }

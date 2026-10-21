@@ -41,50 +41,20 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
         const stepRightCellWidth: Vector = stepRight(cellWidth).newRotatedVector(angle);
         const stepUpCellHeight: Vector = stepUp(cellHeight).newRotatedVector(angle);
 
-        const createTriangleWithPointyTop: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint,
-                cellWidth,
-                'triangular-cell',
-                angle
-            );
-        const createTriangleWithPointyBottom: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.thenTake(stepUpCellHeight)),
-                cellWidth,
-                'triangular-cell',
-                angle + 180
-            );
-        const createLeftHalfPointyTopTriangle: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint,
-                cellWidth,
-                'right-half-triangular-cell',
-                angle
-            );
-        const createRightHalfPointyTopTriangle: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth),
-                cellWidth,
-                'left-half-triangular-cell',
-                angle
-            );
-        const createLeftHalfPointyBottomTriangle: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.thenTake(stepUpCellHeight)),
-                cellWidth,
-                'left-half-triangular-cell',
-                angle + 180
-            );
-        const createRightHalfPointyBottomTriangle: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(stepUpCellHeight),
-                cellWidth,
-                'right-half-triangular-cell',
-                angle + 180
-            );
-
-
+        const triangleWithPointyTopCreator: CellCreator =
+            CellFactory.getCellCreatorByType('triangular-cell', cellWidth, angle);
+        const triangleWithPointyBottomCreator: CellCreator =
+            CellFactory.getCellCreatorByType('triangular-cell', cellWidth, angle + 180,
+                stepRightHalfCellWidth.thenTake(stepUpCellHeight));
+        const leftHalfPointyTopTriangleCreator: CellCreator =
+            CellFactory.getCellCreatorByType('right-half-triangular-cell', cellWidth, angle);
+        const rightHalfPointyTopTriangleCreator: CellCreator =
+            CellFactory.getCellCreatorByType('left-half-triangular-cell', cellWidth, angle, stepRightHalfCellWidth);
+        const leftHalfPointyBottomTriangleCreator: CellCreator =
+            CellFactory.getCellCreatorByType('left-half-triangular-cell', cellWidth, angle + 180,
+                stepRightHalfCellWidth.thenTake(stepUpCellHeight));
+        const rightHalfPointyBottomTriangleCreator: CellCreator =
+            CellFactory.getCellCreatorByType('right-half-triangular-cell', cellWidth, angle + 180, stepUpCellHeight);
 
         const cellRows: Cell[][] = [];
 
@@ -93,29 +63,29 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
             const evenRow: boolean = rowIndex % 2 === 0;
 
             if (evenRow) {
-                const firstCell: Cell = createLeftHalfPointyBottomTriangle(rowInsertionPoint);
+                const firstCell: Cell = leftHalfPointyBottomTriangleCreator(rowInsertionPoint);
                 const cellRow: Cell[] = this.createPointyTopFirstRowOfTriangles(
                     rowInsertionPoint,
                     stepRightCellWidth,
                     numberOfColumns,
-                    createTriangleWithPointyTop,
-                    createTriangleWithPointyBottom
+                    triangleWithPointyTopCreator,
+                    triangleWithPointyBottomCreator
                 );
-                const lastCell: Cell = createRightHalfPointyBottomTriangle(
+                const lastCell: Cell = rightHalfPointyBottomTriangleCreator(
                     rowInsertionPoint.stepToNewCoordinate(stepRightCellWidth.times(numberOfColumns))
                 );
                 cellRows.push([firstCell, ...cellRow, lastCell]);
             } else {
-                const firstCell: Cell = createLeftHalfPointyTopTriangle(rowInsertionPoint);
+                const firstCell: Cell = leftHalfPointyTopTriangleCreator(rowInsertionPoint);
                 const cellRow: Cell[] = this.createPointyBottomFirstRowOfTriangles(
                     rowInsertionPoint.stepToNewCoordinate(stepRightHalfCellWidth),
                     stepRightCellWidth,
                     numberOfColumns - 1,
-                    createTriangleWithPointyTop,
-                    createTriangleWithPointyBottom
+                    triangleWithPointyTopCreator,
+                    triangleWithPointyBottomCreator
 
                 );
-                const lastCell: Cell = createRightHalfPointyTopTriangle(
+                const lastCell: Cell = rightHalfPointyTopTriangleCreator(
                     rowInsertionPoint.stepToNewCoordinate(stepRightCellWidth.times(numberOfColumns - 1))
                 );
                 cellRows.push([firstCell, ...cellRow, lastCell]);

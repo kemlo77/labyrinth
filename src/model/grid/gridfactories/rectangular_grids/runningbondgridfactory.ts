@@ -36,11 +36,9 @@ export class RunningBondGridFactory extends GridAssembler<Cell> implements Recta
         const oneStepRight: Vector = stepRight(cellWidth).newRotatedVector(angle);
         const twoStepsRight: Vector = stepRight(doubleCellWidth).newRotatedVector(angle);
 
-        const createSquareCell: CellCreator =
-            (insertionPoint: Coordinate) => CellFactory.createCell(insertionPoint, cellWidth, 'square-cell', angle);
-        const createRectangularCell: CellCreator =
-            (insertionPoint: Coordinate) =>
-                CellFactory.createCell(insertionPoint, cellWidth * 2, 'double-square-rectangle-cell', 0 + angle);
+        const squareCellCreator: CellCreator = CellFactory.getCellCreatorByType('square-cell', cellWidth, angle);
+        const rectangularCellCreator: CellCreator = CellFactory
+            .getCellCreatorByType('double-square-rectangle-cell', cellWidth * 2, 0 + angle);
 
         const firstCellInsertionPoint: Coordinate = gridProperties.insertionPoint;
 
@@ -61,20 +59,20 @@ export class RunningBondGridFactory extends GridAssembler<Cell> implements Recta
                     rowInsertionPoint,
                     twoStepsRight,
                     evenRowNumberOfWideCells,
-                    createRectangularCell
+                    rectangularCellCreator
                 );
                 rowOfCells.push(...rectangularCells);
                 //square cell
                 if (numberOfcolumns % 2 === 1) {
                     const lastCellInsertionPoint: Coordinate = evenRowStartPoint
                         .stepToNewCoordinate(twoStepsRight.times(evenRowNumberOfWideCells));
-                    const squareCell: Cell = createSquareCell(lastCellInsertionPoint);
+                    const squareCell: Cell = squareCellCreator(lastCellInsertionPoint);
                     rowOfCells.push(squareCell);
                 }
             } else {
                 //square cell
                 const oddRowStartPoint: Coordinate = rowInsertionPoint;
-                const firstSquareCellInRow: Cell = createSquareCell(oddRowStartPoint);
+                const firstSquareCellInRow: Cell = squareCellCreator(oddRowStartPoint);
                 rowOfCells.push(firstSquareCellInRow);
 
                 //rectangular cells
@@ -84,7 +82,7 @@ export class RunningBondGridFactory extends GridAssembler<Cell> implements Recta
                     rectangularCellsInsertionPoint,
                     twoStepsRight,
                     oddRowNumberOfWideCells,
-                    createRectangularCell
+                    rectangularCellCreator
                 );
                 rowOfCells.push(...rectangularCells);
 
@@ -92,7 +90,7 @@ export class RunningBondGridFactory extends GridAssembler<Cell> implements Recta
                 if (numberOfcolumns % 2 === 0) {
                     const lastCellInsertionPoint: Coordinate = rectangularCellsInsertionPoint
                         .stepToNewCoordinate(twoStepsRight.times(oddRowNumberOfWideCells));
-                    const lastSquareCellInRow: Cell = createSquareCell(lastCellInsertionPoint);
+                    const lastSquareCellInRow: Cell = squareCellCreator(lastCellInsertionPoint);
                     rowOfCells.push(lastSquareCellInRow);
                 }
             }

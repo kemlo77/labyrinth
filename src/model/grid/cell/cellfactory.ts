@@ -1,4 +1,6 @@
 import { Coordinate } from '../../coordinate';
+import { Vector } from '../../vector/vector';
+
 import {
     stepDown,
     stepDownLeft,
@@ -9,6 +11,7 @@ import {
     stepUpLeft,
     stepUpRight
 } from '../../vector/vectorcreator';
+import type { CellCreator } from '../typealiases';
 import { Cell } from './cell';
 import { CellBuilder } from './cellbuilder';
 
@@ -24,55 +27,89 @@ export class CellFactory {
         type: string,
         angleInDegrees: number = 0
     ): Cell {
-        return CellFactory.createCellByType(type, insertionPoint, width, angleInDegrees);
+        return CellFactory.getCellCreatorByType(type, width, angleInDegrees)(insertionPoint);
     }
 
-    private static createCellByType(type: string, insertionPoint: Coordinate, width: number,
-        angle: number = 0): Cell {
+    static getCellCreatorByType(type: string, cellWidth: number, angle: number,
+        insertionAdjustmentStep?: Vector): CellCreator {
+        if (!insertionAdjustmentStep) {
+            insertionAdjustmentStep = new Vector(0, 0);
+        }
 
         switch (type) {
-            case 'equilateral-triangular-cell': return CellFactory
-                .createEquilateralTriangleCell(insertionPoint, width, angle);
 
-            case 'triangular-cell': return CellFactory.createTriangleCell(insertionPoint, width, angle);
-            case 'left-half-triangular-cell': return CellFactory
-                .createLeftHalfTriangleCell(insertionPoint, width, angle);
-            case 'right-half-triangular-cell': return CellFactory
-                .createRightHalfTriangleCell(insertionPoint, width, angle);
+            case 'triangular-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createTriangleCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
+            case 'equilateral-triangular-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createEquilateralTriangleCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
+            case 'right-half-triangular-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createRightHalfTriangleCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
+            case 'left-half-triangular-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createLeftHalfTriangleCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
+            case 'triakis-triangle-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createTriakisTriangle(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
 
-            case 'square-cell': return CellFactory.createSquareCell(insertionPoint, width, angle);
-            case 'isosceles-right-triangular-cell':
-                return CellFactory.createIsoscelesRightTriangleCell(insertionPoint, width, angle);
+            case 'isosceles-right-triangular-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createIsoscelesRightTriangleCell(
+                    insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
 
-            case 'double-square-rectangle-cell': return CellFactory
-                .createDoubleSquareRectangleCell(insertionPoint, width, angle);
+            case 'square-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createSquareCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
+            case 'double-square-rectangle-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createDoubleSquareRectangleCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
 
-            case 'octagonal-cell': return CellFactory.createOctagonalCell(insertionPoint, width, angle);
-            case 'chamfered-square-cell': return CellFactory.createChamferedSquareCell(insertionPoint, width, angle);
-            case 'semi-octagonal-semi-square-cell':
-                return CellFactory.createSemiOctagonalSemiSquareCell(insertionPoint, width, angle);
+            case 'rhombus-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createRhombusCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
 
-            case 'hexagonal-cell': return CellFactory.createHexagonalCell(insertionPoint, width, angle);
-            case 'right-half-hexagonal-cell': return CellFactory
-                .createRightHalfHexagonalCell(insertionPoint, width, angle);
-            case 'bottom-half-hexagonal-cell': return CellFactory
-                .createBottomHalfHexagonalCell(insertionPoint, width, angle);
-            case 'bottom-right-quarter-hexagonal-cell':
-                return CellFactory.createBottomRightQuarterHexagonalCell(insertionPoint, width, angle);
-            case 'bottom-left-quarter-hexagonal-cell':
-                return CellFactory.createBottomLeftQuarterHexagonalCell(insertionPoint, width, angle);
-            case 'half-hexagonal-cell': return CellFactory.createHalfHexagonalCell(insertionPoint, width, angle);
+            case 'kite-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createKiteCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
 
-            case 'rhombus-cell': return CellFactory.createRhombusCell(insertionPoint, width, angle);
+            case 'hexagonal-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createHexagonalCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
+            case 'half-hexagonal-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createHalfHexagonalCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
+            case 'bottom-half-hexagonal-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createBottomHalfHexagonalCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
+            case 'right-half-hexagonal-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createRightHalfHexagonalCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
+            case 'bottom-right-quarter-hexagonal-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createBottomRightQuarterHexagonalCell(
+                    insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
+            case 'bottom-left-quarter-hexagonal-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createBottomLeftQuarterHexagonalCell(
+                    insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
 
-            case 'kite-cell': return CellFactory.createKiteCell(insertionPoint, width, angle);
-            case 'triakis-triangle-cell':
-                return CellFactory.createTriakisTriangle(insertionPoint, width, angle);
+            case 'chamfered-square-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createChamferedSquareCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
+            case 'semi-octagonal-semi-square-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createSemiOctagonalSemiSquareCell(
+                    insertionPoint.stepToNewCoordinate(insertionAdjustmentStep
+                    ), cellWidth, angle);
+            case 'octagonal-cell': return (insertionPoint: Coordinate) =>
+                CellFactory.createOctagonalCell(insertionPoint.stepToNewCoordinate(insertionAdjustmentStep),
+                    cellWidth, angle);
 
             default: throw new Error('Unknown cell type: ' + type);
         }
-
     }
+
 
     //Triangle that has all sides equal length
     private static createEquilateralTriangleCell(insertionPoint: Coordinate, width: number, angle: number): Cell {

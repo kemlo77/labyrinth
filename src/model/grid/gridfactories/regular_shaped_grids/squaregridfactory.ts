@@ -14,12 +14,12 @@ export class SquareGridFactory implements RegularShapedGridFactory {
         const angle: number = gridProperties.angle;
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
-        const createSquareCell: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'square-cell', angle);
+        const squareCellCreator: RegionCreator<Cell> =
+            CellFactory.getCellCreatorByType('square-cell', cellWidth, angle);
 
         return new SquareGridAssembler<Cell>().createGrid(
             gridProperties,
-            createSquareCell
+            squareCellCreator
         );
     }
 

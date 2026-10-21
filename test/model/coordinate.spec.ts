@@ -70,11 +70,10 @@ describe('Coordinate', () => {
     });
 
     it('should create a new relative coordinate (2 vectors)', () => {
-        const stepVector1: Vector = new Vector(4, 0);
-        const stepVector2: Vector = new Vector(0, 3);
-        const relativeCoordinate: Coordinate = coordinate.stepToNewCoordinate(stepVector1, stepVector2);
+        const stepVector1: Vector = new Vector(4, -3);
+        const relativeCoordinate: Coordinate = coordinate.stepToNewCoordinate(stepVector1);
         expect(relativeCoordinate.x).to.equal(7);
-        expect(relativeCoordinate.y).to.equal(7);
+        expect(relativeCoordinate.y).to.equal(1);
     });
 
     it('should create a new relative coordinate (1 vector)', () => {

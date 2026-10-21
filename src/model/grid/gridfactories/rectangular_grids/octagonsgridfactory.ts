@@ -36,97 +36,78 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
         const gridInsertionPoint: Coordinate = gridProperties.insertionPoint;
 
-        const createOctagonalCell: CellCreator =
-            (insertionPoint: Coordinate) =>
-                CellFactory.createCell(
-                    insertionPoint.stepToNewCoordinate(
-                        stepRight(cellWidth / 2 - sideLength / 2)
-                            .newRotatedVector(angle)
-                    ),
-                    cellWidth,
-                    'octagonal-cell',
-                    angle
-                );
+        const octagonalCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+            'octagonal-cell',
+            cellWidth,
+            angle,
+            stepRight(cellWidth / 2 - sideLength / 2)
+                .newRotatedVector(angle)
+        );
+        const leftHalfOctagonalCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+            'semi-octagonal-semi-square-cell',
+            cellWidth,
+            angle,
+        );
+        const bottomHalfOctagonalCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+            'semi-octagonal-semi-square-cell',
+            cellWidth,
+            angle + 90,
+            columnStep
+        );
+        const rightHalfOctagonalCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+            'semi-octagonal-semi-square-cell',
+            cellWidth,
+            angle + 180,
+            rowStep.thenTake(columnStep)
+        );
+        const topHalfOctagonalCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+            'semi-octagonal-semi-square-cell',
+            cellWidth,
+            angle + 270,
+            rowStep
+        );
+        const lowerLeftCornerCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+            'chamfered-square-cell',
+            cellWidth,
+            angle + 0,
+        );
+        const lowerRightCornerCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+            'chamfered-square-cell',
+            cellWidth,
+            angle + 90,
+            columnStep
+        );
+        const upperLeftCornerCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+            'chamfered-square-cell',
+            cellWidth,
+            angle + 270,
+            rowStep
+        );
+        const upperRightCornerCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+            'chamfered-square-cell',
+            cellWidth,
+            angle + 180,
+            rowStep.thenTake(columnStep)
+        );
+        const tiltedSquareCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+            'square-cell',
+            tiltedSquareWidth,
+            angle + 45,
+            stepDown(tiltedSquareCellDiagonalLength / 2).newRotatedVector(angle)
+        );
+        const squareCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+            'square-cell',
+            cellWidth,
+            angle
+        );
 
-        const createLeftHalfOctagonalCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint,
-                cellWidth,
-                'semi-octagonal-semi-square-cell',
-                angle
-            );
-        const createBottomHalfOctagonalCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(columnStep),
-                cellWidth,
-                'semi-octagonal-semi-square-cell',
-                angle + 90
-            );
-        const createRightHalfOctagonalCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(rowStep.thenTake(columnStep)),
-                cellWidth,
-                'semi-octagonal-semi-square-cell',
-                angle + 180
-            );
-        const createTopHalfOctagonalCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(rowStep),
-                cellWidth,
-                'semi-octagonal-semi-square-cell',
-                angle + 270
-            );
-
-        const createLowerLeftCornerCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint,
-                cellWidth,
-                'chamfered-square-cell',
-                angle + 0
-            );
-        const createLowerRightCornerCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(columnStep),
-                cellWidth,
-                'chamfered-square-cell',
-                angle + 90
-            );
-        const createUpperLeftCornerCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(rowStep),
-                cellWidth,
-                'chamfered-square-cell',
-                angle + 270
-            );
-        const createUpperRightCornerCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint.stepToNewCoordinate(rowStep.thenTake(columnStep)),
-                cellWidth,
-                'chamfered-square-cell',
-                angle + 180
-            );
-
-        const createTiltedSquareCell: CellCreator = (center: Coordinate) =>
-            CellFactory.createCell(
-                center.stepToNewCoordinate(stepDown(tiltedSquareCellDiagonalLength / 2).newRotatedVector(angle)),
-                tiltedSquareWidth,
-                'square-cell',
-                angle + 45
-            );
-        const createSquareCell: CellCreator = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(
-                insertionPoint,
-                cellWidth,
-                'square-cell',
-                angle
-            );
 
         if (gridProperties.numberOfVerticalEdgeSegments === 1) {
             const rowOfCells: Cell[] = this.createSequenceOfRegions(
                 gridInsertionPoint,
                 columnStep,
                 gridProperties.numberOfHorizontalEdgeSegments,
-                createSquareCell
+                squareCellCreator
             );
             return [rowOfCells];
         }
@@ -136,7 +117,7 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
                 gridInsertionPoint,
                 rowStep,
                 gridProperties.numberOfVerticalEdgeSegments,
-                createSquareCell
+                squareCellCreator
             );
             return [columnOfCells];
         }
@@ -146,7 +127,7 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
         // first column
         const firstColumn: Cell[] = [];
-        const lowerLeftCornerCell: Cell = createLowerLeftCornerCell(gridInsertionPoint);
+        const lowerLeftCornerCell: Cell = lowerLeftCornerCellCreator(gridInsertionPoint);
         firstColumn.push(lowerLeftCornerCell);
 
         const leftColumnSecondCellInsertionPoint: Coordinate = gridInsertionPoint.stepToNewCoordinate(rowStep);
@@ -154,13 +135,13 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
             leftColumnSecondCellInsertionPoint,
             rowStep,
             numberOfRows - 2,
-            createLeftHalfOctagonalCell
+            leftHalfOctagonalCellCreator
         );
         firstColumn.push(...leftColumnOfCells);
 
         const upperLeftCornerCellInsertionPoint: Coordinate = gridInsertionPoint
             .stepToNewCoordinate(rowStep.times(numberOfRows - 1));
-        const upperLeftCornerCell: Cell = createUpperLeftCornerCell(upperLeftCornerCellInsertionPoint);
+        const upperLeftCornerCell: Cell = upperLeftCornerCellCreator(upperLeftCornerCellInsertionPoint);
         firstColumn.push(upperLeftCornerCell);
 
         cellColumns.push(firstColumn);
@@ -179,7 +160,7 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
             if (notOnFirstColumn && notOnLastColumn) {
                 const intermediateColumn: Cell[] = [];
-                const bottomCell: Cell = createBottomHalfOctagonalCell(firstOctagonalCellInsertionPoint);
+                const bottomCell: Cell = bottomHalfOctagonalCellCreator(firstOctagonalCellInsertionPoint);
                 intermediateColumn.push(bottomCell);
 
                 const intermediateColumnSecondCellInsertionPoint: Coordinate =
@@ -189,13 +170,13 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
                         intermediateColumnSecondCellInsertionPoint,
                         rowStep,
                         numberOfRows - 2,
-                        createOctagonalCell
+                        octagonalCellCreator
                     );
                 intermediateColumn.push(...octagonalCellSequence);
 
                 const topCellInsertionPoint: Coordinate = firstOctagonalCellInsertionPoint
                     .stepToNewCoordinate(rowStep.times(numberOfRows - 1));
-                const topCell: Cell = createTopHalfOctagonalCell(topCellInsertionPoint);
+                const topCell: Cell = topHalfOctagonalCellCreator(topCellInsertionPoint);
                 intermediateColumn.push(topCell);
 
 
@@ -208,7 +189,7 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
                         fistTiltedSquareCellCenter,
                         rowStep,
                         numberOfRows - 1,
-                        createTiltedSquareCell
+                        tiltedSquareCellCreator
                     );
                 cellColumns.push(tiltedSquareCellSequence);
             }
@@ -219,7 +200,7 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
         const lastColumn: Cell[] = [];
         const lastColumnFirstCellInsertionPoint: Coordinate =
             gridInsertionPoint.stepToNewCoordinate(columnStep.times(numberOfColumns - 1));
-        const lowerRightCornerCell: Cell = createLowerRightCornerCell(lastColumnFirstCellInsertionPoint);
+        const lowerRightCornerCell: Cell = lowerRightCornerCellCreator(lastColumnFirstCellInsertionPoint);
         lastColumn.push(lowerRightCornerCell);
 
         const rightColumnSecondCellInsertionPoint: Coordinate =
@@ -228,13 +209,13 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
             rightColumnSecondCellInsertionPoint,
             rowStep,
             numberOfRows - 2,
-            createRightHalfOctagonalCell
+            rightHalfOctagonalCellCreator
         );
         lastColumn.push(...rightColumnOfCells);
 
         const upperRightCornerCellInsertionPoint: Coordinate = lastColumnFirstCellInsertionPoint
             .stepToNewCoordinate(rowStep.times(numberOfRows - 1));
-        const upperRightCornerCell: Cell = createUpperRightCornerCell(upperRightCornerCellInsertionPoint);
+        const upperRightCornerCell: Cell = upperRightCornerCellCreator(upperRightCornerCellInsertionPoint);
         lastColumn.push(upperRightCornerCell);
 
         cellColumns.push(lastColumn);

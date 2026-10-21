@@ -1,4 +1,3 @@
-import { Coordinate } from '../../../coordinate';
 import { Cell } from '../../cell/cell';
 import { CellFactory } from '../../cell/cellfactory';
 import { Grid } from '../../grid';
@@ -13,15 +12,15 @@ export class TriangularGridFactory implements RegularShapedGridFactory {
         const angle: number = gridProperties.angle;
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
-        const createTriangleWithPointyTop: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'equilateral-triangular-cell', angle);
-        const createTriangleWithPointyBottom: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellFactory.createCell(insertionPoint, cellWidth, 'equilateral-triangular-cell', angle + 60);
+        const triangleWithPointyTopCreator: RegionCreator<Cell> =
+            CellFactory.getCellCreatorByType('equilateral-triangular-cell', cellWidth, angle);
+        const triangleWithPointyBottomCreator: RegionCreator<Cell> =
+            CellFactory.getCellCreatorByType('equilateral-triangular-cell', cellWidth, angle + 60);
 
         return new TriangularGridAssembler<Cell>().createGrid(
             gridProperties,
-            createTriangleWithPointyTop,
-            createTriangleWithPointyBottom
+            triangleWithPointyTopCreator,
+            triangleWithPointyBottomCreator
         );
     }
 
