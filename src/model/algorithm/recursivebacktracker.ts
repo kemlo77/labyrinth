@@ -1,4 +1,4 @@
-import { Cell } from '../grid/cell/cell';
+import { Cell } from '../cell/cell';
 import { Grid } from '../grid/grid';
 import { Segment } from '../segment';
 import type { MazeGenerationAlgorithm } from './algorithm';

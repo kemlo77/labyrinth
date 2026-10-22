@@ -3,9 +3,9 @@ import { RecursiveBacktrackerAlgorithm } from '../../../algorithm/recursivebackt
 import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { stepRight, stepDown } from '../../../vector/vectorcreator';
-import { Cell } from '../../cell/cell';
+import { Cell } from '../../../cell/cell';
 import { Grid } from '../../grid';
-import type { GridCreator } from '../../typealiases';
+import type { GridCreator } from '../../../typealiases';
 import { RectangularGridProperties } from '../rectangular_grids/rectangulargridproperties';
 import { StandardGridFactory } from '../rectangular_grids/standardgridfactory';
 import { RegularShapedGridProperties } from '../regular_shaped_grids/regularshapedgridproperties';

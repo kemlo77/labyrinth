@@ -2,7 +2,7 @@ import { Grid } from '../../grid';
 import { Coordinate } from '../../../coordinate';
 import { RectangularGridProperties } from '../rectangular_grids/rectangulargridproperties';
 import { stepDown, stepRight, stepUp } from '../../../vector/vectorcreator';
-import { Cell } from '../../cell/cell';
+import { Cell } from '../../../cell/cell';
 import { DiagonalSquaresGridFactory } from '../rectangular_grids/diagonalsquaresgridfactory';
 
 export class TiltedTrailGridFactory {

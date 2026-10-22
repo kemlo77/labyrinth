@@ -1,7 +1,7 @@
-import { ArrayOperations } from '../../../service/arrayoperations';
-import { Coordinate } from '../../coordinate';
-import { Segment } from '../../segment';
-import type { Region } from '../region';
+import { ArrayOperations } from '../../service/arrayoperations';
+import { Coordinate } from '../coordinate';
+import { Segment } from '../segment';
+import type { Region } from '../grid/region';
 import { Border } from './border';
 import { NeighbourRelation } from './neighbourrelation';
 

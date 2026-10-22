@@ -43,7 +43,7 @@ export class GridSupplier {
 
         if (gridType === 'test-grid-fragment') {
             return GridFragmentFactory
-                .createGridFragment(insertionPoint, 100, 'half-hexagon-grid-fragment-triangle');
+                .createGridFragment(insertionPoint, 200, 'reversed-half-hexagon-grid-fragment-triangle');
         }
 
         if (gridType === 'triangular') {

@@ -1,4 +1,4 @@
-import { Cell } from './cell/cell';
+import { Cell } from '../cell/cell';
 
 export interface Region<T> {
     establishNeighbourRelationsWith(region: T): void;

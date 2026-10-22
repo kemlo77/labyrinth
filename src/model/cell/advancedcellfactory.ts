@@ -1,7 +1,7 @@
-import { Coordinate } from '../../coordinate';
-import { stepRight, stepUp, stepInDirection, stepLeft, stepDown } from '../../vector/vectorcreator';
-import { Cell } from './cell';
-import { CellBuilder } from './cellbuilder';
+import { Coordinate } from '../coordinate';
+import { stepRight, stepUp, stepInDirection, stepLeft, stepDown } from '../vector/vectorcreator';
+import { Cell } from '../cell/cell';
+import { CellBuilder } from '../cell/cellbuilder';
 
 export class AdvancedCellFactory {
 

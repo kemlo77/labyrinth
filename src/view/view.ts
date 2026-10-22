@@ -1,4 +1,4 @@
-import { Cell } from '../model/grid/cell/cell';
+import { Cell } from '../model/cell/cell';
 import { Model } from '../model/model';
 import type { Observer } from './observer';
 import {
@@ -9,7 +9,7 @@ import {
     LIGHT_RED_COLOR,
     LIGHT_GRAY_COLOR
 } from './canvaspainter';
-import { Border } from '../model/grid/cell/border';
+import { Border } from '../model/cell/border';
 
 export class View implements Observer {
 

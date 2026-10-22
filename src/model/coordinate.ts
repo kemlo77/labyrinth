@@ -40,6 +40,9 @@ export class Coordinate {
     }
 
     stepToNewCoordinate(step: Vector): Coordinate {
+        if (step.x === 0 && step.y === 0) {
+            return this;
+        }
         return new Coordinate(this.x + step.x, this.y + step.y);
     }
 

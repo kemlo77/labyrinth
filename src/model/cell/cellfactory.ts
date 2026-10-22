@@ -1,5 +1,5 @@
-import { Coordinate } from '../../coordinate';
-import { Vector } from '../../vector/vector';
+import { Coordinate } from '../coordinate';
+import { Vector } from '../vector/vector';
 
 import {
     stepDown,
@@ -10,7 +10,7 @@ import {
     stepUp,
     stepUpLeft,
     stepUpRight
-} from '../../vector/vectorcreator';
+} from '../vector/vectorcreator';
 import type { CellCreator } from '../typealiases';
 import { Cell } from './cell';
 import { CellBuilder } from './cellbuilder';

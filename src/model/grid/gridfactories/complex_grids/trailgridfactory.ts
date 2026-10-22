@@ -3,7 +3,7 @@ import { Coordinate } from '../../../coordinate';
 import { StandardGridFactory } from '../rectangular_grids/standardgridfactory';
 import { RectangularGridProperties } from '../rectangular_grids/rectangulargridproperties';
 import { stepDown, stepRight, stepUp } from '../../../vector/vectorcreator';
-import { Cell } from '../../cell/cell';
+import { Cell } from '../../../cell/cell';
 
 export class TrailGridFactory {
 

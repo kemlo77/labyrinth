@@ -1,5 +1,5 @@
-import { Coordinate } from '../../coordinate';
-import { Segment } from '../../segment';
+import { Coordinate } from '../coordinate';
+import { Segment } from '../segment';
 
 export class Border extends Segment {
 

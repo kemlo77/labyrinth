@@ -1,8 +1,8 @@
 import { Coordinate } from '../../../coordinate';
-import { Cell } from '../../cell/cell';
-import { CellFactory } from '../../cell/cellfactory';
+import { Cell } from '../../../cell/cell';
+import { CellFactory } from '../../../cell/cellfactory';
 import { Grid } from '../../grid';
-import type { CellCreator } from '../../typealiases';
+import type { CellCreator } from '../../../typealiases';
 import { Vector } from '../../../vector/vector';
 import type { RectangularGridFactory } from './rectangulargridfactory.interface';
 import { RectangularGridProperties } from './rectangulargridproperties';

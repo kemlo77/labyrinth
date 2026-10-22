@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { Border } from '../../../../src/model/grid/cell/border';
-import { Coordinate } from '../../../../src/model/coordinate';
+import { Border } from '../../../src/model/cell/border';
+import { Coordinate } from '../../../src/model/coordinate';
 
 
 describe('Border', () => {

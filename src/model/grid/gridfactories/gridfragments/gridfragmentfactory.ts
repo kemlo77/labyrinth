@@ -1,10 +1,10 @@
 import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { stepLeft, stepRight, stepUp, stepInDirection } from '../../../vector/vectorcreator';
-import { Cell } from '../../cell/cell';
-import { CellFactory } from '../../cell/cellfactory';
+import { Cell } from '../../../cell/cell';
+import { CellFactory } from '../../../cell/cellfactory';
 import { Grid } from '../../grid';
-import type { CellCreator } from '../../typealiases';
+import type { CellCreator } from '../../../typealiases';
 
 export class GridFragmentFactory {
 

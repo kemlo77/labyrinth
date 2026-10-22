@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { CellBuilder } from '../../../../src/model/grid/cell/cellbuilder';
-import { Coordinate } from '../../../../src/model/coordinate';
-import { Vector } from '../../../../src/model/vector/vector';
-import { Cell } from '../../../../src/model/grid/cell/cell';
+import { CellBuilder } from '../../../src/model/cell/cellbuilder';
+import { Coordinate } from '../../../src/model/coordinate';
+import { Vector } from '../../../src/model/vector/vector';
+import { Cell } from '../../../src/model/cell/cell';
 
 describe('CellBuilder', () => {
     describe('build', () => {

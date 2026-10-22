@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { NeighbourRelation } from '../../../../src/model/grid/cell/neighbourrelation';
-import { Cell } from '../../../../src/model/grid/cell/cell';
-import { Border } from '../../../../src/model/grid/cell/border';
-import { Coordinate } from '../../../../src/model/coordinate';
+import { NeighbourRelation } from '../../../src/model/cell/neighbourrelation';
+import { Cell } from '../../../src/model/cell/cell';
+import { Border } from '../../../src/model/cell/border';
+import { Coordinate } from '../../../src/model/coordinate';
 
 
 describe('NeighbourRelation', () => {

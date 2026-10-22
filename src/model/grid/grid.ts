@@ -2,7 +2,7 @@ import type { MazeGenerationAlgorithm } from '../algorithm/algorithm';
 import { RecursiveBacktrackerAlgorithm } from '../algorithm/recursivebacktracker';
 import { Coordinate } from '../coordinate';
 import { Segment } from '../segment';
-import { Cell } from './cell/cell';
+import { Cell } from '../cell/cell';
 import type { Region } from './region';
 
 export class Grid implements Region<Grid> {

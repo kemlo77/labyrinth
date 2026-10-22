@@ -1,9 +1,9 @@
 import { Coordinate } from '../../../coordinate';
-import { Cell } from '../../cell/cell';
+import { Cell } from '../../../cell/cell';
 import { Grid } from '../../grid';
-import { AdvancedCellFactory } from '../../cell/advancedcellfactory';
+import { AdvancedCellFactory } from '../../../cell/advancedcellfactory';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
-import type { GridCreator } from '../../typealiases';
+import type { GridCreator } from '../../../typealiases';
 
 export class SierpinskySquareGridFactory {
 

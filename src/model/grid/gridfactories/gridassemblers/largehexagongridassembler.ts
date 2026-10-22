@@ -1,10 +1,10 @@
 import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { stepInDirection, stepLeft, stepRight, stepUp } from '../../../vector/vectorcreator';
-import { Cell } from '../../cell/cell';
+import { Cell } from '../../../cell/cell';
 import { Grid } from '../../grid';
 import type { Region } from '../../region';
-import type { RegionCreator } from '../../typealiases';
+import type { RegionCreator } from '../../../typealiases';
 import { RegularShapedGridProperties } from '../regular_shaped_grids/regularshapedgridproperties';
 import { GridAssembler } from './gridassembler';
 
