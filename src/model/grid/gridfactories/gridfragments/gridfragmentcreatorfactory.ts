@@ -1,12 +1,12 @@
 import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
-import { stepLeft, stepRight, stepUp, stepInDirection } from '../../../vector/vectorcreator';
+import { stepRight, stepUp, stepInDirection } from '../../../vector/vectorcreator';
 import { Cell } from '../../../cell/cell';
-import { CellFactory } from '../../../cell/cellfactory';
+import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import { Grid } from '../../grid';
-import type { CellCreator } from '../../../typealiases';
+import type { CellCreator, GridCreator } from '../../../typealiases';
 
-export class GridFragmentFactory {
+export class GridFragmentCreatorFactory {
 
     private constructor() {
         throw new Error('This class cannot be instantiated');
@@ -18,56 +18,66 @@ export class GridFragmentFactory {
         type: string,
         angle: number = 0
     ): Grid {
+        return GridFragmentCreatorFactory
+            .createGridFragmentCreator(sideLength, type, angle)(insertionPoint);
+    }
+
+    static createGridFragmentCreator(
+        sideLength: number,
+        type: string,
+        angle: number = 0
+    ): GridCreator {
         switch (type) {
             case 'kite-grid-fragment-triangle':
-                return GridFragmentFactory.createKiteGridFragment(insertionPoint, sideLength, angle);
+                return GridFragmentCreatorFactory.makeKiteGridFragmentCreator(sideLength, angle);
             case 'triakis-grid-fragment-triangle':
-                return GridFragmentFactory.createTriakisGridFragment(insertionPoint, sideLength, angle);
+                return GridFragmentCreatorFactory.makeTriakisGridFragmentCreator(sideLength, angle);
             case 'half-hexagon-grid-fragment-triangle':
-                return GridFragmentFactory.createHalfHexagonGridFragment(insertionPoint, sideLength, angle);
+                return GridFragmentCreatorFactory.makeHalfHexagonGridFragmentCreator(sideLength, angle);
             case 'reversed-half-hexagon-grid-fragment-triangle':
-                return GridFragmentFactory.createReversedHalfHexagonGridFragment(insertionPoint, sideLength, angle);
+                return GridFragmentCreatorFactory
+                    .makeReversedHalfHexagonGridFragmentCreator(sideLength, angle);
             default:
                 throw new Error('Unknown grid fragment type');
         }
     }
 
-    private static createHalfHexagonGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
+    private static makeHalfHexagonGridFragmentCreator(sideLength: number, angle: number): GridCreator {
         const cellBaseWidth: number = sideLength * 2 / 3;
         const leftCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle);
+            CellCreatorFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle);
         const rightCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle + 120);
+            CellCreatorFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle + 120);
         const topCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle + 240);
+            CellCreatorFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle + 240);
 
-        return GridFragmentFactory.createTriangularGridFragment(
-            GridFragmentFactory.calculateTrianglePoints(insertionPoint, sideLength, angle),
+        return (insertionPoint: Coordinate) => GridFragmentCreatorFactory.createTriangularGridFragment(
+            GridFragmentCreatorFactory.calculateTrianglePoints(insertionPoint, sideLength, angle),
             leftCornerCellCreator,
             rightCornerCellCreator,
             topCornerCellCreator
         );
+
     }
 
-    private static createReversedHalfHexagonGridFragment(
-        insertionPoint: Coordinate, sideLength: number, angle: number = 0): Grid {
+    private static makeReversedHalfHexagonGridFragmentCreator(sideLength: number, angle: number = 0): GridCreator {
         const cellBaseWidth: number = sideLength * 2 / 3;
 
         const leftCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle,
+            CellCreatorFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle,
                 stepInDirection(angle, cellBaseWidth / 2)
             );
         const rightCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle + 120,
+            CellCreatorFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle + 120,
                 stepInDirection(angle + 120, cellBaseWidth / 2)
             );
         const topCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle + 240,
+            CellCreatorFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle + 240,
                 stepInDirection(angle + 240, cellBaseWidth / 2)
             );
 
-        return GridFragmentFactory.createTriangularGridFragment(
-            GridFragmentFactory.calculateTrianglePoints(insertionPoint, sideLength, angle),
+        return (insertionPoint: Coordinate) => GridFragmentCreatorFactory.createTriangularGridFragment(
+            GridFragmentCreatorFactory.calculateTrianglePoints(insertionPoint, sideLength, angle),
             leftCornerCellCreator,
             rightCornerCellCreator,
             topCornerCellCreator
@@ -75,33 +85,33 @@ export class GridFragmentFactory {
     }
 
 
-    private static createKiteGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
+    private static makeKiteGridFragmentCreator(sideLength: number, angle: number): GridCreator {
         const cellBaseWidth: number = sideLength / 2;
         const leftCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('kite-cell', cellBaseWidth, angle);
+            CellCreatorFactory.getCellCreatorByType('kite-cell', cellBaseWidth, angle);
         const rightCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('kite-cell', cellBaseWidth, angle + 120);
+            CellCreatorFactory.getCellCreatorByType('kite-cell', cellBaseWidth, angle + 120);
         const topCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('kite-cell', cellBaseWidth, angle + 240);
+            CellCreatorFactory.getCellCreatorByType('kite-cell', cellBaseWidth, angle + 240);
 
-        return GridFragmentFactory.createTriangularGridFragment(
-            GridFragmentFactory.calculateTrianglePoints(insertionPoint, sideLength, angle),
+        return (insertionPoint: Coordinate) => GridFragmentCreatorFactory.createTriangularGridFragment(
+            GridFragmentCreatorFactory.calculateTrianglePoints(insertionPoint, sideLength, angle),
             leftCornerCellCreator,
             rightCornerCellCreator,
             topCornerCellCreator
         );
     }
 
-    private static createTriakisGridFragment(insertionPoint: Coordinate, sideLength: number, angle: number): Grid {
+    private static makeTriakisGridFragmentCreator(sideLength: number, angle: number): GridCreator {
         const leftCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('triakis-triangle-cell', sideLength, angle);
+            CellCreatorFactory.getCellCreatorByType('triakis-triangle-cell', sideLength, angle);
         const rightCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('triakis-triangle-cell', sideLength, angle + 120);
+            CellCreatorFactory.getCellCreatorByType('triakis-triangle-cell', sideLength, angle + 120);
         const topCornerCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('triakis-triangle-cell', sideLength, angle + 240);
+            CellCreatorFactory.getCellCreatorByType('triakis-triangle-cell', sideLength, angle + 240);
 
-        return GridFragmentFactory.createTriangularGridFragment(
-            GridFragmentFactory.calculateTrianglePoints(insertionPoint, sideLength, angle),
+        return (insertionPoint: Coordinate) => GridFragmentCreatorFactory.createTriangularGridFragment(
+            GridFragmentCreatorFactory.calculateTrianglePoints(insertionPoint, sideLength, angle),
             leftCornerCellCreator,
             rightCornerCellCreator,
             topCornerCellCreator
@@ -122,9 +132,9 @@ export class GridFragmentFactory {
         const rightCell: Cell = rightCornerCellCreator(rightCorner);
         const topCell: Cell = topCornerCellCreator(topCorner);
 
-        GridFragmentFactory.createNeighbourRelationsInTriangle(leftCell, rightCell, topCell);
+        GridFragmentCreatorFactory.createNeighbourRelationsInTriangle(leftCell, rightCell, topCell);
 
-        return GridFragmentFactory.createGrid(leftCell, rightCell, topCell, gridCenter);
+        return GridFragmentCreatorFactory.createGrid(leftCell, rightCell, topCell, gridCenter);
     }
 
     private static calculateTrianglePoints(

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Cell } from '../../../src/model/cell/cell';
 import { Coordinate } from '../../../src/model/coordinate';
-import { CellFactory } from '../../../src/model/cell/cellfactory';
+import { CellCreatorFactory } from '../../../src/model/cell/cellcreatorfactory';
 import { Segment } from '../../../src/model/segment';
 
 describe('Cell', () => {
@@ -14,19 +14,19 @@ describe('Cell', () => {
 
     beforeEach(() => {
         const insertionPoint1: Coordinate = new Coordinate(5, 5);
-        leftCell = CellFactory.createCell(insertionPoint1, 10, 'square-cell');
+        leftCell = CellCreatorFactory.createCell(insertionPoint1, 10, 'square-cell');
 
         const insertionPoint2: Coordinate = new Coordinate(15, 5);
-        middleCell = CellFactory.createCell(insertionPoint2, 10, 'square-cell');
+        middleCell = CellCreatorFactory.createCell(insertionPoint2, 10, 'square-cell');
 
         const insertionPoint3: Coordinate = new Coordinate(25, 5);
-        rightCell = CellFactory.createCell(insertionPoint3, 10, 'square-cell');
+        rightCell = CellCreatorFactory.createCell(insertionPoint3, 10, 'square-cell');
 
         const insertionPoint4: Coordinate = new Coordinate(15, 15);
-        upperCell = CellFactory.createCell(insertionPoint4, 10, 'square-cell');
+        upperCell = CellCreatorFactory.createCell(insertionPoint4, 10, 'square-cell');
 
         const insertionPoint5: Coordinate = new Coordinate(15, -5);
-        lowerCell = CellFactory.createCell(insertionPoint5, 10, 'square-cell');
+        lowerCell = CellCreatorFactory.createCell(insertionPoint5, 10, 'square-cell');
     });
 
     it('establishing neighbour relation between two cells', () => {
@@ -46,8 +46,8 @@ describe('Cell', () => {
     });
 
     it('establish neighbour relation between two cells', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
+        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
         cell1.establishNeighbourRelationsWith(cell2);
         expect(cell1.neighbourCells).to.have.lengthOf(1);
         expect(cell2.neighbourCells).to.have.lengthOf(1);
@@ -67,16 +67,16 @@ describe('Cell', () => {
     });
 
     it('establish neighbour relation between two cells when not close', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(100, 100), 10, 'square-cell');
+        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
+        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(100, 100), 10, 'square-cell');
         expect(() => cell1.establishNeighbourRelationsWith(cell2))
             .to.throw('No common border found between cells');
 
     });
 
     it('open connection to a neighbour cell', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
+        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
         cell1.establishNeighbourRelationsWith(cell2);
         expect(cell1.hasNoOpenBorders).to.be.true;
         expect(cell2.hasNoOpenBorders).to.be.true;
@@ -95,14 +95,14 @@ describe('Cell', () => {
     });
 
     it('open connection to a neighbour cell twice', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
+        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
         expect(() => cell1.openConnectionTo(cell2)).to.throw('No neighbour found to open connection to');
     });
 
     it('establish neighbour relation between two cells twice', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
+        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
         cell1.establishNeighbourRelationsWith(cell2);
         cell1.establishNeighbourRelationsWith(cell2);
         expect(cell1.neighbourCells).to.have.lengthOf(1);
@@ -110,8 +110,8 @@ describe('Cell', () => {
     });
 
     it('closing all connection a cell has', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
+        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
         cell1.establishNeighbourRelationsWith(cell2);
         cell1.openConnectionTo(cell2);
         expect(cell1.bordersToNeighbour[0].isOpen).to.be.true;
@@ -126,8 +126,8 @@ describe('Cell', () => {
     });
 
     it('getting random unvisited neighbour', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
+        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
         cell1.establishNeighbourRelationsWith(cell2);
         expect(cell1.randomUnvisitedNeighbour).to.equal(cell2);
     });
@@ -189,7 +189,7 @@ describe('Cell', () => {
     });
 
     it('should rotate cell', () => {
-        const cell: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
+        const cell: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
         const originalCorners: Coordinate[] = cell.corners;
         cell.rotateAroundCenter(90);
         const rotatedCorners: Coordinate[] = cell.corners;
@@ -279,8 +279,8 @@ describe('Cell', () => {
 
     ].forEach(testData => {
         it('should merge with another cell', () => {
-            const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-            const cell2: Cell = CellFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+            const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
+            const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
             const rotatedCell1: Cell = cell1.rotateAroundCenter(testData.angle1);
             const rotatedCell2: Cell = cell2.rotateAroundCenter(testData.angle2);
             const newCell: Cell = rotatedCell1.mergeWith(rotatedCell2);
@@ -291,8 +291,8 @@ describe('Cell', () => {
     });
 
     it('should not merge with another cell when no common border', () => {
-        const cell1: Cell = CellFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellFactory.createCell(new Coordinate(30, 10), 10, 'square-cell');
+        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
+        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(30, 10), 10, 'square-cell');
         expect(() => cell1.mergeWith(cell2)).to.throw('No common border found between cells');
     });
 

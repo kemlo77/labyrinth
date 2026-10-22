@@ -1,7 +1,7 @@
 import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { Cell } from '../../../cell/cell';
-import { CellFactory } from '../../../cell/cellfactory';
+import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import type { CellCreator } from '../../../typealiases';
 import { Grid } from '../../grid';
 import type { RectangularGridFactory } from './rectangulargridfactory.interface';
@@ -36,66 +36,66 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
         const gridInsertionPoint: Coordinate = gridProperties.insertionPoint;
 
-        const octagonalCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+        const octagonalCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
             'octagonal-cell',
             cellWidth,
             angle,
             stepRight(cellWidth / 2 - sideLength / 2)
                 .newRotatedVector(angle)
         );
-        const leftHalfOctagonalCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+        const leftHalfOctagonalCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
             'semi-octagonal-semi-square-cell',
             cellWidth,
             angle,
         );
-        const bottomHalfOctagonalCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+        const bottomHalfOctagonalCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
             'semi-octagonal-semi-square-cell',
             cellWidth,
             angle + 90,
             columnStep
         );
-        const rightHalfOctagonalCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+        const rightHalfOctagonalCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
             'semi-octagonal-semi-square-cell',
             cellWidth,
             angle + 180,
             rowStep.thenTake(columnStep)
         );
-        const topHalfOctagonalCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+        const topHalfOctagonalCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
             'semi-octagonal-semi-square-cell',
             cellWidth,
             angle + 270,
             rowStep
         );
-        const lowerLeftCornerCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+        const lowerLeftCornerCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
             'chamfered-square-cell',
             cellWidth,
             angle + 0,
         );
-        const lowerRightCornerCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+        const lowerRightCornerCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
             'chamfered-square-cell',
             cellWidth,
             angle + 90,
             columnStep
         );
-        const upperLeftCornerCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+        const upperLeftCornerCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
             'chamfered-square-cell',
             cellWidth,
             angle + 270,
             rowStep
         );
-        const upperRightCornerCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+        const upperRightCornerCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
             'chamfered-square-cell',
             cellWidth,
             angle + 180,
             rowStep.thenTake(columnStep)
         );
-        const tiltedSquareCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+        const tiltedSquareCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
             'square-cell',
             tiltedSquareWidth,
             angle + 45,
             stepDown(tiltedSquareCellDiagonalLength / 2).newRotatedVector(angle)
         );
-        const squareCellCreator: CellCreator = CellFactory.getCellCreatorByType(
+        const squareCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
             'square-cell',
             cellWidth,
             angle

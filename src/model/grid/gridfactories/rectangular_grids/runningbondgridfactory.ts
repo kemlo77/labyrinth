@@ -3,7 +3,7 @@ import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../../cell/cell';
-import { CellFactory } from '../../../cell/cellfactory';
+import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import type { CellCreator } from '../../../typealiases';
 import { Grid } from '../../grid';
 import type { RectangularGridFactory } from './rectangulargridfactory.interface';
@@ -36,8 +36,8 @@ export class RunningBondGridFactory extends GridAssembler<Cell> implements Recta
         const oneStepRight: Vector = stepRight(cellWidth).newRotatedVector(angle);
         const twoStepsRight: Vector = stepRight(doubleCellWidth).newRotatedVector(angle);
 
-        const squareCellCreator: CellCreator = CellFactory.getCellCreatorByType('square-cell', cellWidth, angle);
-        const rectangularCellCreator: CellCreator = CellFactory
+        const squareCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType('square-cell', cellWidth, angle);
+        const rectangularCellCreator: CellCreator = CellCreatorFactory
             .getCellCreatorByType('double-square-rectangle-cell', cellWidth * 2, 0 + angle);
 
         const firstCellInsertionPoint: Coordinate = gridProperties.insertionPoint;

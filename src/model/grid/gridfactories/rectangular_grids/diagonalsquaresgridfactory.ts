@@ -2,7 +2,7 @@ import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { stepDown, stepRight, stepUp, stepUpRight } from '../../../vector/vectorcreator';
 import { Cell } from '../../../cell/cell';
-import { CellFactory } from '../../../cell/cellfactory';
+import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import type { CellCreator } from '../../../typealiases';
 import { Grid } from '../../grid';
 import type { RectangularGridFactory } from './rectangulargridfactory.interface';
@@ -32,14 +32,14 @@ export class DiagonalSquaresGridFactory extends GridAssembler<Cell> implements R
         const angle: number = gridProperties.angle;
 
         const topRowTriangleCreator: CellCreator =
-            CellFactory.getCellCreatorByType('isosceles-right-triangular-cell', cellWidth, angle + 45);
+            CellCreatorFactory.getCellCreatorByType('isosceles-right-triangular-cell', cellWidth, angle + 45);
         const leftColumnTriangleCreator: CellCreator =
-            CellFactory.getCellCreatorByType('isosceles-right-triangular-cell', cellWidth, angle + 135);
+            CellCreatorFactory.getCellCreatorByType('isosceles-right-triangular-cell', cellWidth, angle + 135);
         const bottomRowTriangleCreator: CellCreator =
-            CellFactory.getCellCreatorByType('isosceles-right-triangular-cell', cellWidth, angle + 225);
+            CellCreatorFactory.getCellCreatorByType('isosceles-right-triangular-cell', cellWidth, angle + 225);
         const rightColumnTriangleCreator: CellCreator =
-            CellFactory.getCellCreatorByType('isosceles-right-triangular-cell', cellWidth, angle + 315);
-        const squareCellCreator: CellCreator = CellFactory.getCellCreatorByType('square-cell', cellWidth, 45 + angle);
+            CellCreatorFactory.getCellCreatorByType('isosceles-right-triangular-cell', cellWidth, angle + 315);
+        const squareCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType('square-cell', cellWidth, 45 + angle);
 
         const stepToLeftInsertionPoint: Vector = stepUpRight(cellWidth).newRotatedVector(angle);
         const stepToRightInsertionPoint: Vector =

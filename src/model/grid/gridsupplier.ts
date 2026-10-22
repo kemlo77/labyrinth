@@ -22,7 +22,7 @@ import { SierpinskySquareGridFactory } from './gridfactories/complex_grids/sierp
 import { MazeGridFactory } from './gridfactories/complex_grids/mazegridfactory';
 import { TrailGridFactory } from './gridfactories/complex_grids/trailgridfactory';
 import { TiltedTrailGridFactory } from './gridfactories/complex_grids/tiltedtrailgridfactory';
-import { GridFragmentFactory } from './gridfactories/gridfragments/gridfragmentfactory';
+import { GridFragmentCreatorFactory } from './gridfactories/gridfragments/gridfragmentcreatorfactory';
 
 export class GridSupplier {
 
@@ -42,7 +42,7 @@ export class GridSupplier {
         }
 
         if (gridType === 'test-grid-fragment') {
-            return GridFragmentFactory
+            return GridFragmentCreatorFactory
                 .createGridFragment(insertionPoint, 200, 'reversed-half-hexagon-grid-fragment-triangle');
         }
 

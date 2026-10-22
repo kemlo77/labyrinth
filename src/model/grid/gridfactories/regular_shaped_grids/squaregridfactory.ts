@@ -1,6 +1,6 @@
 import { Coordinate } from '../../../coordinate';
 import { Cell } from '../../../cell/cell';
-import { CellFactory } from '../../../cell/cellfactory';
+import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import { Grid } from '../../grid';
 import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
@@ -15,7 +15,7 @@ export class SquareGridFactory implements RegularShapedGridFactory {
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
         const squareCellCreator: RegionCreator<Cell> =
-            CellFactory.getCellCreatorByType('square-cell', cellWidth, angle);
+            CellCreatorFactory.getCellCreatorByType('square-cell', cellWidth, angle);
 
         return new SquareGridAssembler<Cell>().createGrid(
             gridProperties,

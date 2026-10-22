@@ -2,7 +2,7 @@ import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { stepInDirection, stepRight } from '../../../vector/vectorcreator';
 import { Cell } from '../../../cell/cell';
-import { CellFactory } from '../../../cell/cellfactory';
+import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import type { CellCreator } from '../../../typealiases';
 import { Grid } from '../../grid';
 import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
@@ -31,7 +31,7 @@ export class RhomboidGridFactory extends GridAssembler<Cell> implements RegularS
         const rowStep: Vector = stepInDirection(60, cellWidth).newRotatedVector(angle);
 
         const rhombusCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('rhombus-cell', cellWidth, angle);
+            CellCreatorFactory.getCellCreatorByType('rhombus-cell', cellWidth, angle);
 
         const cellColumns: Cell[][] = [];
         for (let columnIndex: number = 0; columnIndex < segmentsPerSide; columnIndex++) {

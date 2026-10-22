@@ -2,7 +2,7 @@ import { Coordinate } from '../../../coordinate';
 import { Vector } from '../../../vector/vector';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
 import { Cell } from '../../../cell/cell';
-import { CellFactory } from '../../../cell/cellfactory';
+import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import type { CellCreator } from '../../../typealiases';
 import { Grid } from '../../grid';
 import type { RectangularGridFactory } from './rectangulargridfactory.interface';
@@ -33,7 +33,7 @@ export class StandardGridFactory extends GridAssembler<Cell> implements Rectangu
             gridProperties.insertionPoint;
 
         const squareCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('square-cell', cellWidth, gridProperties.angle);
+            CellCreatorFactory.getCellCreatorByType('square-cell', cellWidth, gridProperties.angle);
 
 
         const cellColumns: Cell[][] = [];

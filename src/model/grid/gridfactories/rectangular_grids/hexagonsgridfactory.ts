@@ -1,6 +1,6 @@
 import { Coordinate } from '../../../coordinate';
 import { Cell } from '../../../cell/cell';
-import { CellFactory } from '../../../cell/cellfactory';
+import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import { Grid } from '../../grid';
 import type { CellCreator } from '../../../typealiases';
 import { Vector } from '../../../vector/vector';
@@ -43,22 +43,22 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
 
         const regularCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('hexagonal-cell', cellSideLength, angle);
+            CellCreatorFactory.getCellCreatorByType('hexagonal-cell', cellSideLength, angle);
         const topHalfCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('bottom-half-hexagonal-cell', cellSideLength, angle);
+            CellCreatorFactory.getCellCreatorByType('bottom-half-hexagonal-cell', cellSideLength, angle);
         const bottomHalfCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('bottom-half-hexagonal-cell', cellSideLength, angle + 180,
+            CellCreatorFactory.getCellCreatorByType('bottom-half-hexagonal-cell', cellSideLength, angle + 180,
                 sideLengthRight.thenTake(halfCellHeightUp));
         const leftSideCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('right-half-hexagonal-cell', cellSideLength, angle);
+            CellCreatorFactory.getCellCreatorByType('right-half-hexagonal-cell', cellSideLength, angle);
         const rightSideCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('right-half-hexagonal-cell', cellSideLength, angle + 180,
+            CellCreatorFactory.getCellCreatorByType('right-half-hexagonal-cell', cellSideLength, angle + 180,
                 cellHeightUp.thenTake(halfSideLengthRight));
         const bottomRightQuarterCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('bottom-right-quarter-hexagonal-cell', cellSideLength, angle + 180,
+            CellCreatorFactory.getCellCreatorByType('bottom-right-quarter-hexagonal-cell', cellSideLength, angle + 180,
                 halfSideLengthRight.thenTake(halfCellHeightUp));
         const upRightQuarterCellCreator: CellCreator =
-            CellFactory.getCellCreatorByType('bottom-left-quarter-hexagonal-cell', cellSideLength, angle);
+            CellCreatorFactory.getCellCreatorByType('bottom-left-quarter-hexagonal-cell', cellSideLength, angle);
 
         const insertionPoint: Coordinate = gridProperties.insertionPoint;
 
