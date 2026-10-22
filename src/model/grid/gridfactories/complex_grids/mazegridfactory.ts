@@ -14,9 +14,9 @@ import { SquareGridFactory } from '../regular_shaped_grids/squaregridfactory';
 export class MazeGridFactory {
 
     private readonly _algorithm: MazeGenerationAlgorithm = new RecursiveBacktrackerAlgorithm();
-    private _cellsInNewGrid: Cell[];
-    private _startCell: Cell;
-    private _endCell: Cell;
+    private _cellsInNewGrid!: Cell[];
+    private _startCell!: Cell;
+    private _endCell!: Cell;
 
 
 

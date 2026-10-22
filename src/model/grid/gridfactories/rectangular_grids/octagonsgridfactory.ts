@@ -36,70 +36,80 @@ export class OctagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
         const gridInsertionPoint: Coordinate = gridProperties.insertionPoint;
 
-        const octagonalCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
-            'octagonal-cell',
-            cellWidth,
-            angle,
-            stepRight(cellWidth / 2 - sideLength / 2)
-                .newRotatedVector(angle)
-        );
-        const leftHalfOctagonalCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
-            'semi-octagonal-semi-square-cell',
-            cellWidth,
-            angle,
-        );
-        const bottomHalfOctagonalCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
-            'semi-octagonal-semi-square-cell',
-            cellWidth,
-            angle + 90,
-            columnStep
-        );
-        const rightHalfOctagonalCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
-            'semi-octagonal-semi-square-cell',
-            cellWidth,
-            angle + 180,
-            rowStep.thenTake(columnStep)
-        );
-        const topHalfOctagonalCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
-            'semi-octagonal-semi-square-cell',
-            cellWidth,
-            angle + 270,
-            rowStep
-        );
-        const lowerLeftCornerCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
-            'chamfered-square-cell',
-            cellWidth,
-            angle + 0,
-        );
-        const lowerRightCornerCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
-            'chamfered-square-cell',
-            cellWidth,
-            angle + 90,
-            columnStep
-        );
-        const upperLeftCornerCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
-            'chamfered-square-cell',
-            cellWidth,
-            angle + 270,
-            rowStep
-        );
-        const upperRightCornerCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
-            'chamfered-square-cell',
-            cellWidth,
-            angle + 180,
-            rowStep.thenTake(columnStep)
-        );
-        const tiltedSquareCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
-            'square-cell',
-            tiltedSquareWidth,
-            angle + 45,
-            stepDown(tiltedSquareCellDiagonalLength / 2).newRotatedVector(angle)
-        );
-        const squareCellCreator: CellCreator = CellCreatorFactory.getCellCreatorByType(
-            'square-cell',
-            cellWidth,
-            angle
-        );
+        const octagonalCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
+                'octagonal-cell',
+                cellWidth,
+                angle,
+                stepRight(cellWidth / 2 - sideLength / 2).newRotatedVector(angle)
+            );
+        const leftHalfOctagonalCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByType(
+                'semi-octagonal-semi-square-cell',
+                cellWidth,
+                angle,
+            );
+        const bottomHalfOctagonalCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
+                'semi-octagonal-semi-square-cell',
+                cellWidth,
+                angle + 90,
+                columnStep
+            );
+        const rightHalfOctagonalCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
+                'semi-octagonal-semi-square-cell',
+                cellWidth,
+                angle + 180,
+                rowStep.thenTake(columnStep)
+            );
+        const topHalfOctagonalCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
+                'semi-octagonal-semi-square-cell',
+                cellWidth,
+                angle + 270,
+                rowStep
+            );
+        const lowerLeftCornerCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByType(
+                'chamfered-square-cell',
+                cellWidth,
+                angle + 0,
+            );
+        const lowerRightCornerCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
+                'chamfered-square-cell',
+                cellWidth,
+                angle + 90,
+                columnStep
+            );
+        const upperLeftCornerCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
+                'chamfered-square-cell',
+                cellWidth,
+                angle + 270,
+                rowStep
+            );
+        const upperRightCornerCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
+                'chamfered-square-cell',
+                cellWidth,
+                angle + 180,
+                rowStep.thenTake(columnStep)
+            );
+        const tiltedSquareCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
+                'square-cell',
+                tiltedSquareWidth,
+                angle + 45,
+                stepDown(tiltedSquareCellDiagonalLength / 2).newRotatedVector(angle)
+            );
+        const squareCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByType(
+                'square-cell',
+                cellWidth,
+                angle
+            );
 
 
         if (gridProperties.numberOfVerticalEdgeSegments === 1) {

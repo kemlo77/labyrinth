@@ -4,9 +4,9 @@ import { Cell } from './cell';
 
 export class CellBuilder {
 
-    private _startCorner: Coordinate;
+    private _startCorner!: Coordinate;
     private readonly _steps: Vector[] = [];
-    private _center: Coordinate;
+    private _center!: Coordinate;
     private _rotationAngle: number = 0;
 
     setStartCorner(startCorner: Coordinate): this {

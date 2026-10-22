@@ -6,7 +6,7 @@ import { Segment } from './segment';
 
 export class Model implements Subject {
 
-    private _grid: Grid;
+    private _grid!: Grid;
 
     private _solutionTrail: Segment[] = [];
     private readonly _observers: Observer[] = [];

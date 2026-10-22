@@ -44,17 +44,20 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
         const triangleWithPointyTopCreator: CellCreator =
             CellCreatorFactory.getCellCreatorByType('triangular-cell', cellWidth, angle);
         const triangleWithPointyBottomCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByType('triangular-cell', cellWidth, angle + 180,
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion('triangular-cell', cellWidth, angle + 180,
                 stepRightHalfCellWidth.thenTake(stepUpCellHeight));
         const leftHalfPointyTopTriangleCreator: CellCreator =
             CellCreatorFactory.getCellCreatorByType('right-half-triangular-cell', cellWidth, angle);
         const rightHalfPointyTopTriangleCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByType('left-half-triangular-cell', cellWidth, angle, stepRightHalfCellWidth);
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
+                'left-half-triangular-cell', cellWidth, angle, stepRightHalfCellWidth);
         const leftHalfPointyBottomTriangleCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByType('left-half-triangular-cell', cellWidth, angle + 180,
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
+                'left-half-triangular-cell', cellWidth, angle + 180,
                 stepRightHalfCellWidth.thenTake(stepUpCellHeight));
         const rightHalfPointyBottomTriangleCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByType('right-half-triangular-cell', cellWidth, angle + 180, stepUpCellHeight);
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
+                'right-half-triangular-cell', cellWidth, angle + 180, stepUpCellHeight);
 
         const cellRows: Cell[][] = [];
 

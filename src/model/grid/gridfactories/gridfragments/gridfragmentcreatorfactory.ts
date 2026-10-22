@@ -75,15 +75,15 @@ export class GridFragmentCreatorFactory {
         const cellBaseWidth: number = sideLength * 2 / 3;
 
         const leftCornerCellCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle,
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion('half-hexagonal-cell', cellBaseWidth, angle,
                 stepInDirection(angle, cellBaseWidth / 2)
             );
         const rightCornerCellCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle + 120,
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion('half-hexagonal-cell', cellBaseWidth, angle + 120,
                 stepInDirection(angle + 120, cellBaseWidth / 2)
             );
         const topCornerCellCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByType('half-hexagonal-cell', cellBaseWidth, angle + 240,
+            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion('half-hexagonal-cell', cellBaseWidth, angle + 240,
                 stepInDirection(angle + 240, cellBaseWidth / 2)
             );
 
