@@ -28,6 +28,8 @@ export class GridFragmentCreatorFactory {
         angle: number = 0
     ): GridCreator {
         switch (type) {
+            case 'single-cell-grid-fragment-triangle':
+                return GridFragmentCreatorFactory.makeSingleCellGridFragmentCreator(sideLength, angle);
             case 'kite-grid-fragment-triangle':
                 return GridFragmentCreatorFactory.makeKiteGridFragmentCreator(sideLength, angle);
             case 'triakis-grid-fragment-triangle':
@@ -40,6 +42,15 @@ export class GridFragmentCreatorFactory {
             default:
                 throw new Error('Unknown grid fragment type');
         }
+    }
+
+    private static makeSingleCellGridFragmentCreator(sideLength: number, angle: number): GridCreator {
+        const triangleCellCreator: CellCreator =
+            CellCreatorFactory.getCellCreatorByType('equilateral-triangular-cell', sideLength, angle);
+        return (insertionPoint: Coordinate) => {
+            const cell: Cell = triangleCellCreator(insertionPoint);
+            return new Grid([cell], cell, cell, cell.center);
+        };
     }
 
     private static makeHalfHexagonGridFragmentCreator(sideLength: number, angle: number): GridCreator {
