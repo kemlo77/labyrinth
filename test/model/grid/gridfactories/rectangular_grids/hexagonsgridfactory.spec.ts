@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { HexagonsGridFactory }
     from '../../../../../src/model/grid/gridfactories/rectangular_grids/hexagonsgridfactory';
 import { Grid } from '../../../../../src/model/grid/grid';
-import { Cell } from '../../../../../src/model/grid/cell/cell';
+import { Cell } from '../../../../../src/model/cell/cell';
 import { Coordinate } from '../../../../../src/model/coordinate';
 import { RectangularGridProperties }
     from '../../../../../src/model/grid/gridfactories/rectangular_grids/rectangulargridproperties';

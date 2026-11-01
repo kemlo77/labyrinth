@@ -49,15 +49,11 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
         const leftHalfPointyTopTriangleCreator: CellCreator =
             CellCreatorFactory.getCellCreatorByType('right-half-triangular-cell', cellWidth, angle);
         const rightHalfPointyTopTriangleCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
-                'left-half-triangular-cell', cellWidth, angle, stepRightHalfCellWidth);
+            CellCreatorFactory.getCellCreatorByType('left-half-triangular-cell', cellWidth, angle);
         const leftHalfPointyBottomTriangleCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
-                'left-half-triangular-cell', cellWidth, angle + 180,
-                stepRightHalfCellWidth.thenTake(stepUpCellHeight));
+            CellCreatorFactory.getCellCreatorByType('left-half-triangular-cell', cellWidth, angle + 180,);
         const rightHalfPointyBottomTriangleCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
-                'right-half-triangular-cell', cellWidth, angle + 180, stepUpCellHeight);
+            CellCreatorFactory.getCellCreatorByType('right-half-triangular-cell', cellWidth, angle + 180);
 
         const cellRows: Cell[][] = [];
 
@@ -66,7 +62,8 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
             const evenRow: boolean = rowIndex % 2 === 0;
 
             if (evenRow) {
-                const firstCell: Cell = leftHalfPointyBottomTriangleCreator(rowInsertionPoint);
+                const firstCell: Cell = leftHalfPointyBottomTriangleCreator(
+                    rowInsertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.thenTake(stepUpCellHeight)));
                 const cellRow: Cell[] = this.createPointyTopFirstRowOfTriangles(
                     rowInsertionPoint,
                     stepRightCellWidth,
@@ -75,7 +72,9 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
                     triangleWithPointyBottomCreator
                 );
                 const lastCell: Cell = rightHalfPointyBottomTriangleCreator(
-                    rowInsertionPoint.stepToNewCoordinate(stepRightCellWidth.times(numberOfColumns))
+                    rowInsertionPoint.stepToNewCoordinate(
+                        stepRightCellWidth.times(numberOfColumns).thenTake(stepUpCellHeight)
+                    )
                 );
                 cellRows.push([firstCell, ...cellRow, lastCell]);
             } else {
@@ -89,7 +88,9 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
 
                 );
                 const lastCell: Cell = rightHalfPointyTopTriangleCreator(
-                    rowInsertionPoint.stepToNewCoordinate(stepRightCellWidth.times(numberOfColumns - 1))
+                    rowInsertionPoint.stepToNewCoordinate(
+                        stepRightCellWidth.times(numberOfColumns - 1).thenTake(stepRightHalfCellWidth)
+                    )
                 );
                 cellRows.push([firstCell, ...cellRow, lastCell]);
             }

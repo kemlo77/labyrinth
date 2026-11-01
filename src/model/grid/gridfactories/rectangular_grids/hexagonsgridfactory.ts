@@ -47,19 +47,13 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
         const topHalfCellCreator: CellCreator =
             CellCreatorFactory.getCellCreatorByType('bottom-half-hexagonal-cell', cellSideLength, angle);
         const bottomHalfCellCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
-                'bottom-half-hexagonal-cell', cellSideLength, angle + 180,
-                sideLengthRight.thenTake(halfCellHeightUp));
+            CellCreatorFactory.getCellCreatorByType('bottom-half-hexagonal-cell', cellSideLength, angle + 180);
         const leftSideCellCreator: CellCreator =
             CellCreatorFactory.getCellCreatorByType('right-half-hexagonal-cell', cellSideLength, angle);
         const rightSideCellCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
-                'right-half-hexagonal-cell', cellSideLength, angle + 180,
-                cellHeightUp.thenTake(halfSideLengthRight));
+            CellCreatorFactory.getCellCreatorByType('right-half-hexagonal-cell', cellSideLength, angle + 180);
         const bottomRightQuarterCellCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion(
-                'bottom-right-quarter-hexagonal-cell', cellSideLength, angle + 180,
-                halfSideLengthRight.thenTake(halfCellHeightUp));
+            CellCreatorFactory.getCellCreatorByType('bottom-right-quarter-hexagonal-cell', cellSideLength, angle + 180);
         const upRightQuarterCellCreator: CellCreator =
             CellCreatorFactory.getCellCreatorByType('bottom-left-quarter-hexagonal-cell', cellSideLength, angle);
 
@@ -85,21 +79,27 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
             }
 
             if (onLastColumn && onEvenColumn) {
+                const adjustedInsertionPoint: Coordinate =
+                    columnInsertionPoint.stepToNewCoordinate(cellHeightUp.thenTake(halfSideLengthRight));
                 const columnOfCells: Cell[] =
-                    this.createSequenceOfRegions(columnInsertionPoint, rowStep, numberOfRows, rightSideCellCreator);
+                    this.createSequenceOfRegions(adjustedInsertionPoint, rowStep, numberOfRows, rightSideCellCreator);
                 cellColumns.push(columnOfCells);
                 continue;
             }
 
             if (onLastColumn && onOddColumn) {
                 const cellColumnInsertionPoint: Coordinate = columnInsertionPoint.stepToNewCoordinate(halfCellHeightUp);
+                const bottomCellInsertionPoint: Coordinate =
+                    columnInsertionPoint.stepToNewCoordinate(halfSideLengthRight.thenTake(halfCellHeightUp));
+                const intermediateCellColumnInsertionPoint: Coordinate =
+                    cellColumnInsertionPoint.stepToNewCoordinate(cellHeightUp.thenTake(halfSideLengthRight));
                 const topCellInsertionPoint: Coordinate =
                     cellColumnInsertionPoint.stepToNewCoordinate(rowStep.times(numberOfRows - 1));
 
-                const bottomCell: Cell = bottomRightQuarterCellCreator(columnInsertionPoint);
+                const bottomCell: Cell = bottomRightQuarterCellCreator(bottomCellInsertionPoint);
                 const intermediateCellsInColumn: Cell[] =
                     this.createSequenceOfRegions(
-                        cellColumnInsertionPoint,
+                        intermediateCellColumnInsertionPoint,
                         rowStep,
                         numberOfRows - 1,
                         rightSideCellCreator
@@ -118,10 +118,12 @@ export class HexagonsGridFactory extends GridAssembler<Cell> implements Rectangu
 
             if (onOddColumn) {
                 const cellColumnInsertionPoint: Coordinate = columnInsertionPoint.stepToNewCoordinate(halfRowStep);
+                const bottomCellInsertionPoint: Coordinate =
+                    columnInsertionPoint.stepToNewCoordinate(sideLengthRight.thenTake(halfCellHeightUp));
                 const topCellInsertionPoint: Coordinate =
                     cellColumnInsertionPoint.stepToNewCoordinate(rowStep.times(numberOfRows - 1));
 
-                const bottomCell: Cell = bottomHalfCellCreator(columnInsertionPoint);
+                const bottomCell: Cell = bottomHalfCellCreator(bottomCellInsertionPoint);
                 const intermediateCellsInColumn: Cell[] =
                     this.createSequenceOfRegions(
                         cellColumnInsertionPoint,
