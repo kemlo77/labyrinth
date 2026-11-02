@@ -171,10 +171,10 @@ export class GridSupplier {
     }
 
     private static getRectangularGridProperties(insertionPoint: Coordinate): RectangularGridProperties {
-        const numberOfRows: number = 34;
-        const numberOfColumns: number = 21;
+        const horizontalSegments: number = 34;
+        const verticalSegments: number = 21;
         const cellWidth: number = 30;
-        return new RectangularGridProperties(insertionPoint, numberOfRows, numberOfColumns, cellWidth);
+        return new RectangularGridProperties(insertionPoint, horizontalSegments, verticalSegments, cellWidth);
     }
 
     private static getLargeHexagonGridProperties(insertionPoint: Coordinate): RegularShapedGridProperties {

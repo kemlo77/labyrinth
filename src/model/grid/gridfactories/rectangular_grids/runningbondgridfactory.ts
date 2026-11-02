@@ -25,14 +25,12 @@ export class RunningBondGridFactory extends GridAssembler<Cell> implements Recta
     private createCellGrid(gridProperties: RectangularGridProperties): Cell[][] {
 
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
-        const halfCellWidth: number = cellWidth / 2;
         const doubleCellWidth: number = cellWidth * 2;
         const numberOfcolumns: number = gridProperties.numberOfHorizontalEdgeSegments;
         const numberOfRows: number = gridProperties.numberOfVerticalEdgeSegments;
         const angle: number = gridProperties.angle;
 
         const oneStepUp: Vector = stepUp(cellWidth).newRotatedVector(angle);
-        const aHalfStepRight: Vector = stepRight(halfCellWidth).newRotatedVector(angle);
         const oneStepRight: Vector = stepRight(cellWidth).newRotatedVector(angle);
         const twoStepsRight: Vector = stepRight(doubleCellWidth).newRotatedVector(angle);
 
@@ -54,7 +52,6 @@ export class RunningBondGridFactory extends GridAssembler<Cell> implements Recta
                 firstCellInsertionPoint.stepToNewCoordinate(oneStepUp.times(rowIndex));
             if (onEvenRow) {
                 //rectangular cells
-                const evenRowStartPoint: Coordinate = rowInsertionPoint.stepToNewCoordinate(aHalfStepRight);
                 const rectangularCells: Cell[] = this.createSequenceOfRegions(
                     rowInsertionPoint,
                     twoStepsRight,
@@ -64,7 +61,7 @@ export class RunningBondGridFactory extends GridAssembler<Cell> implements Recta
                 rowOfCells.push(...rectangularCells);
                 //square cell
                 if (numberOfcolumns % 2 === 1) {
-                    const lastCellInsertionPoint: Coordinate = evenRowStartPoint
+                    const lastCellInsertionPoint: Coordinate = rowInsertionPoint
                         .stepToNewCoordinate(twoStepsRight.times(evenRowNumberOfWideCells));
                     const squareCell: Cell = squareCellCreator(lastCellInsertionPoint);
                     rowOfCells.push(squareCell);

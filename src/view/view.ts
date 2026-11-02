@@ -36,6 +36,8 @@ export class View implements Observer {
         //this.drawAllNeighbourRelations();
         //this.drawNumberOfNeighbours();
         //this.drawGridCenter();
+        //this.drawAllCellsFirstPoint();
+        //this.drawAllCellsLastPoint();
         if (this._showSolution) {
             this.drawSolution();
         }
@@ -96,7 +98,19 @@ export class View implements Observer {
         } catch {
             //console.log('Grid center is not defined');
         }
+    }
 
+    private drawAllCellsFirstPoint(): void {
+        this._model.grid.allCells.forEach(cell => {
+            this._canvasPainter.drawFilledCircle(cell.corners[0], 2, LIGHT_GREEN_COLOR);
+        });
+    }
+
+    private drawAllCellsLastPoint(): void {
+        this._model.grid.allCells.forEach(cell => {
+            const lastCellIndex: number = cell.corners.length - 1;
+            this._canvasPainter.drawFilledCircle(cell.corners[lastCellIndex], 2, LIGHT_RED_COLOR);
+        });
     }
 
     private drawStartCell(): void {
