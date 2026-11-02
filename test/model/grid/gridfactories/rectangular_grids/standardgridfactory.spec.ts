@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { StandardGridFactory }
     from '../../../../../src/model/grid/gridfactories/rectangular_grids/standardgridfactory';
-import { Cell } from '../../../../../src/model/grid/cell/cell';
+import { Cell } from '../../../../../src/model/cell/cell';
 import { Coordinate } from '../../../../../src/model/coordinate';
 import { RectangularGridProperties }
     from '../../../../../src/model/grid/gridfactories/rectangular_grids/rectangulargridproperties';

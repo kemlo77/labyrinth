@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { OctagonsGridFactory }
     from '../../../../../src/model/grid/gridfactories/rectangular_grids/octagonsgridfactory';
-import { Cell } from '../../../../../src/model/grid/cell/cell';
+import { Cell } from '../../../../../src/model/cell/cell';
 import { RectangularGridProperties }
     from '../../../../../src/model/grid/gridfactories/rectangular_grids/rectangulargridproperties';
 import { Coordinate } from '../../../../../src/model/coordinate';
