@@ -1,5 +1,4 @@
 import { Coordinate } from '../coordinate';
-import { Vector } from '../vector/vector';
 
 import {
     stepDown,
@@ -19,15 +18,6 @@ export class CellCreatorFactory {
 
     private constructor() {
         throw new Error('This class cannot be instantiated');
-    }
-
-    static createCell(
-        insertionPoint: Coordinate,
-        width: number,
-        type: string,
-        angleInDegrees: number = 0
-    ): Cell {
-        return CellCreatorFactory.getCellCreatorByType(type, width, angleInDegrees)(insertionPoint);
     }
 
     static getCellCreatorByType(type: string, cellWidth: number, angle: number): CellCreator {

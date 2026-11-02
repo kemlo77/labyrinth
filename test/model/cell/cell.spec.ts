@@ -3,8 +3,12 @@ import { Cell } from '../../../src/model/cell/cell';
 import { Coordinate } from '../../../src/model/coordinate';
 import { CellCreatorFactory } from '../../../src/model/cell/cellcreatorfactory';
 import { Segment } from '../../../src/model/segment';
+import { CellCreator } from '../../../src/model/typealiases';
 
 describe('Cell', () => {
+
+    const createSquareCell: CellCreator =
+        CellCreatorFactory.getCellCreatorByType('square-cell', 10, 0);
 
     let leftCell: Cell;
     let middleCell: Cell;
@@ -14,19 +18,19 @@ describe('Cell', () => {
 
     beforeEach(() => {
         const insertionPoint1: Coordinate = new Coordinate(5, 5);
-        leftCell = CellCreatorFactory.createCell(insertionPoint1, 10, 'square-cell');
+        leftCell = createSquareCell(insertionPoint1);
 
         const insertionPoint2: Coordinate = new Coordinate(15, 5);
-        middleCell = CellCreatorFactory.createCell(insertionPoint2, 10, 'square-cell');
+        middleCell = createSquareCell(insertionPoint2);
 
         const insertionPoint3: Coordinate = new Coordinate(25, 5);
-        rightCell = CellCreatorFactory.createCell(insertionPoint3, 10, 'square-cell');
+        rightCell = createSquareCell(insertionPoint3);
 
         const insertionPoint4: Coordinate = new Coordinate(15, 15);
-        upperCell = CellCreatorFactory.createCell(insertionPoint4, 10, 'square-cell');
+        upperCell = createSquareCell(insertionPoint4);
 
         const insertionPoint5: Coordinate = new Coordinate(15, -5);
-        lowerCell = CellCreatorFactory.createCell(insertionPoint5, 10, 'square-cell');
+        lowerCell = createSquareCell(insertionPoint5);
     });
 
     it('establishing neighbour relation between two cells', () => {
@@ -46,8 +50,8 @@ describe('Cell', () => {
     });
 
     it('establish neighbour relation between two cells', () => {
-        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = createSquareCell(new Coordinate(10, 10));
+        const cell2: Cell = createSquareCell(new Coordinate(20, 10));
         cell1.establishNeighbourRelationsWith(cell2);
         expect(cell1.neighbourCells).to.have.lengthOf(1);
         expect(cell2.neighbourCells).to.have.lengthOf(1);
@@ -67,16 +71,16 @@ describe('Cell', () => {
     });
 
     it('establish neighbour relation between two cells when not close', () => {
-        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(100, 100), 10, 'square-cell');
+        const cell1: Cell = createSquareCell(new Coordinate(10, 10));
+        const cell2: Cell = createSquareCell(new Coordinate(100, 100));
         expect(() => cell1.establishNeighbourRelationsWith(cell2))
             .to.throw('No common border found between cells');
 
     });
 
     it('open connection to a neighbour cell', () => {
-        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = createSquareCell(new Coordinate(10, 10));
+        const cell2: Cell = createSquareCell(new Coordinate(20, 10));
         cell1.establishNeighbourRelationsWith(cell2);
         expect(cell1.hasNoOpenBorders).to.be.true;
         expect(cell2.hasNoOpenBorders).to.be.true;
@@ -95,14 +99,14 @@ describe('Cell', () => {
     });
 
     it('open connection to a neighbour cell twice', () => {
-        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = createSquareCell(new Coordinate(10, 10));
+        const cell2: Cell = createSquareCell(new Coordinate(20, 10));
         expect(() => cell1.openConnectionTo(cell2)).to.throw('No neighbour found to open connection to');
     });
 
     it('establish neighbour relation between two cells twice', () => {
-        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = createSquareCell(new Coordinate(10, 10));
+        const cell2: Cell = createSquareCell(new Coordinate(20, 10));
         cell1.establishNeighbourRelationsWith(cell2);
         cell1.establishNeighbourRelationsWith(cell2);
         expect(cell1.neighbourCells).to.have.lengthOf(1);
@@ -110,8 +114,8 @@ describe('Cell', () => {
     });
 
     it('closing all connection a cell has', () => {
-        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = createSquareCell(new Coordinate(10, 10));
+        const cell2: Cell = createSquareCell(new Coordinate(20, 10));
         cell1.establishNeighbourRelationsWith(cell2);
         cell1.openConnectionTo(cell2);
         expect(cell1.bordersToNeighbour[0].isOpen).to.be.true;
@@ -126,8 +130,8 @@ describe('Cell', () => {
     });
 
     it('getting random unvisited neighbour', () => {
-        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+        const cell1: Cell = createSquareCell(new Coordinate(10, 10));
+        const cell2: Cell = createSquareCell(new Coordinate(20, 10));
         cell1.establishNeighbourRelationsWith(cell2);
         expect(cell1.randomUnvisitedNeighbour).to.equal(cell2);
     });
@@ -189,7 +193,7 @@ describe('Cell', () => {
     });
 
     it('should rotate cell', () => {
-        const cell: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
+        const cell: Cell = createSquareCell(new Coordinate(10, 10));
         const originalCorners: Coordinate[] = cell.corners;
         cell.rotateAroundCenter(90);
         const rotatedCorners: Coordinate[] = cell.corners;
@@ -279,8 +283,8 @@ describe('Cell', () => {
 
     ].forEach(testData => {
         it('should merge with another cell', () => {
-            const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-            const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(20, 10), 10, 'square-cell');
+            const cell1: Cell = createSquareCell(new Coordinate(10, 10));
+            const cell2: Cell = createSquareCell(new Coordinate(20, 10));
             const rotatedCell1: Cell = cell1.rotateAroundCenter(testData.angle1);
             const rotatedCell2: Cell = cell2.rotateAroundCenter(testData.angle2);
             const newCell: Cell = rotatedCell1.mergeWith(rotatedCell2);
@@ -291,8 +295,8 @@ describe('Cell', () => {
     });
 
     it('should not merge with another cell when no common border', () => {
-        const cell1: Cell = CellCreatorFactory.createCell(new Coordinate(10, 10), 10, 'square-cell');
-        const cell2: Cell = CellCreatorFactory.createCell(new Coordinate(30, 10), 10, 'square-cell');
+        const cell1: Cell = createSquareCell(new Coordinate(10, 10));
+        const cell2: Cell = createSquareCell(new Coordinate(30, 10));
         expect(() => cell1.mergeWith(cell2)).to.throw('No common border found between cells');
     });
 

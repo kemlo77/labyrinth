@@ -2,8 +2,9 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { Coordinate } from '../../../src/model/coordinate';
 import { Cell } from '../../../src/model/cell/cell';
 import { CellCreatorFactory } from '../../../src/model/cell/cellcreatorfactory';
+import { CellCreator } from '../../../src/model/typealiases';
 
-describe('CellFactory', () => {
+describe('CellCreatorFactory', () => {
     let insertionPoint: Coordinate;
 
     beforeEach(() => {
@@ -12,7 +13,9 @@ describe('CellFactory', () => {
 
     it('creating an equilateral triangle cell', () => {
         const insertionPoint: Coordinate = new Coordinate(0, 0);
-        const triangleCell: Cell = CellCreatorFactory.createCell(insertionPoint, 15, 'equilateral-triangular-cell');
+        const createTriangularCell: CellCreator =
+            CellCreatorFactory.getCellCreatorByType('equilateral-triangular-cell', 15, 0);
+        const triangleCell: Cell = createTriangularCell(insertionPoint);
         expect(triangleCell.corners).to.have.lengthOf(3);
         expect(triangleCell.center.x).to.be.closeTo(7.5, 0.0001);
         expect(triangleCell.center.y).to.be.closeTo(4.3301, 0.0001);
@@ -25,7 +28,9 @@ describe('CellFactory', () => {
     });
 
     it('creating a square cell', () => {
-        const squareCell: Cell = CellCreatorFactory.createCell(insertionPoint, 10, 'square-cell');
+        const createSquareCell: CellCreator =
+            CellCreatorFactory.getCellCreatorByType('square-cell', 10, 0);
+        const squareCell: Cell = createSquareCell(insertionPoint);
         expect(squareCell.corners).to.have.lengthOf(4);
         expect(squareCell.center.equals(new Coordinate(10, 10))).to.be.true;
         expect(squareCell.corners[0].equals(new Coordinate(5, 5))).to.be.true;
@@ -35,7 +40,9 @@ describe('CellFactory', () => {
     });
 
     it('creating an isosceles right triangle cell', () => {
-        const triangleCell: Cell = CellCreatorFactory.createCell(insertionPoint, 15, 'isosceles-right-triangular-cell');
+        const createTriangularCell: CellCreator =
+            CellCreatorFactory.getCellCreatorByType('isosceles-right-triangular-cell', 15, 0);
+        const triangleCell: Cell = createTriangularCell(insertionPoint);
         expect(triangleCell.corners).to.have.lengthOf(3);
         expect(triangleCell.corners[0].equals(new Coordinate(5, 5))).to.be.true;
         expect(triangleCell.corners[1].equals(new Coordinate(20, 5))).to.be.true;
@@ -43,7 +50,9 @@ describe('CellFactory', () => {
     });
 
     it('creating a double square rectangle cell', () => {
-        const rectangleCell: Cell = CellCreatorFactory.createCell(insertionPoint, 10, 'double-square-rectangle-cell');
+        const createRectangularCell: CellCreator =
+            CellCreatorFactory.getCellCreatorByType('double-square-rectangle-cell', 10, 0);
+        const rectangleCell: Cell = createRectangularCell(insertionPoint);
         expect(rectangleCell.corners).to.have.lengthOf(6);
         expect(rectangleCell.center.equals(new Coordinate(10, 7.5))).to.be.true;
         expect(rectangleCell.corners[0].equals(new Coordinate(5, 5))).to.be.true;
@@ -56,8 +65,9 @@ describe('CellFactory', () => {
 
     it('creating a rotated double square rectangle cell', () => {
         const rotatedRectangleCenter: Coordinate = new Coordinate(0, 0);
-        const rectangleCell: Cell =
-            CellCreatorFactory.createCell(rotatedRectangleCenter, 10, 'double-square-rectangle-cell', 90);
+        const createRectangularCell: CellCreator =
+            CellCreatorFactory.getCellCreatorByType('double-square-rectangle-cell', 10, 90);
+        const rectangleCell: Cell = createRectangularCell(rotatedRectangleCenter);
         expect(rectangleCell.corners[0].x).to.be.closeTo(0, 0.0001);
         expect(rectangleCell.corners[0].y).to.be.closeTo(0, 0.0001);
         expect(rectangleCell.corners[1].x).to.be.closeTo(0, 0.0001);
@@ -77,7 +87,9 @@ describe('CellFactory', () => {
 
     it('creating a hexagon cell', () => {
         const insertionPoint: Coordinate = new Coordinate(0, 0);
-        const hexagonCell: Cell = CellCreatorFactory.createCell(insertionPoint, 10, 'hexagonal-cell');
+        const createHexagonalCell: CellCreator =
+            CellCreatorFactory.getCellCreatorByType('hexagonal-cell', 10, 0);
+        const hexagonCell: Cell = createHexagonalCell(insertionPoint);
         expect(hexagonCell.corners).to.have.lengthOf(6);
         expect(hexagonCell.center.x).to.be.closeTo(5, 0.0001);
         expect(hexagonCell.center.y).to.be.closeTo(8.6603, 0.0001);
@@ -96,7 +108,9 @@ describe('CellFactory', () => {
     });
 
     it('creating an octagon cell', () => {
-        const octagonCell: Cell = CellCreatorFactory.createCell(insertionPoint, 10, 'octagonal-cell');
+        const createOctagonalCell: CellCreator =
+            CellCreatorFactory.getCellCreatorByType('octagonal-cell', 10, 0);
+        const octagonCell: Cell = createOctagonalCell(insertionPoint);
         expect(octagonCell.corners).to.have.lengthOf(8);
         expect(octagonCell.center.x).to.be.closeTo(7.0711, 0.0001);
         expect(octagonCell.center.x).to.be.closeTo(7.0711, 0.0001);
@@ -119,7 +133,7 @@ describe('CellFactory', () => {
 
     });
 
-    it('creating a cell of an unknown type', () => {
-        expect(() => CellCreatorFactory.createCell(insertionPoint, 10, 'unknown')).to.throw('Unknown cell type');
+    it('getting a cell creator of unknown type', () => {
+        expect(() => CellCreatorFactory.getCellCreatorByType('unknown', 10, 0)).to.throw('Unknown cell type');
     });
 });
