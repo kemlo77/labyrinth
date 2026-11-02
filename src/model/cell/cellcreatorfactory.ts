@@ -30,20 +30,6 @@ export class CellCreatorFactory {
         return CellCreatorFactory.getCellCreatorByType(type, width, angleInDegrees)(insertionPoint);
     }
 
-    static getCellCreatorByTypeAndAdjustInsertion(
-        type: string, cellWidth: number, angle: number, insertionAdjustmentStep: Vector): CellCreator {
-        if (!insertionAdjustmentStep) {
-            insertionAdjustmentStep = new Vector(0, 0);
-        }
-
-        return (insertionPoint: Coordinate) => {
-            const adjustedInsertionStep: Coordinate = insertionPoint.stepToNewCoordinate(insertionAdjustmentStep);
-            return CellCreatorFactory.getCellCreatorByType(type, cellWidth, angle)(adjustedInsertionStep);
-        };
-
-
-    }
-
     static getCellCreatorByType(type: string, cellWidth: number, angle: number): CellCreator {
 
         switch (type) {

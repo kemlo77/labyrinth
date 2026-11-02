@@ -43,9 +43,14 @@ export class TrianglesGridFactory extends GridAssembler<Cell> implements Rectang
 
         const triangleWithPointyTopCreator: CellCreator =
             CellCreatorFactory.getCellCreatorByType('triangular-cell', cellWidth, angle);
-        const triangleWithPointyBottomCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByTypeAndAdjustInsertion('triangular-cell', cellWidth, angle + 180,
-                stepRightHalfCellWidth.thenTake(stepUpCellHeight));
+        const triangleWithPointyBottomCreator: CellCreator = (insertionPoint: Coordinate) => {
+            const adjustedInsertionPoint: Coordinate =
+                insertionPoint.stepToNewCoordinate(stepRightHalfCellWidth.thenTake(stepUpCellHeight));
+            const cellCreator: CellCreator =
+                CellCreatorFactory.getCellCreatorByType('triangular-cell', cellWidth, angle + 180);
+            return cellCreator(adjustedInsertionPoint);
+        };
+
         const leftHalfPointyTopTriangleCreator: CellCreator =
             CellCreatorFactory.getCellCreatorByType('right-half-triangular-cell', cellWidth, angle);
         const rightHalfPointyTopTriangleCreator: CellCreator =
