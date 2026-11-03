@@ -1,11 +1,11 @@
-import { Coordinate } from '../../../coordinate';
-import { Vector } from '../../../vector/vector';
-import { stepRight, stepUp } from '../../../vector/vectorcreator';
-import { Cell } from '../../../cell/cell';
-import { Grid } from '../../grid';
-import type { Region } from '../../region';
-import type { RegionCreator } from '../../../typealiases';
-import { RegularShapedGridProperties } from '../regular_shaped_grids/regularshapedgridproperties';
+import { Coordinate } from '../../coordinate';
+import { Vector } from '../../vector/vector';
+import { stepRight, stepUp } from '../../vector/vectorcreator';
+import { Cell } from '../../cell/cell';
+import { Grid } from '../grid';
+import type { Region } from '../region';
+import type { RegionCreator } from '../../typealiases';
+import { RegularShapedGridProperties } from '../gridfactories/regular_shaped_grids/regularshapedgridproperties';
 import { GridAssembler } from './gridassembler';
 
 export class TriangularGridAssembler<T extends Region<T>> extends GridAssembler<T> {

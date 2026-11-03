@@ -7,7 +7,7 @@ import type { CellCreator } from '../../../typealiases';
 import { Grid } from '../../grid';
 import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
-import { GridAssembler } from '../gridassemblers/gridassembler';
+import { GridAssembler } from '../../gridassemblers/gridassembler';
 
 
 export class RhomboidGridFactory extends GridAssembler<Cell> implements RegularShapedGridFactory {

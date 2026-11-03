@@ -3,7 +3,7 @@ import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import { Grid } from '../../grid';
 import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
-import { TriangularGridAssembler } from '../gridassemblers/triangulargridassembler';
+import { TriangularGridAssembler } from '../../gridassemblers/triangulargridassembler';
 import type { RegionCreator } from '../../../typealiases';
 
 export class TriangularGridFactory implements RegularShapedGridFactory {

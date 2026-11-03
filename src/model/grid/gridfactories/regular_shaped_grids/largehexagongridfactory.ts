@@ -3,9 +3,9 @@ import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import { Grid } from '../../grid';
 import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
-import { LargeHexagonGridAssembler } from '../gridassemblers/largehexagongridassembler';
+import { LargeHexagonGridAssembler } from '../../gridassemblers/largehexagongridassembler';
 import type { RegionCreator } from '../../../typealiases';
-import { GridFragmentCreatorFactory } from '../gridfragments/gridfragmentcreatorfactory';
+import { GridFragmentCreatorFactory } from '../../gridfragments/gridfragmentcreatorfactory';
 
 export class LargeHexagonGridFactory implements RegularShapedGridFactory {
 

@@ -20,9 +20,9 @@ export class CellCreatorFactory {
         throw new Error('This class cannot be instantiated');
     }
 
-    static getCellCreatorByType(type: string, cellWidth: number, angle: number): CellCreator {
+    static getCellCreatorByType(cellType: string, cellWidth: number, angle: number): CellCreator {
 
-        switch (type) {
+        switch (cellType) {
 
             case 'equilateral-triangular-cell':
                 return CellCreatorFactory.makeEquilateralTriangleCellCreator(cellWidth, angle);
@@ -66,7 +66,7 @@ export class CellCreatorFactory {
             case 'octagonal-cell':
                 return CellCreatorFactory.makeOctagonalCellCreator(cellWidth, angle);
 
-            default: throw new Error('Unknown cell type: ' + type);
+            default: throw new Error('Unknown cell type: ' + cellType);
         }
     }
 

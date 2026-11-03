@@ -7,7 +7,7 @@ import type { CellCreator } from '../../../typealiases';
 import { Grid } from '../../grid';
 import type { RectangularGridFactory } from './rectangulargridfactory.interface';
 import { RectangularGridProperties } from './rectangulargridproperties';
-import { GridAssembler } from '../gridassemblers/gridassembler';
+import { GridAssembler } from '../../gridassemblers/gridassembler';
 
 
 export class TrianglesGridFactory extends GridAssembler<Cell> implements RectangularGridFactory {

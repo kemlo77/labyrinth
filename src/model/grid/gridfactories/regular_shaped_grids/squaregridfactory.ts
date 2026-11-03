@@ -4,7 +4,7 @@ import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import { Grid } from '../../grid';
 import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
-import { SquareGridAssembler } from '../gridassemblers/squaregridassembler';
+import { SquareGridAssembler } from '../../gridassemblers/squaregridassembler';
 import type { RegionCreator } from '../../../typealiases';
 
 

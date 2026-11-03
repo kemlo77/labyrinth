@@ -7,7 +7,7 @@ import { Vector } from '../../../vector/vector';
 import type { RectangularGridFactory } from './rectangulargridfactory.interface';
 import { RectangularGridProperties } from './rectangulargridproperties';
 import { stepLeft, stepRight, stepUp } from '../../../vector/vectorcreator';
-import { GridAssembler } from '../gridassemblers/gridassembler';
+import { GridAssembler } from '../../gridassemblers/gridassembler';
 
 export class HexagonsGridFactory extends GridAssembler<Cell> implements RectangularGridFactory {
 

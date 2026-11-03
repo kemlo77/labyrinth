@@ -22,7 +22,7 @@ import { SierpinskySquareGridFactory } from './gridfactories/complex_grids/sierp
 import { MazeGridFactory } from './gridfactories/complex_grids/mazegridfactory';
 import { TrailGridFactory } from './gridfactories/complex_grids/trailgridfactory';
 import { TiltedTrailGridFactory } from './gridfactories/complex_grids/tiltedtrailgridfactory';
-import { GridFragmentCreatorFactory } from './gridfactories/gridfragments/gridfragmentcreatorfactory';
+import { GridFragmentCreatorFactory } from './gridfragments/gridfragmentcreatorfactory';
 
 export class GridSupplier {
 
