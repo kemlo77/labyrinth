@@ -54,9 +54,9 @@ export class LargeHexagonGridFactory implements RegularShapedGridFactory {
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
         const triangleWithPointyTopCreator: RegionCreator<Grid> =
-            GridFragmentCreatorFactory.createGridFragmentCreator(cellWidth, pointyTopTriangle, angle);
+            GridFragmentCreatorFactory.getGridFragmentCreatorByType(cellWidth, pointyTopTriangle, angle);
         const triangleWithPointyBottomCreator: RegionCreator<Grid> =
-            GridFragmentCreatorFactory.createGridFragmentCreator(cellWidth, pointyBottomTriangle, angle + 60);
+            GridFragmentCreatorFactory.getGridFragmentCreatorByType(cellWidth, pointyBottomTriangle, angle + 60);
 
         return new HexagonGridAssembler<Grid>().createGrid(
             gridProperties,

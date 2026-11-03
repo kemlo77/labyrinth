@@ -12,17 +12,7 @@ export class GridFragmentCreatorFactory {
         throw new Error('This class cannot be instantiated');
     }
 
-    static createGridFragment(
-        insertionPoint: Coordinate,
-        sideLength: number,
-        type: string,
-        angle: number = 0
-    ): Grid {
-        return GridFragmentCreatorFactory
-            .createGridFragmentCreator(sideLength, type, angle)(insertionPoint);
-    }
-
-    static createGridFragmentCreator(
+    static getGridFragmentCreatorByType(
         sideLength: number,
         type: string,
         angle: number = 0

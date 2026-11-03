@@ -23,6 +23,7 @@ import { MazeGridFactory } from './gridfactories/complex_grids/mazegridfactory';
 import { TrailGridFactory } from './gridfactories/complex_grids/trailgridfactory';
 import { TiltedTrailGridFactory } from './gridfactories/complex_grids/tiltedtrailgridfactory';
 import { GridFragmentCreatorFactory } from './gridfragments/gridfragmentcreatorfactory';
+import type { GridCreator } from '../typealiases';
 
 export class GridSupplier {
 
@@ -42,8 +43,9 @@ export class GridSupplier {
         }
 
         if (gridType === 'test-grid-fragment') {
-            return GridFragmentCreatorFactory
-                .createGridFragment(insertionPoint, 200, 'reversed-half-hexagon-grid-fragment-triangle');
+            const createGridFragment: GridCreator = GridFragmentCreatorFactory
+                .getGridFragmentCreatorByType(200, 'reversed-half-hexagon-triangle-grid-fragment');
+            return createGridFragment(insertionPoint);
         }
 
         if (gridType === 'triangular') {
