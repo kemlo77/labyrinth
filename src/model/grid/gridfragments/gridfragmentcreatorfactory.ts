@@ -28,15 +28,15 @@ export class GridFragmentCreatorFactory {
         angle: number = 0
     ): GridCreator {
         switch (type) {
-            case 'single-cell-grid-fragment-triangle':
+            case 'single-cell-triangle-grid-fragment':
                 return GridFragmentCreatorFactory.makeSingleCellGridFragmentCreator(sideLength, angle);
-            case 'kite-grid-fragment-triangle':
+            case 'kite-triangle-grid-fragment':
                 return GridFragmentCreatorFactory.makeKiteGridFragmentCreator(sideLength, angle);
-            case 'triakis-grid-fragment-triangle':
+            case 'triakis-triangle-grid-fragment':
                 return GridFragmentCreatorFactory.makeTriakisGridFragmentCreator(sideLength, angle);
-            case 'half-hexagon-grid-fragment-triangle':
+            case 'half-hexagon-triangle-grid-fragment':
                 return GridFragmentCreatorFactory.makeHalfHexagonGridFragmentCreator(sideLength, angle);
-            case 'reversed-half-hexagon-grid-fragment-triangle':
+            case 'reversed-half-hexagon-triangle-grid-fragment':
                 return GridFragmentCreatorFactory
                     .makeReversedHalfHexagonGridFragmentCreator(sideLength, angle);
             default:

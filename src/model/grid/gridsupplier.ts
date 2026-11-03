@@ -69,18 +69,18 @@ export class GridSupplier {
         if (gridType === 'triakisHexagonal') {
             const gridProperties: RegularShapedGridProperties = this.getLargeHexagonGridProperties(insertionPoint);
             return new LargeHexagonGridFactory()
-                .createGridWithNamedGridElements(gridProperties, 'triakis-grid-fragment-triangle');
+                .createGridWithNamedGridElements(gridProperties, 'triakis-triangle-grid-fragment');
         }
 
         if (gridType === 'kiteHexagonal') {
             const gridProperties: RegularShapedGridProperties = this.getLargeHexagonGridProperties(insertionPoint);
             return new LargeHexagonGridFactory()
-                .createGridWithNamedGridElements(gridProperties, 'kite-grid-fragment-triangle');
+                .createGridWithNamedGridElements(gridProperties, 'kite-triangle-grid-fragment');
         }
         if (gridType === 'halfHexagonsInHexagon') {
             const gridProperties: RegularShapedGridProperties = this.getLargeHexagonGridProperties(insertionPoint);
             return new LargeHexagonGridFactory()
-                .createGridWithNamedGridElements(gridProperties, 'reversed-half-hexagon-grid-fragment-triangle');
+                .createGridWithNamedGridElements(gridProperties, 'reversed-half-hexagon-triangle-grid-fragment');
         }
 
         if (gridType === 'alternateHalfHexagonsInHexagon') {
@@ -88,8 +88,8 @@ export class GridSupplier {
             return new LargeHexagonGridFactory()
                 .createGridWithNamedGridElements(
                     gridProperties,
-                    'reversed-half-hexagon-grid-fragment-triangle',
-                    'half-hexagon-grid-fragment-triangle'
+                    'reversed-half-hexagon-triangle-grid-fragment',
+                    'half-hexagon-triangle-grid-fragment'
                 );
         }
 

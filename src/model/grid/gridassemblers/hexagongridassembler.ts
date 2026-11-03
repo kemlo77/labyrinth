@@ -8,7 +8,7 @@ import type { RegionCreator } from '../../typealiases';
 import { RegularShapedGridProperties } from '../gridfactories/regular_shaped_grids/regularshapedgridproperties';
 import { GridAssembler } from './gridassembler';
 
-export class LargeHexagonGridAssembler<T extends Region<T>> extends GridAssembler<T> {
+export class HexagonGridAssembler<T extends Region<T>> extends GridAssembler<T> {
 
     createGrid(
         gridProperties: RegularShapedGridProperties,

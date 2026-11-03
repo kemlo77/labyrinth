@@ -3,7 +3,7 @@ import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import { Grid } from '../../grid';
 import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
-import { LargeHexagonGridAssembler } from '../../gridassemblers/largehexagongridassembler';
+import { HexagonGridAssembler } from '../../gridassemblers/hexagongridassembler';
 import type { RegionCreator } from '../../../typealiases';
 import { GridFragmentCreatorFactory } from '../../gridfragments/gridfragmentcreatorfactory';
 
@@ -18,7 +18,7 @@ export class LargeHexagonGridFactory implements RegularShapedGridFactory {
         const riangleWithPointyBottomCreator: RegionCreator<Cell> =
             CellCreatorFactory.getCellCreatorByType('equilateral-triangular-cell', cellWidth, angle + 60);
 
-        return new LargeHexagonGridAssembler<Cell>().createGrid(
+        return new HexagonGridAssembler<Cell>().createGrid(
             gridProperties,
             triangleWithPointyTopCreator,
             riangleWithPointyBottomCreator
@@ -38,7 +38,7 @@ export class LargeHexagonGridFactory implements RegularShapedGridFactory {
         const triangleWithPointyBottomCreator: RegionCreator<Cell> =
             CellCreatorFactory.getCellCreatorByType(pointyBottomTriangle, cellWidth, angle + 60);
 
-        return new LargeHexagonGridAssembler<Cell>().createGrid(
+        return new HexagonGridAssembler<Cell>().createGrid(
             gridProperties,
             triangleWithPointyTopCreator,
             triangleWithPointyBottomCreator
@@ -58,7 +58,7 @@ export class LargeHexagonGridFactory implements RegularShapedGridFactory {
         const triangleWithPointyBottomCreator: RegionCreator<Grid> =
             GridFragmentCreatorFactory.createGridFragmentCreator(cellWidth, pointyBottomTriangle, angle + 60);
 
-        return new LargeHexagonGridAssembler<Grid>().createGrid(
+        return new HexagonGridAssembler<Grid>().createGrid(
             gridProperties,
             triangleWithPointyTopCreator,
             triangleWithPointyBottomCreator
