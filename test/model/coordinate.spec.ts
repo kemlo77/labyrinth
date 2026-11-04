@@ -31,20 +31,20 @@ describe('Coordinate', () => {
     });
 
     it('should rotate counterclockwise', () => {
-        const rotatedCoordinate: Coordinate = coordinate.rotateCounterclockwise(90);
+        const rotatedCoordinate: Coordinate = coordinate.rotateCounterclockwiseAroundOrigin(90);
         expect(rotatedCoordinate.x).to.be.closeTo(-4, 0.0001);
         expect(rotatedCoordinate.y).to.be.closeTo(3, 0.0001);
     });
 
     it('should not rotate clockwise when angle is 0', () => {
-        const rotatedCoordinate: Coordinate = coordinate.rotateCounterclockwise(0);
+        const rotatedCoordinate: Coordinate = coordinate.rotateCounterclockwiseAroundOrigin(0);
         expect(rotatedCoordinate.x).to.equal(3);
         expect(rotatedCoordinate.y).to.equal(4);
     });
 
     it('should not rotate around center when angle is 0', () => {
         const center: Coordinate = new Coordinate(1, 1);
-        const rotatedCoordinate: Coordinate = coordinate.rotateAroundCenter(0, center);
+        const rotatedCoordinate: Coordinate = coordinate.rotateAroundAnotherCoordinate(0, center);
         expect(rotatedCoordinate.x).to.equal(3);
         expect(rotatedCoordinate.y).to.equal(4);
     });
@@ -57,7 +57,7 @@ describe('Coordinate', () => {
 
     it('should rotate around center', () => {
         const center: Coordinate = new Coordinate(1, 1);
-        const rotatedCoordinate: Coordinate = coordinate.rotateAroundCenter(90, center);
+        const rotatedCoordinate: Coordinate = coordinate.rotateAroundAnotherCoordinate(90, center);
         expect(rotatedCoordinate.x).to.be.closeTo(-2, 0.0001);
         expect(rotatedCoordinate.y).to.be.closeTo(3, 0.0001);
     });

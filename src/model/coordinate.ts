@@ -14,7 +14,7 @@ export class Coordinate {
         return new Vector(coordinate.x - this.x, coordinate.y - this.y);
     }
 
-    rotateCounterclockwise(angleInDegrees: number): Coordinate {
+    rotateCounterclockwiseAroundOrigin(angleInDegrees: number): Coordinate {
         if (angleInDegrees === 0) {
             return this;
         }
@@ -30,13 +30,13 @@ export class Coordinate {
         return new Coordinate(newX, newY);
     }
 
-    rotateAroundCenter(angleInDegrees: number, center: Coordinate): Coordinate {
+    rotateAroundAnotherCoordinate(angleInDegrees: number, otherCoordinate: Coordinate): Coordinate {
         if (angleInDegrees === 0) {
             return this;
         }
-        const translated: Coordinate = this.translate(-center.x, -center.y);
-        const rotated: Coordinate = translated.rotateCounterclockwise(angleInDegrees);
-        return rotated.translate(center.x, center.y);
+        const translated: Coordinate = this.translate(-otherCoordinate.x, -otherCoordinate.y);
+        const rotated: Coordinate = translated.rotateCounterclockwiseAroundOrigin(angleInDegrees);
+        return rotated.translate(otherCoordinate.x, otherCoordinate.y);
     }
 
     stepToNewCoordinate(step: Vector): Coordinate {

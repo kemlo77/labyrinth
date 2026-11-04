@@ -195,7 +195,7 @@ describe('Cell', () => {
     it('should rotate cell', () => {
         const cell: Cell = createSquareCell(new Coordinate(10, 10));
         const originalCorners: Coordinate[] = cell.corners;
-        cell.rotateAroundCenter(90);
+        cell.rotateAroundCoordinate(90, cell.center);
         const rotatedCorners: Coordinate[] = cell.corners;
         expect(originalCorners[0].equals(rotatedCorners[1])).to.be.false;
         expect(originalCorners[1].equals(rotatedCorners[2])).to.be.false;
@@ -229,7 +229,7 @@ describe('Cell', () => {
         expect(() => middleCell.openConnectionTo(leftCell)).to.throw('No neighbour found to open connection to');
         expect(() => middleCell.establishNeighbourRelationsWith(leftCell))
             .to.throw('No common border found between cells');
-        expect(() => middleCell.rotateAroundCenter(90)).not.to.throw();
+        expect(() => middleCell.rotateAroundCoordinate(90, middleCell.center)).not.to.throw();
     });
 
     it('gauss shoelace - clockwise', () => {
@@ -285,8 +285,8 @@ describe('Cell', () => {
         it('should merge with another cell', () => {
             const cell1: Cell = createSquareCell(new Coordinate(10, 10));
             const cell2: Cell = createSquareCell(new Coordinate(20, 10));
-            const rotatedCell1: Cell = cell1.rotateAroundCenter(testData.angle1);
-            const rotatedCell2: Cell = cell2.rotateAroundCenter(testData.angle2);
+            const rotatedCell1: Cell = cell1.rotateAroundCoordinate(testData.angle1, cell1.center);
+            const rotatedCell2: Cell = cell2.rotateAroundCoordinate(testData.angle2, cell2.center);
             const newCell: Cell = rotatedCell1.mergeWith(rotatedCell2);
             expect(newCell.center.x).to.equal(20);
             expect(newCell.center.y).to.equal(15);

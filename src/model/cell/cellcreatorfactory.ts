@@ -333,7 +333,7 @@ export class CellCreatorFactory {
             if (angle === 0) {
                 return cell;
             }
-            return cell.rotateAroundCenter(angle, insertionPoint);
+            return cell.rotateAroundCoordinate(angle, insertionPoint);
         };
     }
 
@@ -357,7 +357,7 @@ export class CellCreatorFactory {
             if (angle === 0) {
                 return cell;
             }
-            return cell.rotateAroundCenter(angle, insertionPoint);
+            return cell.rotateAroundCoordinate(angle, insertionPoint);
         };
     }
 
@@ -382,7 +382,7 @@ export class CellCreatorFactory {
             if (angle === 0) {
                 return cell;
             }
-            return cell.rotateAroundCenter(angle, insertionPoint);
+            return cell.rotateAroundCoordinate(angle, insertionPoint);
         };
     }
 

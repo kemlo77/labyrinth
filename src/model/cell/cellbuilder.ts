@@ -8,6 +8,7 @@ export class CellBuilder {
     private readonly _steps: Vector[] = [];
     private _center!: Coordinate;
     private _rotationAngle: number = 0;
+    private _corners: Coordinate[] = [];
 
     setStartCorner(startCorner: Coordinate): this {
         this._startCorner = startCorner.clone();
@@ -30,6 +31,32 @@ export class CellBuilder {
     }
 
     build(): Cell {
+        this.assertBuildConditions();
+
+        this.calculateCorners();
+
+        if (this.cellIsRotated()) {
+            this.rotateCornersAroundStartCorner();
+            this.rotateCenterAroundStartCorner();
+        }
+
+        return new Cell(this._center, this._corners);
+    }
+
+    private cellIsRotated(): boolean {
+        return this._rotationAngle !== 0;
+    }
+
+    private rotateCornersAroundStartCorner(): void {
+        this._corners =
+            this._corners.map(corner => corner.rotateAroundAnotherCoordinate(this._rotationAngle, this._startCorner));
+    }
+
+    private rotateCenterAroundStartCorner(): void {
+        this._center = this._center.rotateAroundAnotherCoordinate(this._rotationAngle, this._startCorner);
+    }
+
+    private assertBuildConditions(): void {
         if (!this._startCorner) {
             throw new Error('Start corner is missing');
         }
@@ -39,21 +66,9 @@ export class CellBuilder {
         if (!this._center) {
             throw new Error('Center is missing');
         }
-
-        const corners: Coordinate[] = this.calculateCorners();
-
-        if (this._rotationAngle !== 0) {
-            const rotatedCorners: Coordinate[] =
-                corners.map(corner => corner.rotateAroundCenter(this._rotationAngle, this._startCorner));
-            const rotatedCenter: Coordinate =
-                this._center.rotateAroundCenter(this._rotationAngle, this._startCorner);
-            return new Cell(rotatedCenter, rotatedCorners);
-        }
-
-        return new Cell(this._center, corners);
     }
 
-    private calculateCorners(): Coordinate[] {
+    private calculateCorners(): void {
         const corners: Coordinate[] = [];
         let currentCorner: Coordinate = this._startCorner;
         corners.push(currentCorner);
@@ -61,7 +76,7 @@ export class CellBuilder {
             currentCorner = currentCorner.stepToNewCoordinate(step);
             corners.push(currentCorner);
         }
-        return corners;
+        this._corners = corners;
     }
 
 }

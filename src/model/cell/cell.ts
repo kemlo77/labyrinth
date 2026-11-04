@@ -193,9 +193,10 @@ export class Cell implements Region<Cell> {
         });
     }
 
-    rotateAroundCenter(angle: number, center: Coordinate = this._center): Cell {
-        const newCenter: Coordinate = this._center.rotateAroundCenter(angle, center);
-        const newCorners: Coordinate[] = this._corners.map(corner => corner.rotateAroundCenter(angle, center));
+    rotateAroundCoordinate(angle: number, coordinate: Coordinate): Cell {
+        const newCenter: Coordinate = this._center.rotateAroundAnotherCoordinate(angle, coordinate);
+        const newCorners: Coordinate[] =
+            this._corners.map(corner => corner.rotateAroundAnotherCoordinate(angle, coordinate));
         return new Cell(newCenter, newCorners);
     }
 

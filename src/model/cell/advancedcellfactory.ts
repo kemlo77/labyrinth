@@ -9,6 +9,7 @@ export class AdvancedCellFactory {
         throw new Error('This class cannot be instantiated');
     }
 
+
     static createCell(
         insertionPoint: Coordinate,
         width: number,
@@ -16,27 +17,13 @@ export class AdvancedCellFactory {
         numberOfSideSegments: number,
         angleInDegrees: number = 0
     ): Cell {
-        const createdCell: Cell =
-            AdvancedCellFactory.createCellByType(insertionPoint, width, type, numberOfSideSegments);
-
-        if (angleInDegrees === 0) {
-            return createdCell;
-        }
-
-        return createdCell.rotateAroundCenter(angleInDegrees, insertionPoint);
-    }
-
-    private static createCellByType(
-        insertionPoint: Coordinate,
-        width: number,
-        type: string,
-        numberOfSideSegments: number
-    ): Cell {
         switch (type) {
             case 'triangular':
-                return AdvancedCellFactory.createSegmentedTriangleCell(insertionPoint, width, numberOfSideSegments);
+                return AdvancedCellFactory
+                    .createSegmentedTriangleCell(insertionPoint, width, numberOfSideSegments, angleInDegrees);
             case 'square':
-                return AdvancedCellFactory.createSegmentedSquareCell(insertionPoint, width, numberOfSideSegments);
+                return AdvancedCellFactory
+                    .createSegmentedSquareCell(insertionPoint, width, numberOfSideSegments, angleInDegrees);
             default:
                 throw new Error('Unknown cell type');
         }
@@ -45,7 +32,8 @@ export class AdvancedCellFactory {
     private static createSegmentedSquareCell(
         insertionPoint: Coordinate,
         width: number,
-        numberOfSideSegments: number
+        numberOfSideSegments: number,
+        angleInDegrees: number
     ): Cell {
         const segmentLength: number = width / numberOfSideSegments;
         const center: Coordinate = insertionPoint.stepToNewCoordinate(
@@ -68,6 +56,7 @@ export class AdvancedCellFactory {
         }
 
         cellBuilder.defineCenter(center);
+        cellBuilder.rotateAroundStartCorner(angleInDegrees);
 
         return cellBuilder.build();
     }
@@ -75,7 +64,8 @@ export class AdvancedCellFactory {
     private static createSegmentedTriangleCell(
         insertionPoint: Coordinate,
         sideLength: number,
-        numberOfSideSegments: number
+        numberOfSideSegments: number,
+        angleInDegrees: number
     ): Cell {
         const segmentLength: number = sideLength / numberOfSideSegments;
         const triangleHeight: number = sideLength * Math.sqrt(3) / 2;
@@ -97,6 +87,7 @@ export class AdvancedCellFactory {
         }
 
         cellBuilder.defineCenter(center);
+        cellBuilder.rotateAroundStartCorner(angleInDegrees);
 
         return cellBuilder.build();
     }
