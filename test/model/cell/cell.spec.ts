@@ -141,12 +141,12 @@ describe('Cell', () => {
         expect(leftCell.center.y).to.equal(10);
     });
 
-    it('should have correct corners', () => {
-        const corners: Coordinate[] = leftCell.corners;
-        expect(corners[0].equals(new Coordinate(5, 5))).to.be.true;
-        expect(corners[1].equals(new Coordinate(15, 5))).to.be.true;
-        expect(corners[2].equals(new Coordinate(15, 15))).to.be.true;
-        expect(corners[3].equals(new Coordinate(5, 15))).to.be.true;
+    it('should have correct vertices', () => {
+        const vertices: Coordinate[] = leftCell.vertices;
+        expect(vertices[0].equals(new Coordinate(5, 5))).to.be.true;
+        expect(vertices[1].equals(new Coordinate(15, 5))).to.be.true;
+        expect(vertices[2].equals(new Coordinate(15, 15))).to.be.true;
+        expect(vertices[3].equals(new Coordinate(5, 15))).to.be.true;
     });
 
     it('should have 4 borders when no neighbours', () => {
@@ -194,13 +194,13 @@ describe('Cell', () => {
 
     it('should rotate cell', () => {
         const cell: Cell = createSquareCell(new Coordinate(10, 10));
-        const originalCorners: Coordinate[] = cell.corners;
+        const originalVertices: Coordinate[] = cell.vertices;
         cell.rotateAroundCoordinate(90, cell.center);
-        const rotatedCorners: Coordinate[] = cell.corners;
-        expect(originalCorners[0].equals(rotatedCorners[1])).to.be.false;
-        expect(originalCorners[1].equals(rotatedCorners[2])).to.be.false;
-        expect(originalCorners[2].equals(rotatedCorners[3])).to.be.false;
-        expect(originalCorners[3].equals(rotatedCorners[0])).to.be.false;
+        const rotatedVertices: Coordinate[] = cell.vertices;
+        expect(originalVertices[0].equals(rotatedVertices[1])).to.be.false;
+        expect(originalVertices[1].equals(rotatedVertices[2])).to.be.false;
+        expect(originalVertices[2].equals(rotatedVertices[3])).to.be.false;
+        expect(originalVertices[3].equals(rotatedVertices[0])).to.be.false;
     });
 
     it('kill cell', () => {
@@ -219,7 +219,7 @@ describe('Cell', () => {
         expect(middleCell.closedBorders).to.have.lengthOf(0);
         expect(middleCell.bordersWithNoNeighbour).to.have.lengthOf(0);
         expect(middleCell.bordersToNeighbour).to.have.lengthOf(0);
-        expect(middleCell.corners).to.have.lengthOf(0);
+        expect(middleCell.vertices).to.have.lengthOf(0);
         expect(middleCell.connectedNeighbours).to.have.lengthOf(0);
         expect(middleCell.hasRoomForMoreNeighbours).to.be.false;
         expect(middleCell.neighbourCells).to.have.lengthOf(0);
@@ -244,7 +244,7 @@ describe('Cell', () => {
         );
         const area: number = cell['gaussShoelace']();
         expect(area).to.equal(-100);
-        const isClockwise: boolean = cell['cornersAreInClockwiseOrder']();
+        const isClockwise: boolean = cell['verticesAreInClockwiseOrder']();
         expect(isClockwise).to.be.true;
     });
 
@@ -260,7 +260,7 @@ describe('Cell', () => {
         );
         const area: number = cell['gaussShoelace']();
         expect(area).to.equal(400);
-        const isClockwise: boolean = cell['cornersAreInClockwiseOrder']();
+        const isClockwise: boolean = cell['verticesAreInClockwiseOrder']();
         expect(isClockwise).to.be.false;
     });
 
@@ -290,7 +290,7 @@ describe('Cell', () => {
             const newCell: Cell = rotatedCell1.mergeWith(rotatedCell2);
             expect(newCell.center.x).to.equal(20);
             expect(newCell.center.y).to.equal(15);
-            expect(newCell.corners).to.have.lengthOf(6);
+            expect(newCell.vertices).to.have.lengthOf(6);
         });
     });
 

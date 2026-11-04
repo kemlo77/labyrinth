@@ -6,19 +6,19 @@ import { Cell } from '../../../src/model/cell/cell';
 
 describe('CellBuilder', () => {
     describe('build', () => {
-        it('should throw an error if start corner is missing', () => {
+        it('should throw an error if starting point is missing', () => {
             const cellBuilder: CellBuilder = new CellBuilder()
-                .addStepToNextCorner(new Vector(1, 0))
-                .addStepToNextCorner(new Vector(1, 1))
+                .addStepToNextVertice(new Vector(1, 0))
+                .addStepToNextVertice(new Vector(1, 1))
                 .defineCenter(new Coordinate(0, 0));
 
-            expect(() => cellBuilder.build()).to.throw('Start corner is missing');
+            expect(() => cellBuilder.build()).to.throw('Starting point is missing');
         });
 
         it('should throw an error if less than 2 steps added', () => {
             const cellBuilder: CellBuilder = new CellBuilder()
-                .setStartCorner(new Coordinate(0, 0))
-                .addStepToNextCorner(new Vector(1, 1))
+                .setStartingPoint(new Coordinate(0, 0))
+                .addStepToNextVertice(new Vector(1, 1))
                 .defineCenter(new Coordinate(0, 0));
 
             expect(() => cellBuilder.build()).to.throw('Less than 2 steps added');
@@ -26,35 +26,35 @@ describe('CellBuilder', () => {
 
         it('should throw an error if center is missing', () => {
             const cellBuilder: CellBuilder = new CellBuilder()
-                .setStartCorner(new Coordinate(0, 0))
-                .addStepToNextCorner(new Vector(1, 0))
-                .addStepToNextCorner(new Vector(1, 1));
+                .setStartingPoint(new Coordinate(0, 0))
+                .addStepToNextVertice(new Vector(1, 0))
+                .addStepToNextVertice(new Vector(1, 1));
 
             expect(() => cellBuilder.build()).to.throw('Center is missing');
         });
 
-        it('should return a new Cell instance with correct center and corners', () => {
-            const startCorner: Coordinate = new Coordinate(0, 0);
+        it('should return a new Cell instance with correct center and vertices', () => {
+            const startingPoint: Coordinate = new Coordinate(0, 0);
             const step1: Vector = new Vector(1, 0);
             const step2: Vector = new Vector(0, 1);
             const center: Coordinate = new Coordinate(1, 1);
 
             const cell: Cell = new CellBuilder()
-                .setStartCorner(startCorner)
-                .addStepToNextCorner(step1)
-                .addStepToNextCorner(step2)
+                .setStartingPoint(startingPoint)
+                .addStepToNextVertice(step1)
+                .addStepToNextVertice(step2)
                 .defineCenter(center)
                 .build();
 
-            const expectedCorners: Coordinate[] = [
-                startCorner,
-                startCorner.stepToNewCoordinate(step1),
-                startCorner.stepToNewCoordinate(step1).stepToNewCoordinate(step2)
+            const expectedVertices: Coordinate[] = [
+                startingPoint,
+                startingPoint.stepToNewCoordinate(step1),
+                startingPoint.stepToNewCoordinate(step1).stepToNewCoordinate(step2)
             ];
 
 
             expect(cell.center).to.deep.equal(center);
-            expect(cell.corners).to.deep.equal(expectedCorners);
+            expect(cell.vertices).to.deep.equal(expectedVertices);
         });
     });
 });

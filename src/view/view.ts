@@ -49,7 +49,7 @@ export class View implements Observer {
     }
 
     private fillCell(cell: Cell, fillColor: string, borderColor: string): void {
-        this._canvasPainter.fillPolygon(cell.corners, fillColor, borderColor);
+        this._canvasPainter.fillPolygon(cell.vertices, fillColor, borderColor);
     }
 
     private drawAllCellBorders(): void {
@@ -102,23 +102,23 @@ export class View implements Observer {
 
     private drawAllCellsFirstPoint(): void {
         this._model.grid.allCells.forEach(cell => {
-            this._canvasPainter.drawFilledCircle(cell.corners[0], 2, LIGHT_GREEN_COLOR);
+            this._canvasPainter.drawFilledCircle(cell.vertices[0], 2, LIGHT_GREEN_COLOR);
         });
     }
 
     private drawAllCellsLastPoint(): void {
         this._model.grid.allCells.forEach(cell => {
-            const lastCellIndex: number = cell.corners.length - 1;
-            this._canvasPainter.drawFilledCircle(cell.corners[lastCellIndex], 2, LIGHT_RED_COLOR);
+            const lastCellIndex: number = cell.vertices.length - 1;
+            this._canvasPainter.drawFilledCircle(cell.vertices[lastCellIndex], 2, LIGHT_RED_COLOR);
         });
     }
 
     private drawStartCell(): void {
-        this._canvasPainter.fillPolygon(this._model.grid.startCell.corners, LIGHT_GREEN_COLOR, LIGHT_GREEN_COLOR);
+        this._canvasPainter.fillPolygon(this._model.grid.startCell.vertices, LIGHT_GREEN_COLOR, LIGHT_GREEN_COLOR);
     }
 
     private drawEndCell(): void {
-        this._canvasPainter.fillPolygon(this._model.grid.endCell.corners, LIGHT_RED_COLOR, LIGHT_RED_COLOR);
+        this._canvasPainter.fillPolygon(this._model.grid.endCell.vertices, LIGHT_RED_COLOR, LIGHT_RED_COLOR);
     }
 
     private drawSolution(): void {

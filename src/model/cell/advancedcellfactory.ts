@@ -40,23 +40,23 @@ export class AdvancedCellFactory {
             stepRight(width / 2).thenTake(stepUp(width / 2))
         );
 
-        const cellBuilder: CellBuilder = new CellBuilder().setStartCorner(insertionPoint);
+        const cellBuilder: CellBuilder = new CellBuilder().setStartingPoint(insertionPoint);
 
         for (let i: number = 0; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextCorner(stepRight(segmentLength));
+            cellBuilder.addStepToNextVertice(stepRight(segmentLength));
         }
         for (let i: number = 0; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextCorner(stepUp(segmentLength));
+            cellBuilder.addStepToNextVertice(stepUp(segmentLength));
         }
         for (let i: number = 0; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextCorner(stepLeft(segmentLength));
+            cellBuilder.addStepToNextVertice(stepLeft(segmentLength));
         }
         for (let i: number = 1; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextCorner(stepDown(segmentLength));
+            cellBuilder.addStepToNextVertice(stepDown(segmentLength));
         }
 
         cellBuilder.defineCenter(center);
-        cellBuilder.rotateAroundStartCorner(angleInDegrees);
+        cellBuilder.rotateAroundStartingPoint(angleInDegrees);
 
         return cellBuilder.build();
     }
@@ -74,20 +74,20 @@ export class AdvancedCellFactory {
         const center: Coordinate = insertionPoint
             .stepToNewCoordinate(stepRight(halvSideLength).thenTake(stepUp(thirdHeight)));
 
-        const cellBuilder: CellBuilder = new CellBuilder().setStartCorner(insertionPoint);
+        const cellBuilder: CellBuilder = new CellBuilder().setStartingPoint(insertionPoint);
 
         for (let i: number = 0; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextCorner(stepRight(segmentLength));
+            cellBuilder.addStepToNextVertice(stepRight(segmentLength));
         }
         for (let i: number = 0; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextCorner(stepInDirection(120, segmentLength));
+            cellBuilder.addStepToNextVertice(stepInDirection(120, segmentLength));
         }
         for (let i: number = 1; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextCorner(stepInDirection(240, segmentLength));
+            cellBuilder.addStepToNextVertice(stepInDirection(240, segmentLength));
         }
 
         cellBuilder.defineCenter(center);
-        cellBuilder.rotateAroundStartCorner(angleInDegrees);
+        cellBuilder.rotateAroundStartingPoint(angleInDegrees);
 
         return cellBuilder.build();
     }

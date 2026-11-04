@@ -81,11 +81,11 @@ export class CellCreatorFactory {
             const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(halfWidth)
                 .thenTake(stepUp(thirdHeight)));
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(sideLength))
-                .addStepToNextCorner(stepInDirection(120, sideLength))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(sideLength))
+                .addStepToNextVertice(stepInDirection(120, sideLength))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -99,11 +99,11 @@ export class CellCreatorFactory {
             const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(halfWidth)
                 .thenTake(stepUp(thirdHeight)));
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(width))
-                .addStepToNextCorner(stepUp(height).thenTake(stepLeft(width / 2)))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(width))
+                .addStepToNextVertice(stepUp(height).thenTake(stepLeft(width / 2)))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -117,11 +117,11 @@ export class CellCreatorFactory {
             const center: Coordinate =
                 insertionPoint.stepToNewCoordinate(stepRight(sixthOfWidth).thenTake(stepUp(thirdHeight)));
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(halfWidth))
-                .addStepToNextCorner(stepUp(height))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(halfWidth))
+                .addStepToNextVertice(stepUp(height))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -136,11 +136,11 @@ export class CellCreatorFactory {
             const center: Coordinate =
                 insertionPoint.stepToNewCoordinate(stepRight(thirdOfWidth).thenTake(stepUp(thirdHeight)));
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(halfWidth))
-                .addStepToNextCorner(stepUp(height).thenTake(stepLeft(halfWidth)))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(halfWidth))
+                .addStepToNextVertice(stepUp(height).thenTake(stepLeft(halfWidth)))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -152,12 +152,12 @@ export class CellCreatorFactory {
             const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(width / 2)
                 .thenTake(stepUp(height / 2)));
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(width))
-                .addStepToNextCorner(stepUp(width))
-                .addStepToNextCorner(stepLeft(width))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(width))
+                .addStepToNextVertice(stepUp(width))
+                .addStepToNextVertice(stepLeft(width))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -168,14 +168,14 @@ export class CellCreatorFactory {
             const center: Coordinate =
                 insertionPoint.stepToNewCoordinate(stepRight(width / 2).thenTake(stepUp(height / 2)));
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight((width / 2)))
-                .addStepToNextCorner(stepRight((width / 2)))
-                .addStepToNextCorner(stepUp(height))
-                .addStepToNextCorner(stepLeft((width / 2)))
-                .addStepToNextCorner(stepLeft((width / 2)))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight((width / 2)))
+                .addStepToNextVertice(stepRight((width / 2)))
+                .addStepToNextVertice(stepUp(height))
+                .addStepToNextVertice(stepLeft((width / 2)))
+                .addStepToNextVertice(stepLeft((width / 2)))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -188,11 +188,11 @@ export class CellCreatorFactory {
             const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(width / 3)
                 .thenTake(stepUp(height / 3)));
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(width))
-                .addStepToNextCorner(stepUpLeft(hypotenuseLength))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(width))
+                .addStepToNextVertice(stepUpLeft(hypotenuseLength))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -205,14 +205,14 @@ export class CellCreatorFactory {
             const center: Coordinate =
                 insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 2)));
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepInDirection(0, sideLength))
-                .addStepToNextCorner(stepInDirection(60, sideLength))
-                .addStepToNextCorner(stepInDirection(120, sideLength))
-                .addStepToNextCorner(stepInDirection(180, sideLength))
-                .addStepToNextCorner(stepInDirection(240, sideLength))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepInDirection(0, sideLength))
+                .addStepToNextVertice(stepInDirection(60, sideLength))
+                .addStepToNextVertice(stepInDirection(120, sideLength))
+                .addStepToNextVertice(stepInDirection(180, sideLength))
+                .addStepToNextVertice(stepInDirection(240, sideLength))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -226,13 +226,13 @@ export class CellCreatorFactory {
                 insertionPoint.stepToNewCoordinate(stepRight(sideLength / 4).thenTake(stepUp(height / 2)));
 
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepInDirection(0, sideLength / 2))
-                .addStepToNextCorner(stepInDirection(60, sideLength))
-                .addStepToNextCorner(stepInDirection(120, sideLength))
-                .addStepToNextCorner(stepInDirection(180, sideLength / 2))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepInDirection(0, sideLength / 2))
+                .addStepToNextVertice(stepInDirection(60, sideLength))
+                .addStepToNextVertice(stepInDirection(120, sideLength))
+                .addStepToNextVertice(stepInDirection(180, sideLength / 2))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -246,12 +246,12 @@ export class CellCreatorFactory {
                 insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 4)));
 
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepInDirection(0, sideLength))
-                .addStepToNextCorner(stepInDirection(60, sideLength))
-                .addStepToNextCorner(stepInDirection(180, width))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepInDirection(0, sideLength))
+                .addStepToNextVertice(stepInDirection(60, sideLength))
+                .addStepToNextVertice(stepInDirection(180, width))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -265,12 +265,12 @@ export class CellCreatorFactory {
                 insertionPoint.stepToNewCoordinate(stepRight(sideLength / 4).thenTake(stepUp(height / 4)));
 
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepInDirection(0, sideLength / 2))
-                .addStepToNextCorner(stepInDirection(60, sideLength))
-                .addStepToNextCorner(stepInDirection(180, sideLength))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepInDirection(0, sideLength / 2))
+                .addStepToNextVertice(stepInDirection(60, sideLength))
+                .addStepToNextVertice(stepInDirection(180, sideLength))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -284,12 +284,12 @@ export class CellCreatorFactory {
                 insertionPoint.stepToNewCoordinate(stepRight(sideLength / 4).thenTake(stepUp(height / 4)));
 
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepInDirection(0, sideLength / 2))
-                .addStepToNextCorner(stepInDirection(90, height / 2))
-                .addStepToNextCorner(stepInDirection(180, sideLength))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepInDirection(0, sideLength / 2))
+                .addStepToNextVertice(stepInDirection(90, height / 2))
+                .addStepToNextVertice(stepInDirection(180, sideLength))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -303,13 +303,13 @@ export class CellCreatorFactory {
                 insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 4)));
 
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepInDirection(0, sideLength))
-                .addStepToNextCorner(stepInDirection(0, sideLength))
-                .addStepToNextCorner(stepInDirection(120, sideLength))
-                .addStepToNextCorner(stepInDirection(180, sideLength))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepInDirection(0, sideLength))
+                .addStepToNextVertice(stepInDirection(0, sideLength))
+                .addStepToNextVertice(stepInDirection(120, sideLength))
+                .addStepToNextVertice(stepInDirection(180, sideLength))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -322,11 +322,11 @@ export class CellCreatorFactory {
             const center: Coordinate =
                 insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 2)));
             const cell: Cell = new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(width))
-                .addStepToNextCorner(stepUp(width / 2 + sideLength / 2))
-                .addStepToNextCorner(stepUpLeft(sideLength))
-                .addStepToNextCorner(stepLeft(width / 2 + sideLength / 2))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(width))
+                .addStepToNextVertice(stepUp(width / 2 + sideLength / 2))
+                .addStepToNextVertice(stepUpLeft(sideLength))
+                .addStepToNextVertice(stepLeft(width / 2 + sideLength / 2))
                 .defineCenter(center)
                 .build();
 
@@ -345,12 +345,12 @@ export class CellCreatorFactory {
             const center: Coordinate =
                 insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 2)));
             const cell: Cell = new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(width / 2 + sideLength / 2))
-                .addStepToNextCorner(stepUpRight(sideLength))
-                .addStepToNextCorner(stepUp(sideLength))
-                .addStepToNextCorner(stepUpLeft(sideLength))
-                .addStepToNextCorner(stepLeft(width / 2 + sideLength / 2))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(width / 2 + sideLength / 2))
+                .addStepToNextVertice(stepUpRight(sideLength))
+                .addStepToNextVertice(stepUp(sideLength))
+                .addStepToNextVertice(stepUpLeft(sideLength))
+                .addStepToNextVertice(stepLeft(width / 2 + sideLength / 2))
                 .defineCenter(center)
                 .build();
 
@@ -368,14 +368,14 @@ export class CellCreatorFactory {
             const center: Coordinate =
                 insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 2)));
             const cell: Cell = new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(sideLength))
-                .addStepToNextCorner(stepUpRight(sideLength))
-                .addStepToNextCorner(stepUp(sideLength))
-                .addStepToNextCorner(stepUpLeft(sideLength))
-                .addStepToNextCorner(stepLeft(sideLength))
-                .addStepToNextCorner(stepDownLeft(sideLength))
-                .addStepToNextCorner(stepDown(sideLength))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(sideLength))
+                .addStepToNextVertice(stepUpRight(sideLength))
+                .addStepToNextVertice(stepUp(sideLength))
+                .addStepToNextVertice(stepUpLeft(sideLength))
+                .addStepToNextVertice(stepLeft(sideLength))
+                .addStepToNextVertice(stepDownLeft(sideLength))
+                .addStepToNextVertice(stepDown(sideLength))
                 .defineCenter(center)
                 .build();
 
@@ -394,12 +394,12 @@ export class CellCreatorFactory {
                     stepRight(sideLength).thenTake(stepInDirection(120, sideLength / 2))
                 );
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(sideLength))
-                .addStepToNextCorner(stepInDirection(60, sideLength))
-                .addStepToNextCorner(stepLeft(sideLength))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(sideLength))
+                .addStepToNextVertice(stepInDirection(60, sideLength))
+                .addStepToNextVertice(stepLeft(sideLength))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -412,12 +412,12 @@ export class CellCreatorFactory {
             const center: Coordinate =
                 insertionPoint.stepToNewCoordinate(stepRight(sideLength1 / 2).thenTake(stepUp(sideLength2 / 2)));
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(sideLength1))
-                .addStepToNextCorner(stepUp(sideLength2))
-                .addStepToNextCorner(stepInDirection(150, sideLength2))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(sideLength1))
+                .addStepToNextVertice(stepUp(sideLength2))
+                .addStepToNextVertice(stepInDirection(150, sideLength2))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }
@@ -429,11 +429,11 @@ export class CellCreatorFactory {
             const center: Coordinate =
                 insertionPoint.stepToNewCoordinate(stepRight(width / 2).thenTake(stepUp(height / 3)));
             return new CellBuilder()
-                .setStartCorner(insertionPoint)
-                .addStepToNextCorner(stepRight(width))
-                .addStepToNextCorner(stepUp(height).thenTake(stepLeft(width / 2)))
+                .setStartingPoint(insertionPoint)
+                .addStepToNextVertice(stepRight(width))
+                .addStepToNextVertice(stepUp(height).thenTake(stepLeft(width / 2)))
                 .defineCenter(center)
-                .rotateAroundStartCorner(angle)
+                .rotateAroundStartingPoint(angle)
                 .build();
         };
     }

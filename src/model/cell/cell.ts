@@ -11,25 +11,25 @@ export class Cell implements Region<Cell> {
     private _visited: boolean = false;
     private _isDead: boolean = false;
     private _neighbourRelations: NeighbourRelation[] = [];
-    private _corners: Coordinate[];
+    private _vertices: Coordinate[];
     private _borders: Border[] = [];
 
-    constructor(center: Coordinate, corners: Coordinate[]) {
+    constructor(center: Coordinate, vertices: Coordinate[]) {
         this._center = center;
-        this._corners = corners;
+        this._vertices = vertices;
         this._borders = this.createAllBorders();
     }
 
     private createAllBorders(): Border[] {
         const newBorders: Border[] = [];
-        for (let i: number = 0; i < this._corners.length; i++) {
-            const lastCorner: boolean = i === this._corners.length - 1;
-            if (lastCorner) {
+        for (let i: number = 0; i < this._vertices.length; i++) {
+            const lastVertice: boolean = i === this._vertices.length - 1;
+            if (lastVertice) {
                 break;
             }
-            newBorders.push(new Border(this._corners[i], this._corners[i + 1]));
+            newBorders.push(new Border(this._vertices[i], this._vertices[i + 1]));
         }
-        newBorders.push(new Border(this._corners[this._corners.length - 1], this._corners[0]));
+        newBorders.push(new Border(this._vertices[this._vertices.length - 1], this._vertices[0]));
         return newBorders;
     }
 
@@ -53,8 +53,8 @@ export class Cell implements Region<Cell> {
         return this._isDead;
     }
 
-    get corners(): Coordinate[] {
-        return [... this._corners];
+    get vertices(): Coordinate[] {
+        return [... this._vertices];
     }
 
     get allBorders(): Border[] {
@@ -110,7 +110,7 @@ export class Cell implements Region<Cell> {
         this._isDead = true;
         this.disestablishNeighbourRelations();
         this._borders = [];
-        this._corners = [];
+        this._vertices = [];
     }
 
     establishNeighbourRelationsWith(otherCell: Cell): void {
@@ -195,42 +195,43 @@ export class Cell implements Region<Cell> {
 
     rotateAroundCoordinate(angle: number, coordinate: Coordinate): Cell {
         const newCenter: Coordinate = this._center.rotateAroundAnotherCoordinate(angle, coordinate);
-        const newCorners: Coordinate[] =
-            this._corners.map(corner => corner.rotateAroundAnotherCoordinate(angle, coordinate));
-        return new Cell(newCenter, newCorners);
+        const newVertices: Coordinate[] =
+            this._vertices.map(vertice => vertice.rotateAroundAnotherCoordinate(angle, coordinate));
+        return new Cell(newCenter, newVertices);
     }
 
     mergeWith(otherCell: Cell): Cell {
-        const thisCellsCorners: Coordinate[] =
-            this.cornersInCounterClockwiseOrder();
-        const otherCellsCorners: Coordinate[] =
-            otherCell.cornersInCounterClockwiseOrder();
+        const thisCellsVertices: Coordinate[] =
+            this.verticesInCounterClockwiseOrder();
+        const otherCellsVertices: Coordinate[] =
+            otherCell.verticesInCounterClockwiseOrder();
 
-        let newCorners: Coordinate[];
+        let newVertices: Coordinate[];
         let newCenter: Coordinate;
-        for (let i: number = 0; i < thisCellsCorners.length; i++) {
-            const thisCellsRotatedCorners: Coordinate[] = ArrayOperations.rotateArray<Coordinate>(thisCellsCorners, i);
-            for (let j: number = 0; j < otherCellsCorners.length; j++) {
-                const otherCellsRotatedCorners: Coordinate[] =
-                    ArrayOperations.rotateArray<Coordinate>(otherCellsCorners, j);
+        for (let i: number = 0; i < thisCellsVertices.length; i++) {
+            const thisCellsRotatedVertices: Coordinate[] =
+                ArrayOperations.rotateArray<Coordinate>(thisCellsVertices, i);
+            for (let j: number = 0; j < otherCellsVertices.length; j++) {
+                const otherCellsRotatedVertices: Coordinate[] =
+                    ArrayOperations.rotateArray<Coordinate>(otherCellsVertices, j);
                 if (
-                    thisCellsRotatedCorners[0].distanceTo(otherCellsRotatedCorners[1]) < 0.01 &&
-                    thisCellsRotatedCorners[1].distanceTo(otherCellsRotatedCorners[0]) < 0.01
+                    thisCellsRotatedVertices[0].distanceTo(otherCellsRotatedVertices[1]) < 0.01 &&
+                    thisCellsRotatedVertices[1].distanceTo(otherCellsRotatedVertices[0]) < 0.01
                 ) {
-                    newCenter = new Segment(thisCellsRotatedCorners[0], otherCellsRotatedCorners[0]).midpoint;
-                    // removing duplicate corners
-                    thisCellsRotatedCorners.shift();
-                    otherCellsRotatedCorners.shift();
-                    newCorners = [...thisCellsRotatedCorners, ...otherCellsRotatedCorners];
+                    newCenter = new Segment(thisCellsRotatedVertices[0], otherCellsRotatedVertices[0]).midpoint;
+                    // removing duplicate vertices
+                    thisCellsRotatedVertices.shift();
+                    otherCellsRotatedVertices.shift();
+                    newVertices = [...thisCellsRotatedVertices, ...otherCellsRotatedVertices];
                     break;
                 }
             }
         }
-        if (newCorners === undefined || newCenter === undefined) {
+        if (newVertices === undefined || newCenter === undefined) {
             throw new Error('No common border found between cells');
         }
 
-        const newCell: Cell = new Cell(newCenter, newCorners);
+        const newCell: Cell = new Cell(newCenter, newVertices);
 
         //the old neighbours
         const oldCellsAllNeighbourRelations: NeighbourRelation[] =
@@ -252,33 +253,33 @@ export class Cell implements Region<Cell> {
         return newCell;
     }
 
-    private cornersInCounterClockwiseOrder(): Coordinate[] {
-        if (this.cornersAreInClockwiseOrder()) {
-            return this._corners.reverse();
+    private verticesInCounterClockwiseOrder(): Coordinate[] {
+        if (this.verticesAreInClockwiseOrder()) {
+            return this._vertices.reverse();
         }
-        return this._corners;
+        return this._vertices;
     }
 
-    private cornersAreInClockwiseOrder(): boolean {
+    private verticesAreInClockwiseOrder(): boolean {
         const area: number = this.gaussShoelace();
         return area < 0;
     }
 
     /**
-     * Calculates the area of the polygon defined by the corners using the
+     * Calculates the area of the polygon defined by the vertices using the
      * Gauss's shoelace formula.
      * @returns The area of the polygon.
-     * if the area is negative, the corners are in clockwise order,
-     * if the area is positive, the corners are in counter-clockwise order.
+     * if the area is negative, the vertices are in clockwise order,
+     * if the area is positive, the vertices are in counter-clockwise order.
      */
     private gaussShoelace(): number {
         let theSum: number = 0;
-        for (let i: number = 0; i < this._corners.length; i++) {
-            const j: number = (i + 1) % this._corners.length;
-            const x1: number = this._corners[i].x;
-            const y1: number = this._corners[i].y;
-            const x2: number = this._corners[j].x;
-            const y2: number = this._corners[j].y;
+        for (let i: number = 0; i < this._vertices.length; i++) {
+            const j: number = (i + 1) % this._vertices.length;
+            const x1: number = this._vertices[i].x;
+            const y1: number = this._vertices[i].y;
+            const x2: number = this._vertices[j].x;
+            const y2: number = this._vertices[j].y;
             theSum += (x1 * y2) - (x2 * y1);
         }
         const area: number = theSum / 2;
