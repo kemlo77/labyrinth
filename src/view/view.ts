@@ -36,8 +36,9 @@ export class View implements Observer {
         //this.drawAllNeighbourRelations();
         //this.drawNumberOfNeighbours();
         //this.drawGridCenter();
-        //this.drawAllCellsFirstPoint();
-        //this.drawAllCellsLastPoint();
+        //this.drawAllCellsFirstVertice();
+        //this.drawAllCellsLastVertice();
+        //this.drawAllCellsVertices();
         if (this._showSolution) {
             this.drawSolution();
         }
@@ -100,16 +101,24 @@ export class View implements Observer {
         }
     }
 
-    private drawAllCellsFirstPoint(): void {
+    private drawAllCellsFirstVertice(): void {
         this._model.grid.allCells.forEach(cell => {
-            this._canvasPainter.drawFilledCircle(cell.vertices[0], 2, LIGHT_GREEN_COLOR);
+            this._canvasPainter.drawFilledCircle(cell.vertices[0], 5, LIGHT_GREEN_COLOR);
         });
     }
 
-    private drawAllCellsLastPoint(): void {
+    private drawAllCellsLastVertice(): void {
         this._model.grid.allCells.forEach(cell => {
             const lastCellIndex: number = cell.vertices.length - 1;
-            this._canvasPainter.drawFilledCircle(cell.vertices[lastCellIndex], 2, LIGHT_RED_COLOR);
+            this._canvasPainter.drawFilledCircle(cell.vertices[lastCellIndex], 5, LIGHT_RED_COLOR);
+        });
+    }
+
+    private drawAllCellsVertices(): void {
+        this._model.grid.allCells.forEach(cell => {
+            cell.vertices.forEach(vertice => {
+                this._canvasPainter.drawFilledCircle(vertice, 3, BLACK_COLOR);
+            });
         });
     }
 

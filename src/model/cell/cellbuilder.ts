@@ -9,6 +9,7 @@ export class CellBuilder {
     private _center!: Coordinate;
     private _rotationAngle: number = 0;
     private _vertices: Coordinate[] = [];
+    private _numberOfSubdivisionsPerSegment: number = 1;
 
 
     setStartingPoint(startingPoint: Coordinate): this {
@@ -30,6 +31,13 @@ export class CellBuilder {
         this._rotationAngle = angleInDegrees;
         return this;
     }
+
+    numberOfSubdivisionsPerSegment(howMany: number): this {
+
+        this._numberOfSubdivisionsPerSegment = howMany;
+        return this
+    }
+
 
     build(): Cell {
         this.assertBuildConditions();
@@ -67,6 +75,9 @@ export class CellBuilder {
         if (!this._center) {
             throw new Error('Center is missing');
         }
+        if (this._numberOfSubdivisionsPerSegment < 1) {
+            throw new Error('Number of subdivisions per segment must be at least 1');
+        }
     }
 
     private calculateVertices(): void {
@@ -77,7 +88,40 @@ export class CellBuilder {
             currentVertice = currentVertice.stepToNewCoordinate(step);
             vertices.push(currentVertice);
         }
-        this._vertices = vertices;
+        if (this._numberOfSubdivisionsPerSegment == 1) {
+            this._vertices = vertices;
+            return;
+        }
+
+        const subdividedVertices: Coordinate[] = [];
+        const startVertice: Coordinate = this._startPoint;
+        const lastVertice: Coordinate = vertices[vertices.length - 1];
+        let workingStartVertice: Coordinate = startVertice;
+        subdividedVertices.push(startVertice);
+        for (let i = 1; i < vertices.length; i++) {
+            const endVertice: Coordinate = vertices[i];
+
+            //calculate subdivision step vector
+            const stepVector: Vector = workingStartVertice.vectorTo(endVertice);
+            const subdivisionStepVector: Vector = stepVector.times(1 / this._numberOfSubdivisionsPerSegment);
+
+            //add subdivided vertices
+            for (let j = 1; j <= this._numberOfSubdivisionsPerSegment; j++) {
+                const newVertice: Coordinate = workingStartVertice.stepToNewCoordinate(subdivisionStepVector.times(j));
+                subdividedVertices.push(newVertice);
+            }
+            workingStartVertice = endVertice;
+        }
+
+        const stepVector: Vector = lastVertice.vectorTo(startVertice);
+        const subdivisionStepVector: Vector = stepVector.times(1 / this._numberOfSubdivisionsPerSegment);
+        for (let k = 1; k < this._numberOfSubdivisionsPerSegment; k++) {
+
+            const newVertice: Coordinate = lastVertice.stepToNewCoordinate(subdivisionStepVector.times(k));
+            subdividedVertices.push(newVertice);
+        }
+        this._vertices = subdividedVertices;
     }
+
 
 }

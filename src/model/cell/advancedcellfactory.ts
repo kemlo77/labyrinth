@@ -35,30 +35,18 @@ export class AdvancedCellFactory {
         numberOfSideSegments: number,
         angleInDegrees: number
     ): Cell {
-        const segmentLength: number = width / numberOfSideSegments;
         const center: Coordinate = insertionPoint.stepToNewCoordinate(
             stepRight(width / 2).thenTake(stepUp(width / 2))
         );
 
-        const cellBuilder: CellBuilder = new CellBuilder().setStartingPoint(insertionPoint);
-
-        for (let i: number = 0; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextVertice(stepRight(segmentLength));
-        }
-        for (let i: number = 0; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextVertice(stepUp(segmentLength));
-        }
-        for (let i: number = 0; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextVertice(stepLeft(segmentLength));
-        }
-        for (let i: number = 1; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextVertice(stepDown(segmentLength));
-        }
-
-        cellBuilder.defineCenter(center);
-        cellBuilder.rotateAroundStartingPoint(angleInDegrees);
-
-        return cellBuilder.build();
+        return new CellBuilder().setStartingPoint(insertionPoint)
+            .addStepToNextVertice(stepRight(width))
+            .addStepToNextVertice(stepUp(width))
+            .addStepToNextVertice(stepLeft(width))
+            .numberOfSubdivisionsPerSegment(numberOfSideSegments)
+            .defineCenter(center)
+            .rotateAroundStartingPoint(angleInDegrees)
+            .build();
     }
 
     private static createSegmentedTriangleCell(
@@ -67,28 +55,16 @@ export class AdvancedCellFactory {
         numberOfSideSegments: number,
         angleInDegrees: number
     ): Cell {
-        const segmentLength: number = sideLength / numberOfSideSegments;
         const triangleHeight: number = sideLength * Math.sqrt(3) / 2;
-        const thirdHeight: number = triangleHeight / 3;
-        const halvSideLength: number = sideLength / 2;
         const center: Coordinate = insertionPoint
-            .stepToNewCoordinate(stepRight(halvSideLength).thenTake(stepUp(thirdHeight)));
+            .stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(triangleHeight / 3)));
 
-        const cellBuilder: CellBuilder = new CellBuilder().setStartingPoint(insertionPoint);
-
-        for (let i: number = 0; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextVertice(stepRight(segmentLength));
-        }
-        for (let i: number = 0; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextVertice(stepInDirection(120, segmentLength));
-        }
-        for (let i: number = 1; i < numberOfSideSegments; i++) {
-            cellBuilder.addStepToNextVertice(stepInDirection(240, segmentLength));
-        }
-
-        cellBuilder.defineCenter(center);
-        cellBuilder.rotateAroundStartingPoint(angleInDegrees);
-
-        return cellBuilder.build();
+        return new CellBuilder().setStartingPoint(insertionPoint)
+            .addStepToNextVertice(stepRight(sideLength))
+            .addStepToNextVertice(stepInDirection(120, sideLength))
+            .numberOfSubdivisionsPerSegment(numberOfSideSegments)
+            .defineCenter(center)
+            .rotateAroundStartingPoint(angleInDegrees)
+            .build();
     }
 }
