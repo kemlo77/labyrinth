@@ -11,6 +11,13 @@ export class CellBuilder {
     private _vertices: Coordinate[] = [];
     private _numberOfSubdivisionsPerSegment: number = 1;
 
+    private cellIsRotated(): boolean {
+        return this._rotationAngle !== 0;
+    }
+
+    private segmentsAreSubdivided(): boolean {
+        return this._numberOfSubdivisionsPerSegment > 1;
+    }
 
     setStartingPoint(startingPoint: Coordinate): this {
         this._startPoint = startingPoint.clone();
@@ -33,7 +40,6 @@ export class CellBuilder {
     }
 
     numberOfSubdivisionsPerSegment(howMany: number): this {
-
         this._numberOfSubdivisionsPerSegment = howMany;
         return this
     }
@@ -52,9 +58,6 @@ export class CellBuilder {
         return new Cell(this._center, this._vertices);
     }
 
-    private cellIsRotated(): boolean {
-        return this._rotationAngle !== 0;
-    }
 
     private rotateVerticesAroundStartingPoint(): void {
         this._vertices =
@@ -81,6 +84,40 @@ export class CellBuilder {
     }
 
     private calculateVertices(): void {
+        if (this.segmentsAreSubdivided()) {
+            this._vertices = this.calculateSubdividedVerticesFromAddedSteps();
+            return;
+        }
+
+        this._vertices = this.calculateVerticesFromAddedSteps();
+    }
+
+    private calculateSubdividedVerticesFromAddedSteps(): Coordinate[] {
+        const vertices: Coordinate[] = this.calculateVerticesFromAddedSteps();
+        const subdividedVertices: Coordinate[] = [];
+        const startVertice: Coordinate = this._startPoint;
+        const lastVertice: Coordinate = vertices[vertices.length - 1];
+        let currentStartVertice: Coordinate = startVertice;
+        subdividedVertices.push(startVertice);
+        for (let i = 1; i < vertices.length; i++) {
+            const currentEndVertice: Coordinate = vertices[i];
+
+            const intermediateVertices: Coordinate[] =
+                this.generateIntermediateVertices(currentStartVertice, currentEndVertice);
+            subdividedVertices.push(...intermediateVertices);
+
+            subdividedVertices.push(currentEndVertice);
+
+            currentStartVertice = currentEndVertice;
+        }
+
+        const intermediateVerticesOnLastSegment: Coordinate[] =
+            this.generateIntermediateVertices(lastVertice, startVertice);
+        subdividedVertices.push(...intermediateVerticesOnLastSegment);
+        return subdividedVertices;
+    }
+
+    private calculateVerticesFromAddedSteps(): Coordinate[] {
         const vertices: Coordinate[] = [];
         let currentVertice: Coordinate = this._startPoint;
         vertices.push(currentVertice);
@@ -88,39 +125,28 @@ export class CellBuilder {
             currentVertice = currentVertice.stepToNewCoordinate(step);
             vertices.push(currentVertice);
         }
-        if (this._numberOfSubdivisionsPerSegment == 1) {
-            this._vertices = vertices;
-            return;
+        return vertices;
+    }
+
+    private generateIntermediateVertices(startVertice: Coordinate, endVertice: Coordinate): Coordinate[] {
+        const subdivisionStepVector: Vector = this.calculateSubDivisionStepVector(startVertice, endVertice);
+        return this.generateVerticesFrom(
+            startVertice, subdivisionStepVector, this._numberOfSubdivisionsPerSegment - 1);
+    }
+
+    private calculateSubDivisionStepVector(startVertice: Coordinate, endVertice: Coordinate): Vector {
+        const subdivisionStepVector: Vector = startVertice.vectorTo(endVertice)
+            .times(1 / this._numberOfSubdivisionsPerSegment);
+        return subdivisionStepVector;
+    }
+
+    private generateVerticesFrom(startingPoint: Coordinate, step: Vector, numberOfSteps: number): Coordinate[] {
+        const vertices: Coordinate[] = [];
+        for (let i = 1; i <= numberOfSteps; i++) {
+            const currentVertice = startingPoint.stepToNewCoordinate(step.times(i));
+            vertices.push(currentVertice);
         }
-
-        const subdividedVertices: Coordinate[] = [];
-        const startVertice: Coordinate = this._startPoint;
-        const lastVertice: Coordinate = vertices[vertices.length - 1];
-        let workingStartVertice: Coordinate = startVertice;
-        subdividedVertices.push(startVertice);
-        for (let i = 1; i < vertices.length; i++) {
-            const endVertice: Coordinate = vertices[i];
-
-            //calculate subdivision step vector
-            const stepVector: Vector = workingStartVertice.vectorTo(endVertice);
-            const subdivisionStepVector: Vector = stepVector.times(1 / this._numberOfSubdivisionsPerSegment);
-
-            //add subdivided vertices
-            for (let j = 1; j <= this._numberOfSubdivisionsPerSegment; j++) {
-                const newVertice: Coordinate = workingStartVertice.stepToNewCoordinate(subdivisionStepVector.times(j));
-                subdividedVertices.push(newVertice);
-            }
-            workingStartVertice = endVertice;
-        }
-
-        const stepVector: Vector = lastVertice.vectorTo(startVertice);
-        const subdivisionStepVector: Vector = stepVector.times(1 / this._numberOfSubdivisionsPerSegment);
-        for (let k = 1; k < this._numberOfSubdivisionsPerSegment; k++) {
-
-            const newVertice: Coordinate = lastVertice.stepToNewCoordinate(subdivisionStepVector.times(k));
-            subdividedVertices.push(newVertice);
-        }
-        this._vertices = subdividedVertices;
+        return vertices;
     }
 
 
