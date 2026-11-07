@@ -5,5 +5,7 @@ import type { Region } from './grid/region';
 export type CellTest = (cell: Cell) => boolean;
 export type CellAction = (cell: Cell) => void;
 export type CellCreator = (insertionPoint: Coordinate) => Cell;
+export type SegmentedCellCreator =
+    (insertionPoint: Coordinate, angleInDegrees: number, sideLength: number, numberOfSideSegments: number) => Cell;
 export type GridCreator = (newInsertionPoint: Coordinate) => Grid;
 export type RegionCreator<T extends Region<T>> = (insertionPoint: Coordinate) => T;

@@ -1,9 +1,9 @@
 import { Coordinate } from '../../../coordinate';
 import { Grid } from '../../grid';
-import { AdvancedCellFactory } from '../../../cell/advancedcellfactory';
+import { SegmentedCellCreatorFactory } from '../../../cell/segmentedcellcreatorfactory';
 import { Cell } from '../../../cell/cell';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
-import type { GridCreator } from '../../../typealiases';
+import type { SegmentedCellCreator, GridCreator } from '../../../typealiases';
 
 export class SierpinskiTriangleGridFactory {
 
@@ -13,18 +13,20 @@ export class SierpinskiTriangleGridFactory {
         sideLength: number,
         angle: number = 0
     ): Grid {
-        return this.createSierpinskiTriangle(insertionPoint, sideLength, numberOfIterations, angle);
+        return this.createSierpinskiTriangle(insertionPoint, angle, sideLength, numberOfIterations);
     }
 
     private createSierpinskiTriangle(
         insertionPoint: Coordinate,
+        angle: number,
         sideLength: number,
-        iterations: number,
-        angle: number): Grid {
+        iterations: number): Grid {
+        const createTriangleCell: SegmentedCellCreator =
+            SegmentedCellCreatorFactory.makeSegmentedCellCreator('triangular');
 
         if (iterations === 0) {
-            const cell: Cell = AdvancedCellFactory.createCell(insertionPoint, sideLength, 'triangular', 1, angle);
-            return new Grid([cell], cell, cell);
+            const cell: Cell = createTriangleCell(insertionPoint, angle, sideLength, 1);
+            return Grid.fromSingleCell(cell);
         }
 
         const halfWidth: number = sideLength / 2;
@@ -34,20 +36,15 @@ export class SierpinskiTriangleGridFactory {
         const createSubdivision: GridCreator = (newInsertionPoint: Coordinate) => {
             return this.createSierpinskiTriangle(
                 newInsertionPoint,
+                angle,
                 halfWidth,
-                iterations - 1,
-                angle
+                iterations - 1
             );
         };
 
         const createMiddle: GridCreator = (newInsertionPoint: Coordinate) => {
-            const middleCell: Cell = AdvancedCellFactory.createCell(
-                newInsertionPoint,
-                halfWidth,
-                'triangular',
-                Math.pow(2, iterations - 1),
-                angle + 60
-            );
+            const middleCell: Cell =
+                createTriangleCell(newInsertionPoint, angle + 60, halfWidth, Math.pow(2, iterations - 1));
             return Grid.fromSingleCell(middleCell);
         };
 

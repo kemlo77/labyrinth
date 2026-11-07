@@ -39,7 +39,7 @@ export class GridFragmentCreatorFactory {
             CellCreatorFactory.getCellCreatorByType('equilateral-triangular-cell', sideLength, angle);
         return (insertionPoint: Coordinate) => {
             const cell: Cell = triangleCellCreator(insertionPoint);
-            return new Grid([cell], cell, cell, cell.center);
+            return Grid.fromSingleCell(cell);
         };
     }
 

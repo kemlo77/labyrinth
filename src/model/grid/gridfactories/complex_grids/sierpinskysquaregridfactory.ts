@@ -1,9 +1,9 @@
 import { Coordinate } from '../../../coordinate';
 import { Cell } from '../../../cell/cell';
 import { Grid } from '../../grid';
-import { AdvancedCellFactory } from '../../../cell/advancedcellfactory';
+import { SegmentedCellCreatorFactory } from '../../../cell/segmentedcellcreatorfactory';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
-import type { GridCreator } from '../../../typealiases';
+import type { SegmentedCellCreator, GridCreator } from '../../../typealiases';
 
 export class SierpinskySquareGridFactory {
 
@@ -22,8 +22,11 @@ export class SierpinskySquareGridFactory {
         iterations: number,
         angle: number): Grid {
 
+        const createSquareCell: SegmentedCellCreator =
+            SegmentedCellCreatorFactory.makeSegmentedCellCreator('square');
+
         if (iterations === 0) {
-            const cell: Cell = AdvancedCellFactory.createCell(insertionPoint, sideLength, 'square', 1, angle);
+            const cell: Cell = createSquareCell(insertionPoint, angle, sideLength, 1);
             return Grid.fromSingleCell(cell);
         }
 
@@ -46,12 +49,11 @@ export class SierpinskySquareGridFactory {
         };
 
         const createMiddle: GridCreator = (newInsertionPoint: Coordinate) => {
-            const middleCell: Cell = AdvancedCellFactory.createCell(
+            const middleCell: Cell = createSquareCell(
                 newInsertionPoint,
+                angle,
                 sideLength / 3,
-                'square',
-                Math.pow(3, iterations - 1),
-                angle
+                Math.pow(3, iterations - 1)
             );
             return Grid.fromSingleCell(middleCell);
         };
