@@ -86,7 +86,7 @@ export class CellCreatorFactory {
 
 
     //Triangle that has all sides equal length
-    private static crateEquilateralTriangleCell(insertionPoint: Coordinate, width: number, angle: number): Cell {
+    private static crateEquilateralTriangleCell(insertionPoint: Coordinate, angle: number, width: number): Cell {
         const height: number = width * Math.sqrt(3) / 2;
         const thirdHeight: number = height / 3;
         const halfWidth: number = width / 2;
@@ -103,7 +103,7 @@ export class CellCreatorFactory {
     }
 
     //Triangle that has the same base width as height
-    private static createTriangleCell(insertionPoint: Coordinate, width: number, angle: number): Cell {
+    private static createTriangleCell(insertionPoint: Coordinate, angle: number, width: number): Cell {
         const height: number = width;
         const thirdHeight: number = height / 3;
         const halfWidth: number = width / 2;
@@ -119,7 +119,7 @@ export class CellCreatorFactory {
             .build();
     }
 
-    private static createLeftHalfTriangleCell(insertionPoint: Coordinate, width: number, angle: number): Cell {
+    private static createLeftHalfTriangleCell(insertionPoint: Coordinate, angle: number, width: number): Cell {
         const height: number = width;
         const thirdHeight: number = height / 3;
         const halfWidth: number = width / 2;
@@ -136,7 +136,7 @@ export class CellCreatorFactory {
             .build();
     }
 
-    private static createRightHalfTriangleCell(insertionPoint: Coordinate, width: number, angle: number): Cell {
+    private static createRightHalfTriangleCell(insertionPoint: Coordinate, angle: number, width: number): Cell {
         const height: number = width;
         const thirdHeight: number = height / 3;
         const halfWidth: number = width / 2;

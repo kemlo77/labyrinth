@@ -4,7 +4,7 @@ import { stepRight, stepUp } from '../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { Grid } from '../grid';
 import type { Region } from '../region';
-import type { RegionCreator } from '../../typealiases';
+import type { RegularRegionCreator } from '../../typealiases';
 import { RegularShapedGridProperties } from '../gridfactories/regular_shaped_grids/regularshapedgridproperties';
 import { GridAssembler } from './gridassembler';
 
@@ -12,8 +12,8 @@ export class TriangularGridAssembler<T extends Region<T>> extends GridAssembler<
 
     createGrid(
         gridProperties: RegularShapedGridProperties,
-        pointyTopCreator: RegionCreator<T>,
-        pointyBottomCreator: RegionCreator<T>
+        pointyTopCreator: RegularRegionCreator<T>,
+        pointyBottomCreator: RegularRegionCreator<T>
     ): Grid {
         const regionGrid: T[][] =
             this.createRegionMatrix(gridProperties, pointyTopCreator, pointyBottomCreator);
@@ -44,8 +44,8 @@ export class TriangularGridAssembler<T extends Region<T>> extends GridAssembler<
 
     private createRegionMatrix(
         gridProperties: RegularShapedGridProperties,
-        pointyTopCreator: RegionCreator<T>,
-        pointyBottomCreator: RegionCreator<T>
+        pointyTopCreator: RegularRegionCreator<T>,
+        pointyBottomCreator: RegularRegionCreator<T>
     ): T[][] {
         const firstInsertionPoint: Coordinate = gridProperties.insertionPoint;
         const angle: number = gridProperties.angle;
@@ -54,7 +54,6 @@ export class TriangularGridAssembler<T extends Region<T>> extends GridAssembler<
 
         const stepTriangleHeightUp: Vector = stepUp(regionHeight).newRotatedVector(angle);
         const stepHalfRegionWidthRight: Vector = stepRight(regionWidth / 2).newRotatedVector(angle);
-        const stepRegionWidthRight: Vector = stepRight(regionWidth).newRotatedVector(angle);
 
         const regionRows: T[][] = [];
 
@@ -64,9 +63,11 @@ export class TriangularGridAssembler<T extends Region<T>> extends GridAssembler<
                 .stepToNewCoordinate(stepHalfRegionWidthRight.times(rowIndex));
             const numberOfPointyTopTriangles: number = gridProperties.numberOfEdgeSegments - rowIndex;
 
-            const regionRow: T[] = this.oldCreatePointyTopFirstRowOfTriangles(
+            const regionRow: T[] = this.createPointyTopFirstRowOfTriangles(
                 rowInsertionPoint,
-                stepRegionWidthRight,
+                angle,
+                regionWidth,
+                regionHeight,
                 numberOfPointyTopTriangles,
                 pointyTopCreator,
                 pointyBottomCreator

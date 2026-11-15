@@ -4,25 +4,22 @@ import { Grid } from '../../grid';
 import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
 import { HexagonGridAssembler } from '../../gridassemblers/hexagongridassembler';
-import type { RegionCreator } from '../../../typealiases';
+import type { RegularRegionCreator } from '../../../typealiases';
 import { GridFragmentCreatorFactory } from '../../gridfragments/gridfragmentcreatorfactory';
-import type { Coordinate } from '../../../coordinate';
 
 export class LargeHexagonGridFactory implements RegularShapedGridFactory {
 
     createGrid(gridProperties: RegularShapedGridProperties): Grid {
-        const angle: number = gridProperties.angle;
-        const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
-        const triangleWithPointyTopCreator: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellCreatorFactory.makeRegularCellCreator('equilateral-triangular-cell')(insertionPoint, cellWidth, angle);
-        const riangleWithPointyBottomCreator: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellCreatorFactory.makeRegularCellCreator('equilateral-triangular-cell')(insertionPoint, cellWidth, angle + 60);
+        const triangleWithPointyTopCreator: RegularRegionCreator<Cell> =
+            CellCreatorFactory.makeRegularCellCreator('equilateral-triangular-cell');
+        const triangleWithPointyBottomCreator: RegularRegionCreator<Cell> =
+            CellCreatorFactory.makeRegularCellCreator('equilateral-triangular-cell');
 
         return new HexagonGridAssembler<Cell>().createGrid(
             gridProperties,
             triangleWithPointyTopCreator,
-            riangleWithPointyBottomCreator
+            triangleWithPointyBottomCreator
         );
     }
 
@@ -31,13 +28,11 @@ export class LargeHexagonGridFactory implements RegularShapedGridFactory {
         if (!pointyBottomTriangle) {
             pointyBottomTriangle = pointyTopTriangle;
         }
-        const angle: number = gridProperties.angle;
-        const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
-        const triangleWithPointyTopCreator: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellCreatorFactory.makeRegularCellCreator(pointyTopTriangle)(insertionPoint, cellWidth, angle);
-        const triangleWithPointyBottomCreator: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
-            CellCreatorFactory.makeRegularCellCreator(pointyBottomTriangle)(insertionPoint, cellWidth, angle + 60);
+        const triangleWithPointyTopCreator: RegularRegionCreator<Cell> =
+            CellCreatorFactory.makeRegularCellCreator(pointyTopTriangle);
+        const triangleWithPointyBottomCreator: RegularRegionCreator<Cell> =
+            CellCreatorFactory.makeRegularCellCreator(pointyBottomTriangle);
 
         return new HexagonGridAssembler<Cell>().createGrid(
             gridProperties,
@@ -51,13 +46,11 @@ export class LargeHexagonGridFactory implements RegularShapedGridFactory {
         if (!pointyBottomTriangle) {
             pointyBottomTriangle = pointyTopTriangle;
         }
-        const angle: number = gridProperties.angle;
-        const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
-        const triangleWithPointyTopCreator: RegionCreator<Grid> =
-            GridFragmentCreatorFactory.getGridFragmentCreatorByType(cellWidth, pointyTopTriangle, angle);
-        const triangleWithPointyBottomCreator: RegionCreator<Grid> =
-            GridFragmentCreatorFactory.getGridFragmentCreatorByType(cellWidth, pointyBottomTriangle, angle + 60);
+        const triangleWithPointyTopCreator: RegularRegionCreator<Grid> =
+            GridFragmentCreatorFactory.makeRegularGridCreatorByType(pointyTopTriangle);
+        const triangleWithPointyBottomCreator: RegularRegionCreator<Grid> =
+            GridFragmentCreatorFactory.makeRegularGridCreatorByType(pointyBottomTriangle);
 
         return new HexagonGridAssembler<Grid>().createGrid(
             gridProperties,
