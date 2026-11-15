@@ -29,6 +29,13 @@ export class CellBuilder {
         return this;
     }
 
+    addStepsToNextVertice(numberOfSteps: number, step: Vector): this {
+        for (let i = 0; i < numberOfSteps; i++) {
+            this._steps.push(step);
+        }
+        return this;
+    }
+
     defineCenter(center: Coordinate): this {
         this._center = center;
         return this;

@@ -122,5 +122,21 @@ describe('CellBuilder', () => {
         expect(cell.vertices[5]).to.deep.equal(new Coordinate(1, 1));
     });
 
+    it('should correctly add steps to the next vertex', () => {
+        const startingPoint: Coordinate = new Coordinate(0, 0);
+        const stepRight: Vector = new Vector(1, 0);
+        const stepUp: Vector = new Vector(0, 1);
+        const center: Coordinate = new Coordinate(1, 1);
+
+        const cell: Cell = new CellBuilder()
+            .setStartingPoint(startingPoint)
+            .addStepsToNextVertice(2, stepRight)
+            .addStepsToNextVertice(2, stepUp)
+            .defineCenter(center)
+            .build();
+
+        expect(cell.vertices.length).to.equal(5);
+    });
+
 
 });

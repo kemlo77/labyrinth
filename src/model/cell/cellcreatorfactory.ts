@@ -164,16 +164,15 @@ export class CellCreatorFactory {
 
     private static makeDoubleSquareRectangleCellCreator(width: number, angle: number): CellCreator {
         const height: number = width / 2;
+        const halfWidth: number = width / 2;
         return (insertionPoint: Coordinate) => {
             const center: Coordinate =
-                insertionPoint.stepToNewCoordinate(stepRight(width / 2).thenTake(stepUp(height / 2)));
+                insertionPoint.stepToNewCoordinate(stepRight(halfWidth).thenTake(stepUp(height / 2)));
             return new CellBuilder()
                 .setStartingPoint(insertionPoint)
-                .addStepToNextVertice(stepRight((width / 2)))
-                .addStepToNextVertice(stepRight((width / 2)))
+                .addStepsToNextVertice(2, stepRight(halfWidth))
                 .addStepToNextVertice(stepUp(height))
-                .addStepToNextVertice(stepLeft((width / 2)))
-                .addStepToNextVertice(stepLeft((width / 2)))
+                .addStepsToNextVertice(2, stepLeft(halfWidth))
                 .defineCenter(center)
                 .rotateAroundStartingPoint(angle)
                 .build();
