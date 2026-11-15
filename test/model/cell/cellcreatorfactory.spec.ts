@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { Coordinate } from '../../../src/model/coordinate';
 import { Cell } from '../../../src/model/cell/cell';
 import { CellCreatorFactory } from '../../../src/model/cell/cellcreatorfactory';
-import { CellCreator } from '../../../src/model/typealiases';
+import { CellCreator, RegularCellCreator } from '../../../src/model/typealiases';
 
 describe('CellCreatorFactory', () => {
     let insertionPoint: Coordinate;
@@ -13,9 +13,10 @@ describe('CellCreatorFactory', () => {
 
     it('creating an equilateral triangle cell', () => {
         const insertionPoint: Coordinate = new Coordinate(0, 0);
-        const createTriangularCell: CellCreator =
-            CellCreatorFactory.getCellCreatorByType('equilateral-triangular-cell', 15, 0);
-        const triangleCell: Cell = createTriangularCell(insertionPoint);
+        const createTriangularCell: RegularCellCreator =
+            CellCreatorFactory.makeRegularCellCreator('equilateral-triangular-cell');
+
+        const triangleCell: Cell = createTriangularCell(insertionPoint, 15, 0);
         expect(triangleCell.vertices).to.have.lengthOf(3);
         expect(triangleCell.center.x).to.be.closeTo(7.5, 0.0001);
         expect(triangleCell.center.y).to.be.closeTo(4.3301, 0.0001);

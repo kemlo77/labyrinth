@@ -71,7 +71,7 @@ export class HexagonGridAssembler<T extends Region<T>> extends GridAssembler<T> 
                 .stepToNewCoordinate(stepHalfRegionWidthLeft.times(rowIndex));
             const numberOfPointyTopTriangles: number = gridProperties.numberOfEdgeSegments + rowIndex;
 
-            const rowOfRegions: T[] = this.createPointyBottomFirstRowOfTriangles(
+            const rowOfRegions: T[] = this.oldCreatePointyBottomFirstRowOfTriangles(
                 rowInsertionPoint,
                 stepRegionWidthRight,
                 numberOfPointyTopTriangles,
@@ -89,7 +89,7 @@ export class HexagonGridAssembler<T extends Region<T>> extends GridAssembler<T> 
                 .stepToNewCoordinate(stepHalfRegionWidthRight.times(rowIndex));
             const numberOfPointyTopTriangles: number = gridProperties.numberOfEdgeSegments * 2 - rowIndex;
 
-            const rowOfRegions: T[] = this.createPointyTopFirstRowOfTriangles(
+            const rowOfRegions: T[] = this.oldCreatePointyTopFirstRowOfTriangles(
                 rowInsertionPoint,
                 stepRegionWidthRight,
                 numberOfPointyTopTriangles,

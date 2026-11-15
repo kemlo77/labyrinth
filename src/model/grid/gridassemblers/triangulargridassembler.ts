@@ -64,7 +64,7 @@ export class TriangularGridAssembler<T extends Region<T>> extends GridAssembler<
                 .stepToNewCoordinate(stepHalfRegionWidthRight.times(rowIndex));
             const numberOfPointyTopTriangles: number = gridProperties.numberOfEdgeSegments - rowIndex;
 
-            const regionRow: T[] = this.createPointyTopFirstRowOfTriangles(
+            const regionRow: T[] = this.oldCreatePointyTopFirstRowOfTriangles(
                 rowInsertionPoint,
                 stepRegionWidthRight,
                 numberOfPointyTopTriangles,

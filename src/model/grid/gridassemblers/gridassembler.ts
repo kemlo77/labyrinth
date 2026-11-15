@@ -2,7 +2,8 @@ import { MatrixOperations } from '../../../service/matrixoperations';
 import { Coordinate } from '../../coordinate';
 import { Vector } from '../../vector/vector';
 import type { Region } from '../region';
-import type { RegionCreator } from '../../typealiases';
+import type { RegionCreator, RegularRegionCreator } from '../../typealiases';
+import { stepInDirection, stepRight, stepUp } from '../../vector/vectorcreator';
 
 
 export abstract class GridAssembler<T extends Region<T>> {
@@ -22,7 +23,7 @@ export abstract class GridAssembler<T extends Region<T>> {
     }
 
 
-    protected createPointyTopFirstRowOfTriangles(
+    protected oldCreatePointyTopFirstRowOfTriangles(
         insertionPoint: Coordinate,
         stepToNextInsertionPoint: Vector,
         numberOfPointyTopTriangles: number,
@@ -44,7 +45,35 @@ export abstract class GridAssembler<T extends Region<T>> {
         return rowOfRegions;
     }
 
-    protected createPointyBottomFirstRowOfTriangles(
+    protected createPointyTopFirstRowOfTriangles(
+        insertionPoint: Coordinate,
+        angle: number,
+        triangleBaseWidth: number,
+        triangleHeight: number,
+        numberOfPointyTopTriangles: number,
+        createTriangle: RegularRegionCreator<T>
+    ): T[] {
+        const stepToNextInsertionPoint: Vector = stepInDirection(angle, triangleBaseWidth);
+        const stepToUpperInsertionPoint: Vector =
+            stepRight(triangleBaseWidth / 2).thenTake(stepUp(triangleHeight)).newRotatedVector(angle);
+        const rowOfRegions: T[] = [];
+        for (let index: number = 0; index < numberOfPointyTopTriangles; index++) {
+            const notFirstTriangle: boolean = index > 0;
+            const regionInsertionPoint: Coordinate =
+                insertionPoint.stepToNewCoordinate(stepToNextInsertionPoint.times(index));
+
+            if (notFirstTriangle) {
+                const upperInsertionPoint: Coordinate =
+                    regionInsertionPoint.stepToNewCoordinate(stepToUpperInsertionPoint);
+                rowOfRegions.push(createTriangle(upperInsertionPoint, triangleBaseWidth, angle + 180));
+            }
+            rowOfRegions.push(createTriangle(regionInsertionPoint, triangleBaseWidth, angle));
+
+        }
+        return rowOfRegions;
+    }
+
+    protected oldCreatePointyBottomFirstRowOfTriangles(
         insertionPoint: Coordinate,
         stepToNextInsertionPoint: Vector,
         numberOfPointyTopTriangles: number,
@@ -60,6 +89,33 @@ export abstract class GridAssembler<T extends Region<T>> {
             rowOfRegions.push(createPointyBottomTriangle(regionInsertionPoint));
             if (notLastTriangle) {
                 rowOfRegions.push(createPointyTopTriangle(regionInsertionPoint));
+            }
+        }
+        return rowOfRegions;
+    }
+
+    protected createPointyBottomFirstRowOfTriangles(
+        insertionPoint: Coordinate,
+        angle: number,
+        triangleBaseWidth: number,
+        triangleHeight: number,
+        numberOfPointyTopTriangles: number,
+        createTriangle: RegularRegionCreator<T>
+    ): T[] {
+        const stepToNextInsertionPoint: Vector = stepInDirection(angle, triangleBaseWidth);
+        const stepToUpperInsertionPoint: Vector =
+            stepRight(triangleBaseWidth / 2).thenTake(stepUp(triangleHeight)).newRotatedVector(angle);
+        const rowOfRegions: T[] = [];
+        for (let index: number = 0; index < numberOfPointyTopTriangles + 1; index++) {
+            const notLastTriangle: boolean = index < numberOfPointyTopTriangles;
+            const regionInsertionPoint: Coordinate =
+                insertionPoint.stepToNewCoordinate(stepToNextInsertionPoint.times(index));
+
+            const upperInsertionPoint: Coordinate =
+                regionInsertionPoint.stepToNewCoordinate(stepToUpperInsertionPoint);
+            rowOfRegions.push(createTriangle(upperInsertionPoint, triangleBaseWidth, angle + 180));
+            if (notLastTriangle) {
+                rowOfRegions.push(createTriangle(regionInsertionPoint, triangleBaseWidth, angle));
             }
         }
         return rowOfRegions;

@@ -6,6 +6,7 @@ import { RegularShapedGridProperties } from './regularshapedgridproperties';
 import { HexagonGridAssembler } from '../../gridassemblers/hexagongridassembler';
 import type { RegionCreator } from '../../../typealiases';
 import { GridFragmentCreatorFactory } from '../../gridfragments/gridfragmentcreatorfactory';
+import type { Coordinate } from '../../../coordinate';
 
 export class LargeHexagonGridFactory implements RegularShapedGridFactory {
 
@@ -13,10 +14,10 @@ export class LargeHexagonGridFactory implements RegularShapedGridFactory {
         const angle: number = gridProperties.angle;
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
-        const triangleWithPointyTopCreator: RegionCreator<Cell> =
-            CellCreatorFactory.getCellCreatorByType('equilateral-triangular-cell', cellWidth, angle);
-        const riangleWithPointyBottomCreator: RegionCreator<Cell> =
-            CellCreatorFactory.getCellCreatorByType('equilateral-triangular-cell', cellWidth, angle + 60);
+        const triangleWithPointyTopCreator: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
+            CellCreatorFactory.makeRegularCellCreator('equilateral-triangular-cell')(insertionPoint, cellWidth, angle);
+        const riangleWithPointyBottomCreator: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
+            CellCreatorFactory.makeRegularCellCreator('equilateral-triangular-cell')(insertionPoint, cellWidth, angle + 60);
 
         return new HexagonGridAssembler<Cell>().createGrid(
             gridProperties,
@@ -33,10 +34,10 @@ export class LargeHexagonGridFactory implements RegularShapedGridFactory {
         const angle: number = gridProperties.angle;
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
-        const triangleWithPointyTopCreator: RegionCreator<Cell> =
-            CellCreatorFactory.getCellCreatorByType(pointyTopTriangle, cellWidth, angle);
-        const triangleWithPointyBottomCreator: RegionCreator<Cell> =
-            CellCreatorFactory.getCellCreatorByType(pointyBottomTriangle, cellWidth, angle + 60);
+        const triangleWithPointyTopCreator: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
+            CellCreatorFactory.makeRegularCellCreator(pointyTopTriangle)(insertionPoint, cellWidth, angle);
+        const triangleWithPointyBottomCreator: RegionCreator<Cell> = (insertionPoint: Coordinate) =>
+            CellCreatorFactory.makeRegularCellCreator(pointyBottomTriangle)(insertionPoint, cellWidth, angle + 60);
 
         return new HexagonGridAssembler<Cell>().createGrid(
             gridProperties,

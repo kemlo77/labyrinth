@@ -10,7 +10,7 @@ import {
     stepUpLeft,
     stepUpRight
 } from '../vector/vectorcreator';
-import type { CellCreator } from '../typealiases';
+import type { CellCreator, RegularCellCreator } from '../typealiases';
 import { Cell } from './cell';
 import { CellBuilder } from './cellbuilder';
 
@@ -24,14 +24,14 @@ export class CellCreatorFactory {
 
         switch (cellType) {
 
-            case 'equilateral-triangular-cell':
-                return CellCreatorFactory.makeEquilateralTriangleCellCreator(cellWidth, angle);
-            case 'triangular-cell':
-                return CellCreatorFactory.makeTriangleCellCreator(cellWidth, angle);
-            case 'left-half-triangular-cell':
-                return CellCreatorFactory.makeLeftHalfTriangleCellCreator(cellWidth, angle);
-            case 'right-half-triangular-cell':
-                return CellCreatorFactory.makeRightHalfTriangleCellCreator(cellWidth, angle);
+            // case 'equilateral-triangular-cell':
+            //     return CellCreatorFactory.makeEquilateralTriangleCellCreator(cellWidth, angle);
+            // case 'triangular-cell':
+            //     return CellCreatorFactory.makeTriangleCellCreator(cellWidth, angle);
+            // case 'left-half-triangular-cell':
+            //     return CellCreatorFactory.makeLeftHalfTriangleCellCreator(cellWidth, angle);
+            // case 'right-half-triangular-cell':
+            //     return CellCreatorFactory.makeRightHalfTriangleCellCreator(cellWidth, angle);
             case 'triakis-triangle-cell':
                 return CellCreatorFactory.makeTriakisTriangleCreator(cellWidth, angle);
             case 'isosceles-right-triangular-cell':
@@ -70,79 +70,87 @@ export class CellCreatorFactory {
         }
     }
 
+    static makeRegularCellCreator(cellType: string): RegularCellCreator {
+        switch (cellType) {
+            case 'equilateral-triangular-cell':
+                return CellCreatorFactory.crateEquilateralTriangleCell;
+            case 'triangular-cell':
+                return CellCreatorFactory.createTriangleCell;
+            case 'left-half-triangular-cell':
+                return CellCreatorFactory.createLeftHalfTriangleCell;
+            case 'right-half-triangular-cell':
+                return CellCreatorFactory.createRightHalfTriangleCell;
+            default: throw new Error('Unknown cell type: ' + cellType);
+        }
+    }
+
 
     //Triangle that has all sides equal length
-    private static makeEquilateralTriangleCellCreator(width: number, angle: number): CellCreator {
+    private static crateEquilateralTriangleCell(insertionPoint: Coordinate, width: number, angle: number): Cell {
         const height: number = width * Math.sqrt(3) / 2;
         const thirdHeight: number = height / 3;
         const halfWidth: number = width / 2;
         const sideLength: number = width;
-        return (insertionPoint: Coordinate) => {
-            const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(halfWidth)
-                .thenTake(stepUp(thirdHeight)));
-            return new CellBuilder()
-                .setStartingPoint(insertionPoint)
-                .addStepToNextVertice(stepRight(sideLength))
-                .addStepToNextVertice(stepInDirection(120, sideLength))
-                .defineCenter(center)
-                .rotateAroundStartingPoint(angle)
-                .build();
-        };
+        const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(halfWidth)
+            .thenTake(stepUp(thirdHeight)));
+        return new CellBuilder()
+            .setStartingPoint(insertionPoint)
+            .addStepToNextVertice(stepRight(sideLength))
+            .addStepToNextVertice(stepInDirection(120, sideLength))
+            .defineCenter(center)
+            .rotateAroundStartingPoint(angle)
+            .build();
     }
 
-    //Triangle that has same width and height
-    private static makeTriangleCellCreator(width: number, angle: number): CellCreator {
+    //Triangle that has the same base width as height
+    private static createTriangleCell(insertionPoint: Coordinate, width: number, angle: number): Cell {
         const height: number = width;
         const thirdHeight: number = height / 3;
         const halfWidth: number = width / 2;
-        return (insertionPoint: Coordinate) => {
-            const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(halfWidth)
-                .thenTake(stepUp(thirdHeight)));
-            return new CellBuilder()
-                .setStartingPoint(insertionPoint)
-                .addStepToNextVertice(stepRight(width))
-                .addStepToNextVertice(stepUp(height).thenTake(stepLeft(width / 2)))
-                .defineCenter(center)
-                .rotateAroundStartingPoint(angle)
-                .build();
-        };
+
+        const center: Coordinate = insertionPoint.stepToNewCoordinate(stepRight(halfWidth)
+            .thenTake(stepUp(thirdHeight)));
+        return new CellBuilder()
+            .setStartingPoint(insertionPoint)
+            .addStepToNextVertice(stepRight(width))
+            .addStepToNextVertice(stepUp(height).thenTake(stepLeft(width / 2)))
+            .defineCenter(center)
+            .rotateAroundStartingPoint(angle)
+            .build();
     }
 
-    private static makeLeftHalfTriangleCellCreator(width: number, angle: number): CellCreator {
+    private static createLeftHalfTriangleCell(insertionPoint: Coordinate, width: number, angle: number): Cell {
         const height: number = width;
         const thirdHeight: number = height / 3;
         const halfWidth: number = width / 2;
         const sixthOfWidth: number = width / 6;
-        return (insertionPoint: Coordinate) => {
-            const center: Coordinate =
-                insertionPoint.stepToNewCoordinate(stepRight(sixthOfWidth).thenTake(stepUp(thirdHeight)));
-            return new CellBuilder()
-                .setStartingPoint(insertionPoint)
-                .addStepToNextVertice(stepRight(halfWidth))
-                .addStepToNextVertice(stepUp(height))
-                .defineCenter(center)
-                .rotateAroundStartingPoint(angle)
-                .build();
-        };
+
+        const center: Coordinate =
+            insertionPoint.stepToNewCoordinate(stepRight(sixthOfWidth).thenTake(stepUp(thirdHeight)));
+        return new CellBuilder()
+            .setStartingPoint(insertionPoint)
+            .addStepToNextVertice(stepRight(halfWidth))
+            .addStepToNextVertice(stepUp(height))
+            .defineCenter(center)
+            .rotateAroundStartingPoint(angle)
+            .build();
     }
 
-    private static makeRightHalfTriangleCellCreator(width: number, angle: number): CellCreator {
+    private static createRightHalfTriangleCell(insertionPoint: Coordinate, width: number, angle: number): Cell {
         const height: number = width;
         const thirdHeight: number = height / 3;
         const halfWidth: number = width / 2;
         const thirdOfWidth: number = width / 3;
 
-        return (insertionPoint: Coordinate) => {
-            const center: Coordinate =
-                insertionPoint.stepToNewCoordinate(stepRight(thirdOfWidth).thenTake(stepUp(thirdHeight)));
-            return new CellBuilder()
-                .setStartingPoint(insertionPoint)
-                .addStepToNextVertice(stepRight(halfWidth))
-                .addStepToNextVertice(stepUp(height).thenTake(stepLeft(halfWidth)))
-                .defineCenter(center)
-                .rotateAroundStartingPoint(angle)
-                .build();
-        };
+        const center: Coordinate =
+            insertionPoint.stepToNewCoordinate(stepRight(thirdOfWidth).thenTake(stepUp(thirdHeight)));
+        return new CellBuilder()
+            .setStartingPoint(insertionPoint)
+            .addStepToNextVertice(stepRight(halfWidth))
+            .addStepToNextVertice(stepUp(height).thenTake(stepLeft(halfWidth)))
+            .defineCenter(center)
+            .rotateAroundStartingPoint(angle)
+            .build();
     }
 
     private static makeSquareCellCreator(width: number, angle: number): CellCreator {

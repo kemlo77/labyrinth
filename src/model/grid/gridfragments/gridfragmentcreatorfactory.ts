@@ -4,7 +4,7 @@ import { stepRight, stepUp, stepInDirection } from '../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellCreatorFactory } from '../../cell/cellcreatorfactory';
 import { Grid } from '../grid';
-import type { CellCreator, GridCreator } from '../../typealiases';
+import type { CellCreator, GridCreator, RegularCellCreator } from '../../typealiases';
 
 export class GridFragmentCreatorFactory {
 
@@ -35,10 +35,10 @@ export class GridFragmentCreatorFactory {
     }
 
     private static makeSingleCellGridFragmentCreator(sideLength: number, angle: number): GridCreator {
-        const triangleCellCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByType('equilateral-triangular-cell', sideLength, angle);
+        const createTriangleCell: RegularCellCreator =
+            CellCreatorFactory.makeRegularCellCreator('equilateral-triangular-cell');
         return (insertionPoint: Coordinate) => {
-            const cell: Cell = triangleCellCreator(insertionPoint);
+            const cell: Cell = createTriangleCell(insertionPoint, sideLength, angle);
             return Grid.fromSingleCell(cell);
         };
     }
