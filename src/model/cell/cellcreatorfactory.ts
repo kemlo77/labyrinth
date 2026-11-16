@@ -32,8 +32,8 @@ export class CellCreatorFactory {
             //     return CellCreatorFactory.makeLeftHalfTriangleCellCreator(cellWidth, angle);
             // case 'right-half-triangular-cell':
             //     return CellCreatorFactory.makeRightHalfTriangleCellCreator(cellWidth, angle);
-            case 'triakis-triangle-cell':
-                return CellCreatorFactory.makeTriakisTriangleCreator(cellWidth, angle);
+            // case 'triakis-triangle-cell':
+            //     return CellCreatorFactory.makeTriakisTriangleCreator(cellWidth, angle);
             case 'isosceles-right-triangular-cell':
                 return CellCreatorFactory.makeIsoscelesRightTriangleCellCreator(cellWidth, angle);
 
@@ -43,13 +43,13 @@ export class CellCreatorFactory {
                 return CellCreatorFactory.makeDoubleSquareRectangleCellCreator(cellWidth, angle);
             case 'rhombus-cell':
                 return CellCreatorFactory.makeRhombusCellCreator(cellWidth, angle);
-            case 'kite-cell':
-                return CellCreatorFactory.makeKiteCellCreator(cellWidth, angle);
+            // case 'kite-cell':
+            //     return CellCreatorFactory.makeKiteCellCreator(cellWidth, angle);
 
             case 'hexagonal-cell':
                 return CellCreatorFactory.makeHexagonalCellCreator(cellWidth, angle);
-            case 'half-hexagonal-cell':
-                return CellCreatorFactory.makeHalfHexagonalCellCreator(cellWidth, angle);
+            // case 'half-hexagonal-cell':
+            //     return CellCreatorFactory.makeHalfHexagonalCellCreator(cellWidth, angle);
             case 'bottom-half-hexagonal-cell':
                 return CellCreatorFactory.makeBottomHalfHexagonalCellCreator(cellWidth, angle);
             case 'right-half-hexagonal-cell':
@@ -80,6 +80,15 @@ export class CellCreatorFactory {
                 return CellCreatorFactory.createLeftHalfTriangleCell;
             case 'right-half-triangular-cell':
                 return CellCreatorFactory.createRightHalfTriangleCell;
+            case 'triakis-triangle-cell':
+                return CellCreatorFactory.makeTriakisTriangleCreator;
+
+            case 'kite-cell':
+                return CellCreatorFactory.makeKiteCellCreator;
+
+            case 'half-hexagonal-cell':
+                return CellCreatorFactory.makeHalfHexagonalCellCreator;
+
             default: throw new Error('Unknown cell type: ' + cellType);
         }
     }
@@ -301,24 +310,23 @@ export class CellCreatorFactory {
         };
     }
 
-    private static makeHalfHexagonalCellCreator(baseLength: number, angle: number): CellCreator {
-        const sideLength: number = baseLength / 2;
+    private static makeHalfHexagonalCellCreator(insertionPoint: Coordinate, angle: number, width: number): Cell {
+        const sideLength: number = width / 2;
         const height: number = sideLength * Math.sqrt(3);
 
-        return (insertionPoint: Coordinate) => {
-            const center: Coordinate =
-                insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 4)));
 
-            return new CellBuilder()
-                .setStartingPoint(insertionPoint)
-                .addStepToNextVertice(stepInDirection(0, sideLength))
-                .addStepToNextVertice(stepInDirection(0, sideLength))
-                .addStepToNextVertice(stepInDirection(120, sideLength))
-                .addStepToNextVertice(stepInDirection(180, sideLength))
-                .defineCenter(center)
-                .rotateAroundStartingPoint(angle)
-                .build();
-        };
+        const center: Coordinate =
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength / 2).thenTake(stepUp(height / 4)));
+
+        return new CellBuilder()
+            .setStartingPoint(insertionPoint)
+            .addStepToNextVertice(stepInDirection(0, sideLength))
+            .addStepToNextVertice(stepInDirection(0, sideLength))
+            .addStepToNextVertice(stepInDirection(120, sideLength))
+            .addStepToNextVertice(stepInDirection(180, sideLength))
+            .defineCenter(center)
+            .rotateAroundStartingPoint(angle)
+            .build();
     }
 
     private static makeChamferedSquareCellCreator(width: number, angle: number): CellCreator {
@@ -411,38 +419,35 @@ export class CellCreatorFactory {
         };
     }
 
-    private static makeKiteCellCreator(width: number, angle: number): CellCreator {
+    private static makeKiteCellCreator(insertionPoint: Coordinate, angle: number, width: number): Cell {
         const sideLength1: number = width;
         const sideLength2: number = width / (Math.sqrt(3));
 
-        return (insertionPoint: Coordinate) => {
-            const center: Coordinate =
-                insertionPoint.stepToNewCoordinate(stepRight(sideLength1 / 2).thenTake(stepUp(sideLength2 / 2)));
-            return new CellBuilder()
-                .setStartingPoint(insertionPoint)
-                .addStepToNextVertice(stepRight(sideLength1))
-                .addStepToNextVertice(stepUp(sideLength2))
-                .addStepToNextVertice(stepInDirection(150, sideLength2))
-                .defineCenter(center)
-                .rotateAroundStartingPoint(angle)
-                .build();
-        };
+        const center: Coordinate =
+            insertionPoint.stepToNewCoordinate(stepRight(sideLength1 / 2).thenTake(stepUp(sideLength2 / 2)));
+        return new CellBuilder()
+            .setStartingPoint(insertionPoint)
+            .addStepToNextVertice(stepRight(sideLength1))
+            .addStepToNextVertice(stepUp(sideLength2))
+            .addStepToNextVertice(stepInDirection(150, sideLength2))
+            .defineCenter(center)
+            .rotateAroundStartingPoint(angle)
+            .build();
+
     }
 
-    private static makeTriakisTriangleCreator(width: number, angle: number): CellCreator {
+    private static makeTriakisTriangleCreator(insertionPoint: Coordinate, angle: number, width: number): Cell {
         const height: number = width / (2 * Math.sqrt(3));
+        const center: Coordinate =
+            insertionPoint.stepToNewCoordinate(stepRight(width / 2).thenTake(stepUp(height / 3)));
+        return new CellBuilder()
+            .setStartingPoint(insertionPoint)
+            .addStepToNextVertice(stepRight(width))
+            .addStepToNextVertice(stepUp(height).thenTake(stepLeft(width / 2)))
+            .defineCenter(center)
+            .rotateAroundStartingPoint(angle)
+            .build();
 
-        return (insertionPoint: Coordinate) => {
-            const center: Coordinate =
-                insertionPoint.stepToNewCoordinate(stepRight(width / 2).thenTake(stepUp(height / 3)));
-            return new CellBuilder()
-                .setStartingPoint(insertionPoint)
-                .addStepToNextVertice(stepRight(width))
-                .addStepToNextVertice(stepUp(height).thenTake(stepLeft(width / 2)))
-                .defineCenter(center)
-                .rotateAroundStartingPoint(angle)
-                .build();
-        };
     }
 
 }
