@@ -6,6 +6,7 @@ import { RegularShapedGridProperties } from './regularshapedgridproperties';
 import { HexagonGridAssembler } from '../../gridassemblers/hexagongridassembler';
 import type { RegularRegionCreator } from '../../../typealiases';
 import { GridFragmentCreatorFactory } from '../../gridfragments/gridfragmentcreatorfactory';
+import type { Coordinate } from '../../../coordinate';
 
 export class LargeHexagonGridFactory implements RegularShapedGridFactory {
 
@@ -48,9 +49,14 @@ export class LargeHexagonGridFactory implements RegularShapedGridFactory {
         }
 
         const triangleWithPointyTopCreator: RegularRegionCreator<Grid> =
-            GridFragmentCreatorFactory.makeRegularGridCreatorByType(pointyTopTriangle);
+            (insertionPoint: Coordinate, angleInDegrees: number, sideLength: number) => {
+                return GridFragmentCreatorFactory.makeRegularGridCreatorByType(pointyTopTriangle)({ insertionPoint, angle: angleInDegrees, size: sideLength });
+            };
+
         const triangleWithPointyBottomCreator: RegularRegionCreator<Grid> =
-            GridFragmentCreatorFactory.makeRegularGridCreatorByType(pointyBottomTriangle);
+            (insertionPoint: Coordinate, angleInDegrees: number, sideLength: number) => {
+                return GridFragmentCreatorFactory.makeRegularGridCreatorByType(pointyBottomTriangle)({ insertionPoint, angle: angleInDegrees, size: sideLength });
+            };
 
         return new HexagonGridAssembler<Grid>().createGrid(
             gridProperties,
