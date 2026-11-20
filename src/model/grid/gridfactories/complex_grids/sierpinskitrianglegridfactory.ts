@@ -3,7 +3,7 @@ import { Grid } from '../../grid';
 import { SegmentedCellCreatorFactory } from '../../../cell/segmentedcellcreatorfactory';
 import { Cell } from '../../../cell/cell';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
-import type { SegmentedCellCreator, GridCreator } from '../../../typealiases';
+import type { SegmentedCellCreator, OldGridCreator } from '../../../typealiases';
 
 export class SierpinskiTriangleGridFactory {
 
@@ -33,7 +33,7 @@ export class SierpinskiTriangleGridFactory {
         const quarterWidth: number = sideLength / 4;
         const height: number = sideLength * Math.sqrt(3) / 4;
 
-        const createSubdivision: GridCreator = (newInsertionPoint: Coordinate) => {
+        const createSubdivision: OldGridCreator = (newInsertionPoint: Coordinate) => {
             return this.createSierpinskiTriangle(
                 newInsertionPoint,
                 angle,
@@ -42,7 +42,7 @@ export class SierpinskiTriangleGridFactory {
             );
         };
 
-        const createMiddle: GridCreator = (newInsertionPoint: Coordinate) => {
+        const createMiddle: OldGridCreator = (newInsertionPoint: Coordinate) => {
             const middleCell: Cell =
                 createTriangleCell(newInsertionPoint, angle + 60, halfWidth, Math.pow(2, iterations - 1));
             return Grid.fromSingleCell(middleCell);

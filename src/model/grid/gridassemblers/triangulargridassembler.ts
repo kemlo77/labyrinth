@@ -4,7 +4,7 @@ import { stepRight, stepUp } from '../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { Grid } from '../grid';
 import type { Region } from '../region';
-import type { RegularRegionCreator } from '../../typealiases';
+import type { RegionCreator } from '../../typealiases';
 import { RegularShapedGridProperties } from '../gridfactories/regular_shaped_grids/regularshapedgridproperties';
 import { GridAssembler } from './gridassembler';
 
@@ -12,8 +12,8 @@ export class TriangularGridAssembler<T extends Region<T>> extends GridAssembler<
 
     createGrid(
         gridProperties: RegularShapedGridProperties,
-        pointyTopCreator: RegularRegionCreator<T>,
-        pointyBottomCreator: RegularRegionCreator<T>
+        pointyTopCreator: RegionCreator<T>,
+        pointyBottomCreator: RegionCreator<T>
     ): Grid {
         const regionGrid: T[][] =
             this.createRegionMatrix(gridProperties, pointyTopCreator, pointyBottomCreator);
@@ -44,8 +44,8 @@ export class TriangularGridAssembler<T extends Region<T>> extends GridAssembler<
 
     private createRegionMatrix(
         gridProperties: RegularShapedGridProperties,
-        pointyTopCreator: RegularRegionCreator<T>,
-        pointyBottomCreator: RegularRegionCreator<T>
+        pointyTopCreator: RegionCreator<T>,
+        pointyBottomCreator: RegionCreator<T>
     ): T[][] {
         const firstInsertionPoint: Coordinate = gridProperties.insertionPoint;
         const angle: number = gridProperties.angle;

@@ -23,19 +23,7 @@ export class SquareGridAssembler<T extends Region<T>> extends GridAssembler<T> {
         return new Grid(cells, startCell, endCell, center);
     }
 
-    private calculateGridCenter(
-        gridProperties: RegularShapedGridProperties
-    ): Coordinate {
-        const angle: number = gridProperties.angle;
-        const regionWidth: number = gridProperties.lengthOfEdgeSegments;
-        const gridSideWidth: number = gridProperties.numberOfEdgeSegments * regionWidth;
-        const insertionPoint: Coordinate = gridProperties.insertionPoint;
-        const stepToGridCenter: Vector = stepRight(gridSideWidth / 2)
-            .thenTake(stepUp(gridSideWidth / 2))
-            .newRotatedVector(angle);
 
-        return insertionPoint.stepToNewCoordinate(stepToGridCenter);
-    }
 
     private createRegionMatrix(gridProperties: RegularShapedGridProperties, squareCreator: RegionCreator<T>): T[][] {
 
@@ -52,11 +40,28 @@ export class SquareGridAssembler<T extends Region<T>> extends GridAssembler<T> {
             const columnStartCenter: Coordinate =
                 firstRegionInsertionPoint.stepToNewCoordinate(columnStep.times(columnIndex));
             const regionSequence: T[] =
-                this.createSequenceOfRegions(columnStartCenter, rowStep, segmentsPerSide, squareCreator);
+                this.createSequenceOfRegions(
+                    { insertionPoint: columnStartCenter, angle: gridProperties.angle, size: sideLength },
+                    rowStep,
+                    segmentsPerSide,
+                    squareCreator
+                );
             regionColumns.push(regionSequence);
         }
 
         return regionColumns;
+    }
+
+    private calculateGridCenter(gridProperties: RegularShapedGridProperties): Coordinate {
+        const angle: number = gridProperties.angle;
+        const regionWidth: number = gridProperties.lengthOfEdgeSegments;
+        const gridSideWidth: number = gridProperties.numberOfEdgeSegments * regionWidth;
+        const insertionPoint: Coordinate = gridProperties.insertionPoint;
+        const stepToGridCenter: Vector = stepRight(gridSideWidth / 2)
+            .thenTake(stepUp(gridSideWidth / 2))
+            .newRotatedVector(angle);
+
+        return insertionPoint.stepToNewCoordinate(stepToGridCenter);
     }
 
     private establishNeighbourRelationsInMatrix(regionMatrix: T[][]): void {

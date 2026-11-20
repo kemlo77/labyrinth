@@ -4,7 +4,7 @@ import { Grid } from '../../grid';
 import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
 import { TriangularGridAssembler } from '../../gridassemblers/triangulargridassembler';
-import type { RegularRegionCreator } from '../../../typealiases';
+import type { RegionCreator } from '../../../typealiases';
 
 
 export class TriangularGridFactory implements RegularShapedGridFactory {
@@ -13,8 +13,8 @@ export class TriangularGridFactory implements RegularShapedGridFactory {
         const angle: number = gridProperties.angle;
         const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
-        const equilateralTriangleCreator: RegularRegionCreator<Cell> =
-            CellCreatorFactory.makeRegularCellCreator('equilateral-triangular-cell')
+        const equilateralTriangleCreator: RegionCreator<Cell> =
+            CellCreatorFactory.makeCellCreator('equilateral-triangular-cell')
 
         return new TriangularGridAssembler<Cell>().createGrid(
             gridProperties,

@@ -31,7 +31,8 @@ export class RhomboidGridFactory extends GridAssembler<Cell> implements RegularS
         const rowStep: Vector = stepInDirection(60, cellWidth).newRotatedVector(angle);
 
         const rhombusCellCreator: CellCreator =
-            CellCreatorFactory.getCellCreatorByType('rhombus-cell', cellWidth, angle);
+            CellCreatorFactory.makeCellCreator('rhombus-cell');
+
 
         const cellColumns: Cell[][] = [];
         for (let columnIndex: number = 0; columnIndex < segmentsPerSide; columnIndex++) {
@@ -39,7 +40,7 @@ export class RhomboidGridFactory extends GridAssembler<Cell> implements RegularS
                 firstCellInsertionPoint.stepToNewCoordinate(columnStep.times(columnIndex));
             const cellSequence: Cell[] =
                 this.createSequenceOfRegions(
-                    columnInsertionPoint,
+                    { insertionPoint: columnInsertionPoint, angle: angle, size: cellWidth },
                     rowStep,
                     segmentsPerSide,
                     rhombusCellCreator

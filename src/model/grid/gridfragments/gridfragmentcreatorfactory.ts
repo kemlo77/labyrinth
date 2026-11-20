@@ -4,7 +4,7 @@ import { stepRight, stepUp, stepInDirection } from '../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellCreatorFactory } from '../../cell/cellcreatorfactory';
 import { Grid } from '../grid';
-import type { GridFragmentCreator, PlacementInfo, RegularCellCreator } from '../../typealiases';
+import type { GridFragmentCreator, CellCreator, PlacementInfo } from '../../typealiases';
 
 export class GridFragmentCreatorFactory {
 
@@ -12,7 +12,7 @@ export class GridFragmentCreatorFactory {
         throw new Error('This class cannot be instantiated');
     }
 
-    static makeRegularGridCreatorByType(gridFragmentType: string): GridFragmentCreator {
+    static makeGridCreatorByType(gridFragmentType: string): GridFragmentCreator {
         switch (gridFragmentType) {
             case 'single-cell-triangle-grid-fragment':
                 return GridFragmentCreatorFactory.createSingleCellGridFragment;
@@ -30,33 +30,31 @@ export class GridFragmentCreatorFactory {
     }
 
     private static createSingleCellGridFragment(placementInfo: PlacementInfo): Grid {
-        const createTriangleCell: RegularCellCreator =
-            CellCreatorFactory.makeRegularCellCreator('equilateral-triangular-cell');
+        const createTriangleCell: CellCreator =
+            CellCreatorFactory.makeCellCreator('equilateral-triangular-cell');
 
-        const cell: Cell = createTriangleCell(
-            placementInfo.insertionPoint, placementInfo.angle, placementInfo.size);
+        const cell: Cell = createTriangleCell(placementInfo);
         return Grid.fromSingleCell(cell);
     }
 
     private static createHalfHexagonGridFragment(placementInfo: PlacementInfo): Grid {
         const cellBaseWidth: number = placementInfo.size * 2 / 3;
-        const halfHexagonalCellCreator: RegularCellCreator =
-            CellCreatorFactory.makeRegularCellCreator('half-hexagonal-cell');
+        const halfHexagonalCellCreator: CellCreator =
+            CellCreatorFactory.makeCellCreator('half-hexagonal-cell');
 
         return GridFragmentCreatorFactory.createTriangularGridFragment(
             placementInfo,
             cellBaseWidth,
             halfHexagonalCellCreator
         );
-
     }
 
     private static createReversedHalfHexagonGridFragment(placementInfo: PlacementInfo): Grid {
         const cellBaseWidth: number = placementInfo.size * 2 / 3;
         const angle = placementInfo.angle;
 
-        const halfHexagonalCellCreator: RegularCellCreator =
-            CellCreatorFactory.makeRegularCellCreator('half-hexagonal-cell');
+        const halfHexagonalCellCreator: CellCreator =
+            CellCreatorFactory.makeCellCreator('half-hexagonal-cell');
 
         const { leftCorner, rightCorner, topCorner, gridCenter } =
             GridFragmentCreatorFactory.calculateTrianglePoints(placementInfo);
@@ -68,9 +66,9 @@ export class GridFragmentCreatorFactory {
         const leftCellInsertionPoint: Coordinate =
             topCorner.stepToNewCoordinate(stepInDirection(angle + 240, cellBaseWidth / 2));
 
-        const rightCell: Cell = halfHexagonalCellCreator(rightCellInsertionPoint, angle + 0, cellBaseWidth); //0
-        const topCell: Cell = halfHexagonalCellCreator(topCellInsertionPoint, angle + 120, cellBaseWidth); //120
-        const leftCell: Cell = halfHexagonalCellCreator(leftCellInsertionPoint, angle + 240, cellBaseWidth); //240
+        const rightCell: Cell = halfHexagonalCellCreator({ insertionPoint: rightCellInsertionPoint, angle: angle + 0, size: cellBaseWidth });
+        const topCell: Cell = halfHexagonalCellCreator({ insertionPoint: topCellInsertionPoint, angle: angle + 120, size: cellBaseWidth });
+        const leftCell: Cell = halfHexagonalCellCreator({ insertionPoint: leftCellInsertionPoint, angle: angle + 240, size: cellBaseWidth });
 
         GridFragmentCreatorFactory.establishNeighbourRelationsBetweenCells(rightCell, topCell, leftCell);
 
@@ -81,7 +79,8 @@ export class GridFragmentCreatorFactory {
 
     private static createKiteGridFragment(placementInfo: PlacementInfo): Grid {
         const cellBaseWidth: number = placementInfo.size / 2;
-        const kiteCellCreator: RegularCellCreator = CellCreatorFactory.makeRegularCellCreator('kite-cell');
+        const kiteCellCreator: CellCreator =
+            CellCreatorFactory.makeCellCreator('kite-cell');
 
         return GridFragmentCreatorFactory.createTriangularGridFragment(
             placementInfo,
@@ -91,7 +90,8 @@ export class GridFragmentCreatorFactory {
     }
 
     private static createTriakisGridFragment(placementInfo: PlacementInfo): Grid {
-        const triakisTriangleCellCreator: RegularCellCreator = CellCreatorFactory.makeRegularCellCreator('triakis-triangle-cell');
+        const triakisTriangleCellCreator: CellCreator =
+            CellCreatorFactory.makeCellCreator('triakis-triangle-cell');
 
         return GridFragmentCreatorFactory.createTriangularGridFragment(
             placementInfo,
@@ -100,14 +100,14 @@ export class GridFragmentCreatorFactory {
         );
     }
 
-    private static createTriangularGridFragment(placementInfo: PlacementInfo, sideLength: number, cellCreator: RegularCellCreator): Grid {
+    private static createTriangularGridFragment(placementInfo: PlacementInfo, sideLength: number, cellCreator: CellCreator): Grid {
         const { leftCorner, rightCorner, topCorner, gridCenter } =
             GridFragmentCreatorFactory.calculateTrianglePoints(placementInfo);
         const angle = placementInfo.angle;
 
-        const leftCell: Cell = cellCreator(leftCorner, angle, sideLength);
-        const rightCell: Cell = cellCreator(rightCorner, angle + 120, sideLength);
-        const topCell: Cell = cellCreator(topCorner, angle + 240, sideLength);
+        const leftCell: Cell = cellCreator({ insertionPoint: leftCorner, angle: angle, size: sideLength });
+        const rightCell: Cell = cellCreator({ insertionPoint: rightCorner, angle: angle + 120, size: sideLength });
+        const topCell: Cell = cellCreator({ insertionPoint: topCorner, angle: angle + 240, size: sideLength });
 
         GridFragmentCreatorFactory.establishNeighbourRelationsBetweenCells(leftCell, rightCell, topCell);
 

@@ -2,22 +2,25 @@ import { MatrixOperations } from '../../../service/matrixoperations';
 import { Coordinate } from '../../coordinate';
 import { Vector } from '../../vector/vector';
 import type { Region } from '../region';
-import type { RegionCreator, RegularRegionCreator } from '../../typealiases';
+import type { RegionCreator, PlacementInfo } from '../../typealiases';
 import { stepInDirection, stepRight, stepUp } from '../../vector/vectorcreator';
 
 
 export abstract class GridAssembler<T extends Region<T>> {
 
     protected createSequenceOfRegions(
-        insertionPoint: Coordinate,
+        placementInfo: PlacementInfo,
         step: Vector,
         regionsToCreate: number,
         regionCreator: RegionCreator<T>
     ): T[] {
         const regionSequence: T[] = [];
+        const currentPlacement: PlacementInfo = { ...placementInfo };
         for (let stepNumber: number = 0; stepNumber < regionsToCreate; stepNumber++) {
-            const newInsertionPoint: Coordinate = insertionPoint.stepToNewCoordinate(step.times(stepNumber));
-            regionSequence.push(regionCreator(newInsertionPoint));
+            currentPlacement.insertionPoint =
+                placementInfo.insertionPoint.stepToNewCoordinate(step.times(stepNumber));
+            const newRegion: T = regionCreator(currentPlacement);
+            regionSequence.push(newRegion);
         }
         return regionSequence;
     }
@@ -30,8 +33,8 @@ export abstract class GridAssembler<T extends Region<T>> {
         triangleBaseWidth: number,
         triangleHeight: number,
         numberOfPointyTopTriangles: number,
-        createPointyTopTriangle: RegularRegionCreator<T>,
-        createPointyBottomTriangle: RegularRegionCreator<T>
+        createPointyTopTriangle: RegionCreator<T>,
+        createPointyBottomTriangle: RegionCreator<T>
     ): T[] {
         const stepToNextInsertionPoint: Vector = stepInDirection(angle, triangleBaseWidth);
         const stepToUpperInsertionPoint: Vector =
@@ -45,9 +48,18 @@ export abstract class GridAssembler<T extends Region<T>> {
             if (notFirstTriangle) {
                 const upperInsertionPoint: Coordinate =
                     regionInsertionPoint.stepToNewCoordinate(stepToUpperInsertionPoint);
-                rowOfRegions.push(createPointyBottomTriangle(upperInsertionPoint, angle + 180, triangleBaseWidth));
+                rowOfRegions.push(createPointyBottomTriangle({
+                    insertionPoint: upperInsertionPoint,
+                    angle: angle + 180,
+                    size: triangleBaseWidth
+                }));
             }
-            rowOfRegions.push(createPointyTopTriangle(regionInsertionPoint, angle, triangleBaseWidth));
+            rowOfRegions.push(createPointyTopTriangle(
+                {
+                    insertionPoint: regionInsertionPoint,
+                    angle: angle,
+                    size: triangleBaseWidth
+                }));
 
         }
         return rowOfRegions;
@@ -60,8 +72,8 @@ export abstract class GridAssembler<T extends Region<T>> {
         triangleBaseWidth: number,
         triangleHeight: number,
         numberOfPointyTopTriangles: number,
-        createPointyTopTriangle: RegularRegionCreator<T>,
-        createPointyBottomTriangle: RegularRegionCreator<T>
+        createPointyTopTriangle: RegionCreator<T>,
+        createPointyBottomTriangle: RegionCreator<T>
     ): T[] {
         const stepToNextInsertionPoint: Vector = stepInDirection(angle, triangleBaseWidth);
         const stepToUpperInsertionPoint: Vector =
@@ -74,9 +86,17 @@ export abstract class GridAssembler<T extends Region<T>> {
 
             const upperInsertionPoint: Coordinate =
                 regionInsertionPoint.stepToNewCoordinate(stepToUpperInsertionPoint);
-            rowOfRegions.push(createPointyBottomTriangle(upperInsertionPoint, angle + 180, triangleBaseWidth));
+            rowOfRegions.push(createPointyBottomTriangle({
+                insertionPoint: upperInsertionPoint,
+                angle: angle + 180,
+                size: triangleBaseWidth
+            }));
             if (notLastTriangle) {
-                rowOfRegions.push(createPointyTopTriangle(regionInsertionPoint, angle, triangleBaseWidth));
+                rowOfRegions.push(createPointyTopTriangle({
+                    insertionPoint: regionInsertionPoint,
+                    angle: angle,
+                    size: triangleBaseWidth
+                }));
             }
         }
         return rowOfRegions;

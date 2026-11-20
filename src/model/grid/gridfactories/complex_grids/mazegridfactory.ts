@@ -5,7 +5,7 @@ import { Vector } from '../../../vector/vector';
 import { stepRight, stepDown } from '../../../vector/vectorcreator';
 import { Cell } from '../../../cell/cell';
 import { Grid } from '../../grid';
-import type { GridCreator } from '../../../typealiases';
+import type { OldGridCreator } from '../../../typealiases';
 import { RectangularGridProperties } from '../rectangular_grids/rectangulargridproperties';
 import { StandardGridFactory } from '../rectangular_grids/standardgridfactory';
 import { RegularShapedGridProperties } from '../regular_shaped_grids/regularshapedgridproperties';
@@ -82,7 +82,7 @@ export class MazeGridFactory {
             previousTemplateGridCell.center.vectorTo(currentTemplateGridCell.center);
 
 
-        const createGrid: GridCreator = (neighbourGridCenter: Coordinate, angle: number) => {
+        const createGrid: OldGridCreator = (neighbourGridCenter: Coordinate, angle: number) => {
             const gridInsertionPoint: Coordinate = neighbourGridCenter
                 .stepToNewCoordinate(
                     stepDown(gridWidth / 2)

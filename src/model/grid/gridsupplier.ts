@@ -23,7 +23,10 @@ import { MazeGridFactory } from './gridfactories/complex_grids/mazegridfactory';
 import { TrailGridFactory } from './gridfactories/complex_grids/trailgridfactory';
 import { TiltedTrailGridFactory } from './gridfactories/complex_grids/tiltedtrailgridfactory';
 import { GridFragmentCreatorFactory } from './gridfragments/gridfragmentcreatorfactory';
-import type { GridCreator } from '../typealiases';
+import type { SegmentedCellCreator, GridFragmentCreator, CellCreator } from '../typealiases';
+import { SegmentedCellCreatorFactory } from '../cell/segmentedcellcreatorfactory';
+import type { Cell } from '../cell/cell';
+import { CellCreatorFactory } from '../cell/cellcreatorfactory';
 
 export class GridSupplier {
 
@@ -42,10 +45,28 @@ export class GridSupplier {
             return new StandardGridFactory().createGrid(gridProperties);
         }
 
+        if (gridType === 'test-cell') {
+            const cellCreator: CellCreator = CellCreatorFactory
+                .makeCellCreator('bottom-half-hexagonal-cell');
+            const cell: Cell = cellCreator({
+                insertionPoint: new Coordinate(300, 200),
+                angle: 20,
+                size: 200
+            });
+            return Grid.fromSingleCell(cell);
+        }
+
+        if (gridType === 'test-segmented-cell') {
+            const cellCreator: SegmentedCellCreator = SegmentedCellCreatorFactory
+                .makeSegmentedCellCreator('square');
+            const cell: Cell = cellCreator(new Coordinate(100, 200), 20, 200, 3);
+            return Grid.fromSingleCell(cell);
+        }
+
         if (gridType === 'test-grid-fragment') {
-            const createGridFragment: GridCreator = GridFragmentCreatorFactory
-                .getGridFragmentCreatorByType(200, 'reversed-half-hexagon-triangle-grid-fragment');
-            return createGridFragment(insertionPoint);
+            const createGridFragment: GridFragmentCreator =
+                GridFragmentCreatorFactory.makeGridCreatorByType('triakis-triangle-grid-fragment');
+            return createGridFragment({ insertionPoint: insertionPoint, angle: 0, size: 200 });
         }
 
         if (gridType === 'triangular') {
@@ -113,7 +134,7 @@ export class GridSupplier {
 
         if (gridType === 'hexagons') {
             const gridProperties: RectangularGridProperties =
-                new RectangularGridProperties(insertionPoint, 40, 21, 30);
+                new RectangularGridProperties(insertionPoint, 40, 21, 30, 0);
             return new HexagonsGridFactory().createGrid(gridProperties);
         }
 

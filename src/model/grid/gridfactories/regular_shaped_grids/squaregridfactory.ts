@@ -1,26 +1,19 @@
-import { Coordinate } from '../../../coordinate';
 import { Cell } from '../../../cell/cell';
 import { CellCreatorFactory } from '../../../cell/cellcreatorfactory';
 import { Grid } from '../../grid';
 import type { RegularShapedGridFactory } from './regularshapedgridfactory.interface';
 import { RegularShapedGridProperties } from './regularshapedgridproperties';
 import { SquareGridAssembler } from '../../gridassemblers/squaregridassembler';
-import type { RegionCreator } from '../../../typealiases';
+import type { CellCreator } from '../../../typealiases';
 
 
 export class SquareGridFactory implements RegularShapedGridFactory {
 
     createGrid(gridProperties: RegularShapedGridProperties): Grid {
-        const angle: number = gridProperties.angle;
-        const cellWidth: number = gridProperties.lengthOfEdgeSegments;
 
-        const squareCellCreator: RegionCreator<Cell> =
-            CellCreatorFactory.getCellCreatorByType('square-cell', cellWidth, angle);
+        const createSquareCell: CellCreator = CellCreatorFactory.makeCellCreator('square-cell');
 
-        return new SquareGridAssembler<Cell>().createGrid(
-            gridProperties,
-            squareCellCreator
-        );
+        return new SquareGridAssembler<Cell>().createGrid(gridProperties, createSquareCell);
     }
 
 }

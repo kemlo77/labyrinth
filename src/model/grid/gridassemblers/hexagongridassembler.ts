@@ -4,7 +4,7 @@ import { stepInDirection, stepLeft, stepRight, stepUp } from '../../vector/vecto
 import { Cell } from '../../cell/cell';
 import { Grid } from '../grid';
 import type { Region } from '../region';
-import type { RegionCreator, RegularRegionCreator } from '../../typealiases';
+import type { RegionCreator } from '../../typealiases';
 import { RegularShapedGridProperties } from '../gridfactories/regular_shaped_grids/regularshapedgridproperties';
 import { GridAssembler } from './gridassembler';
 
@@ -12,8 +12,8 @@ export class HexagonGridAssembler<T extends Region<T>> extends GridAssembler<T> 
 
     createGrid(
         gridProperties: RegularShapedGridProperties,
-        pointyTopCreator: RegularRegionCreator<T>,
-        pointyBottomCreator: RegularRegionCreator<T>
+        pointyTopCreator: RegionCreator<T>,
+        pointyBottomCreator: RegionCreator<T>
     ): Grid {
         const regionGrid: T[][] =
             this.createRegionMatrix(gridProperties, pointyTopCreator, pointyBottomCreator);
@@ -28,23 +28,10 @@ export class HexagonGridAssembler<T extends Region<T>> extends GridAssembler<T> 
         return new Grid(cells, startCell, endCell, center);
     }
 
-    private calculateGridCenter(
-        gridProperties: RegularShapedGridProperties
-    ): Coordinate {
-        const angle: number = gridProperties.angle;
-        const regionWidth: number = gridProperties.lengthOfEdgeSegments;
-        const gridSideWidth: number = gridProperties.numberOfEdgeSegments * regionWidth;
-        const insertionPoint: Coordinate = gridProperties.insertionPoint;
-        const stepToGridCenter: Vector = stepInDirection(60, gridSideWidth)
-            .newRotatedVector(angle);
-
-        return insertionPoint.stepToNewCoordinate(stepToGridCenter);
-    }
-
     private createRegionMatrix(
         gridProperties: RegularShapedGridProperties,
-        pointyTopCreator: RegularRegionCreator<T>,
-        pointyBottomCreator: RegularRegionCreator<T>
+        pointyTopCreator: RegionCreator<T>,
+        pointyBottomCreator: RegionCreator<T>
     ): T[][] {
 
         const angle: number = gridProperties.angle;
@@ -143,7 +130,18 @@ export class HexagonGridAssembler<T extends Region<T>> extends GridAssembler<T> 
             }
         }
 
+    }
 
+
+    private calculateGridCenter(gridProperties: RegularShapedGridProperties): Coordinate {
+        const angle: number = gridProperties.angle;
+        const regionWidth: number = gridProperties.lengthOfEdgeSegments;
+        const gridSideWidth: number = gridProperties.numberOfEdgeSegments * regionWidth;
+        const insertionPoint: Coordinate = gridProperties.insertionPoint;
+        const stepToGridCenter: Vector = stepInDirection(60, gridSideWidth)
+            .newRotatedVector(angle);
+
+        return insertionPoint.stepToNewCoordinate(stepToGridCenter);
     }
 
 
