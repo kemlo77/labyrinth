@@ -5,7 +5,7 @@ import { Vector } from '../../../vector/vector';
 import { stepRight, stepDown } from '../../../vector/vectorcreator';
 import { Cell } from '../../../cell/cell';
 import { Grid } from '../../grid';
-import type { OldGridCreator } from '../../../typealiases';
+import type { SimpleGridCreator } from '../../../typealiases';
 import { RectangularGridProperties } from '../rectangular_grids/rectangulargridproperties';
 import { StandardGridFactory } from '../rectangular_grids/standardgridfactory';
 import { RegularShapedGridProperties } from '../regular_shaped_grids/regularshapedgridproperties';
@@ -27,36 +27,39 @@ export class MazeGridFactory {
         subdivisions: number,
         sideLength: number): Grid {
 
-
         this._cellsInNewGrid = [];
+
+        //Template Grid
         const anyLength: number = 20; //since the size of the large grid is not important
-
-        const largeGrid: Grid = new StandardGridFactory()
+        const templateGrid: Grid = new StandardGridFactory()
             .createGrid(new RectangularGridProperties(insertionPoint, outerColumns, outerRows, anyLength));
+        templateGrid.generateMaze();
 
-        largeGrid.generateMaze();
-
-        this.generateNewGrid(insertionPoint, largeGrid, subdivisions, sideLength);
+        //New Grid
+        this.generateNewGrid(insertionPoint, subdivisions, sideLength, templateGrid);
         return new Grid(this._cellsInNewGrid, this._startCell, this._endCell);
     }
 
     private generateNewGrid(
         insertionPoint: Coordinate,
-        largeGrid: Grid,
         subDivisions: number,
-        cellSideLength: number
+        cellSideLength: number,
+        largeGrid: Grid,
     ): void {
+        //Seed Grid
         const gridProperties: RegularShapedGridProperties =
             new RegularShapedGridProperties(insertionPoint, subDivisions, cellSideLength);
-        const startGrid: Grid = new SquareGridFactory()
-            .createGrid(gridProperties);
-        this._startCell = startGrid.startCell;
-        this._cellsInNewGrid.push(...startGrid.allCells);
+        const seedGrid: Grid = new SquareGridFactory().createGrid(gridProperties);
 
+        //Saving to new Grid
+        this._startCell = seedGrid.startCell;
+        this._cellsInNewGrid.push(...seedGrid.allCells);
+
+        //Add steps fron Seed
         largeGrid.startCell.connectedNeighbours.forEach((neighbour: Cell) => {
 
             this.addNextGridStep(
-                startGrid,
+                seedGrid,
                 largeGrid.startCell,
                 neighbour,
                 largeGrid.endCell,
@@ -78,33 +81,28 @@ export class MazeGridFactory {
         const gridOffset: number = 2;
         const gridWidth: number = cellSideLength * subDivisions;
 
-        const fromPreviousToCurrentCell: Vector =
+        const directionFromPreviousToCurrentCell: Vector =
             previousTemplateGridCell.center.vectorTo(currentTemplateGridCell.center);
 
 
-        const createGrid: OldGridCreator = (neighbourGridCenter: Coordinate, angle: number) => {
-            const gridInsertionPoint: Coordinate = neighbourGridCenter
-                .stepToNewCoordinate(
-                    stepDown(gridWidth / 2)
-                        .thenTake(stepRight(gridWidth / 2))
-                        .newRotatedVector(angle)
-                );
-            const gridProperties: RectangularGridProperties = new RectangularGridProperties(
-                gridInsertionPoint,
-                subDivisions + gridOffset,
-                subDivisions,
-                cellSideLength,
-                angle
+        const currentGridInsertionPoint: Coordinate = previousGrid.center
+            .stepToNewCoordinate(
+                stepDown(gridWidth / 2)
+                    .thenTake(stepRight(gridWidth / 2))
+                    .newRotatedVector(directionFromPreviousToCurrentCell.direction)
             );
-            const newGrid: Grid = new StandardGridFactory().createGrid(gridProperties);
-            const newGridCenter: Coordinate = neighbourGridCenter
-                .stepToNewCoordinate(stepRight(gridWidth + cellSideLength * gridOffset).newRotatedVector(angle));
-            newGrid.center = newGridCenter;
-            return newGrid;
-        };
+        const gridProperties: RectangularGridProperties = new RectangularGridProperties(
+            currentGridInsertionPoint,
+            subDivisions + gridOffset,
+            subDivisions,
+            cellSideLength,
+            directionFromPreviousToCurrentCell.direction
+        );
+        const currentGrid: Grid = new StandardGridFactory().createGrid(gridProperties);
+        const newGridCenter: Coordinate = previousGrid.center
+            .stepToNewCoordinate(stepRight(gridWidth + cellSideLength * gridOffset).newRotatedVector(directionFromPreviousToCurrentCell.direction));
+        currentGrid.center = newGridCenter;
 
-
-        const currentGrid: Grid = createGrid(previousGrid.center, fromPreviousToCurrentCell.direction);
         currentGrid.establishNeighbourRelationsWith(previousGrid);
 
 

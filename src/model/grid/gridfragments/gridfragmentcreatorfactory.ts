@@ -4,7 +4,7 @@ import { stepRight, stepUp, stepInDirection } from '../../vector/vectorcreator';
 import { Cell } from '../../cell/cell';
 import { CellCreatorFactory } from '../../cell/cellcreatorfactory';
 import { Grid } from '../grid';
-import type { GridFragmentCreator, CellCreator, PlacementInfo } from '../../typealiases';
+import type { GridCreator, CellCreator, PlacementInfo } from '../../typealiases';
 
 export class GridFragmentCreatorFactory {
 
@@ -12,7 +12,7 @@ export class GridFragmentCreatorFactory {
         throw new Error('This class cannot be instantiated');
     }
 
-    static makeGridCreatorByType(gridFragmentType: string): GridFragmentCreator {
+    static makeGridCreatorByType(gridFragmentType: string): GridCreator {
         switch (gridFragmentType) {
             case 'single-cell-triangle-grid-fragment':
                 return GridFragmentCreatorFactory.createSingleCellGridFragment;

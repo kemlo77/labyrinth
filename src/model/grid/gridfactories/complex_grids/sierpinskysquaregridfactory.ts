@@ -3,7 +3,7 @@ import { Cell } from '../../../cell/cell';
 import { Grid } from '../../grid';
 import { SegmentedCellCreatorFactory } from '../../../cell/segmentedcellcreatorfactory';
 import { stepRight, stepUp } from '../../../vector/vectorcreator';
-import type { SegmentedCellCreator, OldGridCreator } from '../../../typealiases';
+import type { SegmentedCellCreator, SimpleGridCreator } from '../../../typealiases';
 
 export class SierpinskySquareGridFactory {
 
@@ -39,7 +39,7 @@ export class SierpinskySquareGridFactory {
             );
 
 
-        const createSubdivision: OldGridCreator = (newInsertionPoint: Coordinate) => {
+        const createSubdivision: SimpleGridCreator = (newInsertionPoint: Coordinate) => {
             return this.createSierpinskiSquare(
                 newInsertionPoint,
                 sideLength / 3,
@@ -48,7 +48,7 @@ export class SierpinskySquareGridFactory {
             );
         };
 
-        const createMiddle: OldGridCreator = (newInsertionPoint: Coordinate) => {
+        const createMiddle: SimpleGridCreator = (newInsertionPoint: Coordinate) => {
             const middleCell: Cell = createSquareCell(
                 newInsertionPoint,
                 angle,

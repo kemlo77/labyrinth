@@ -23,7 +23,7 @@ import { MazeGridFactory } from './gridfactories/complex_grids/mazegridfactory';
 import { TrailGridFactory } from './gridfactories/complex_grids/trailgridfactory';
 import { TiltedTrailGridFactory } from './gridfactories/complex_grids/tiltedtrailgridfactory';
 import { GridFragmentCreatorFactory } from './gridfragments/gridfragmentcreatorfactory';
-import type { SegmentedCellCreator, GridFragmentCreator, CellCreator } from '../typealiases';
+import type { SegmentedCellCreator, GridCreator, CellCreator } from '../typealiases';
 import { SegmentedCellCreatorFactory } from '../cell/segmentedcellcreatorfactory';
 import type { Cell } from '../cell/cell';
 import { CellCreatorFactory } from '../cell/cellcreatorfactory';
@@ -64,7 +64,7 @@ export class GridSupplier {
         }
 
         if (gridType === 'test-grid-fragment') {
-            const createGridFragment: GridFragmentCreator =
+            const createGridFragment: GridCreator =
                 GridFragmentCreatorFactory.makeGridCreatorByType('triakis-triangle-grid-fragment');
             return createGridFragment({ insertionPoint: insertionPoint, angle: 0, size: 200 });
         }
